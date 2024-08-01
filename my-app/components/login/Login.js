@@ -4,27 +4,40 @@ import { useNavigation } from '@react-navigation/native';
 import img from '../../assets/images/large-dNk4O_UUZ-transformed (1).png';
 
 export default function Login() {
-    const [teacherId, setTeacherId] = useState('');
+    const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation();
-
+    
     const handleLogin = async () => {
         try {
-            const response = await fetch('http://10.0.2.2:8000/teacher_login', {
+            let url = '';
+            let navigateTo = '';
+
+            if (userId.startsWith('T')) {
+                url = 'https://e591-115-98-192-27.ngrok-free.app/teacher_login';
+                navigateTo = 'TeacherDashboard';
+            } else if (userId.startsWith('S')) {
+                url = 'https://e591-115-98-192-27.ngrok-free.app/st_login';
+                navigateTo = 'StudentDashboard';
+            } else {
+                throw new Error('Invalid User ID');
+            }
+
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ teacherId, password }),
+                body: JSON.stringify({ userId, password }),
             });
-    
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-    
+
             const data = await response.json();
-            // Navigate to TeacherDashboard with the response data
-            navigation.navigate('TeacherDashboard', { data });
+            // Navigate to the appropriate dashboard with the response data
+            navigation.navigate(navigateTo, { data });
         } catch (error) {
             Alert.alert('Error', error.message);
         }
@@ -37,12 +50,12 @@ export default function Login() {
                 <Image source={img} style={styles.logo} />
                 {/* Inputs and Buttons Container */}
                 <View style={styles.inputContainer}>
-                    {/* Teacher ID Input */}
+                    {/* User ID Input */}
                     <TextInput
                         style={styles.input}
-                        placeholder="ENTER TEACHER ID"
-                        value={teacherId}
-                        onChangeText={setTeacherId}
+                        placeholder="ENTER USER ID"
+                        value={userId}
+                        onChangeText={setUserId}
                     />
                     {/* Password Input */}
                     <TextInput
@@ -97,6 +110,7 @@ const styles = StyleSheet.create({
         padding: 10,
         justifyContent: 'center',
         padding: 20,
+        marginBottom:100,
     },
     input: {
         height: 40,
