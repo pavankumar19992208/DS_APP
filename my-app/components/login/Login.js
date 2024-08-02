@@ -37,6 +37,7 @@ export default function Login() {
 
             const data = await response.json();
             // Navigate to the appropriate dashboard with the response data
+            console.log(data);
             navigation.navigate(navigateTo, { data });
         } catch (error) {
             Alert.alert('Error', error.message);
