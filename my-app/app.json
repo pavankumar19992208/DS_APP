@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "my-app",
+    "name": "P2P",
     "slug": "my-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,16 +15,23 @@
       "supportsTablet": true
     },
     "android": {
+      "permissions": ["INTERNET"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.pavan_tech.myapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "5a49d231-cc4b-4330-84d2-ee1009d1a929"
+      }
+    }
   }
 }

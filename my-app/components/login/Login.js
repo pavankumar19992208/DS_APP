@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, Button, TouchableOpacity, Text, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import img from '../../assets/images/large-dNk4O_UUZ-transformed (1).png';
+import Help from './Help';
 
 export default function Login() {
     const [userId, setUserId] = useState('');
@@ -14,10 +15,10 @@ export default function Login() {
             let navigateTo = '';
 
             if (userId.startsWith('T')) {
-                url = 'https://e591-115-98-192-27.ngrok-free.app/teacher_login';
+                url = 'https://e2a8-60-243-185-241.ngrok-free.app/teacher_login';
                 navigateTo = 'TeacherDashboard';
             } else if (userId.startsWith('S')) {
-                url = 'https://e591-115-98-192-27.ngrok-free.app/st_login';
+                url = 'https://e2a8-60-243-185-241.ngrok-free.app/st_login';
                 navigateTo = 'StudentDashboard';
             } else {
                 throw new Error('Invalid User ID');
@@ -79,6 +80,7 @@ export default function Login() {
                     </View>
                 </View>
             </View>
+            <Help />
         </View>
     );
 }

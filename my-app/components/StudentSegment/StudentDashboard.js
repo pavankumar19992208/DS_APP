@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, Alert, Dimensions } from 'react-native';
 import SFooterNavbar from './SFooterNavbar';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
 
 export default function StudentDashboard({ route, navigation }) {
     const { data } = route.params;
@@ -10,8 +12,9 @@ export default function StudentDashboard({ route, navigation }) {
         Alert.alert('Logout', 'You have been logged out.');
         console.log('Logout Pressed');
         console.log(data);
+        expo.login();
     };
-
+    
     return (
         <View style={styles.container}>
             {/* Row 1 */}
@@ -45,6 +48,25 @@ export default function StudentDashboard({ route, navigation }) {
                         <Text style={styles.description}>MEDIUM: ENGLISH</Text>
                     </View>
                 </View>
+            </View>
+            <View style={styles.newSection}>
+                <Text style={styles.sectionHeading}>SERVICES</Text>
+                <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('Homework')}>
+        <Text style={styles.buttonText}>TODAY'S HOMEWORK</Text>
+        <Icon name="arrow-forward" size={24} color="#E31C62" />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('Notifications')}>
+        <Text style={styles.buttonText}>NOTIFICATIONS</Text>
+        <Icon name="arrow-forward" size={24} color="#E31C62" />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('AcademicReport')}>
+        <Text style={styles.buttonText}>ACADEMIC REPORT</Text>
+        <Icon name="arrow-forward" size={24} color="#E31C62" />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('StatisticalAnalysis')}>
+        <Text style={styles.buttonText}>STATISTICAL ANALYSIS</Text>
+        <Icon name="arrow-forward" size={24} color="#E31C62" />
+      </TouchableOpacity>
             </View>
             <SFooterNavbar navigation={navigation} />
         </View>
@@ -131,5 +153,28 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
         marginVertical: 5,
     },
+    newSection: {
+        marginTop: 20,
+        padding: 10,
+    },
+    sectionHeading: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#000',
+        color: '#E31C62',
+        marginBottom: 10,
+    },
+    buttonRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    buttonText: {
+        fontSize: 16,
+    },
 });
-
