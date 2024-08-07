@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "P2P",
+    "slug": "P2P",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.P2PTECHWORKS.P2P",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3cf69002-1975-495b-a9e3-a6a784c9ba4a"
+      }
+    },
+    "plugins": [
+      "expo-font"
+    ]
+  }
+}
