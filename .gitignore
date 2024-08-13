@@ -2,13 +2,13 @@
 
 # dependencies
 node_modules/
-
+android/ 
 # Expo
 .expo/
 dist/
 web-build/
 
-# Native
+# Native1
 *.orig.*
 *.jks
 *.p8
