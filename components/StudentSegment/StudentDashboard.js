@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, Alert, Dimensions } from 'react-native';
 import SFooterNavbar from './SFooterNavbar';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
-import LottieView from 'lottie-react-native'; 
+import LottieView from 'lottie-react-native';
+import { UserDataContext } from '../../BaseUrlContext'; // Import UserDataContext
+import ScreenWrapper from '../../ScreenWrapper'; // Import ScreenWrapper
 
-export default function StudentDashboard({ route, navigation }) {
-    const { data } = route.params;
+export default function StudentDashboard({ navigation }) {
+    const { userData } = useContext(UserDataContext); // Access userData from UserDataContext
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [menuVisible, setMenuVisible] = useState(false);
 
     const handleLogout = () => {
         Alert.alert('Logout', 'You have been logged out.');
         console.log('Logout Pressed');
-        console.log(data);
+        console.log(userData);
         navigation.navigate('Login'); // Redirect to the login screen
     };
 
@@ -22,70 +24,72 @@ export default function StudentDashboard({ route, navigation }) {
     const showMenu = () => setMenuVisible(true);
 
     return (
-        <View style={styles.container}>
-                        <LottieView
-                source={require('../commons/jsonfiles/sbg.json')} // Adjust the path to your Lottie file
-                autoPlay
-                loop
-                style={styles.lottieBackground}
-            />
-            {/* Row 1 */}
-            <View style={styles.row}>
-                <View style={styles.column11}>
-                    <Menu
-                        visible={menuVisible}
-                        anchor={<Text style={styles.menuBar} onPress={showMenu}>☰</Text>}
-                        onRequestClose={hideMenu}
-                    >
-                        <MenuItem onPress={handleLogout}>Logout</MenuItem>
-                    </Menu>
-                </View>
-                <View style={styles.column12}>
-                    <Text style={styles.schoolName}>{data.student.SCHOOL_NAME}</Text>
-                </View>
-            </View>
-            {/* Row 2 */}
-            <View style={styles.row}>
-                <View style={styles.column21}>
-                    <Image source={{ uri: data.student.STUDENT_PIC }} style={styles.profilePic} />
-                    <Text style={styles.studentId}>{data.student.STUDENT_ID}</Text>
-                    <Text style={styles.studentName}>{data.student.STUDENT_NAME}</Text>
-                </View>
-                <View style={styles.column22}>
-                    <View style={styles.card}>
-                        <Text style={styles.heading}>STUDENT BIO</Text>
-                        <View style={styles.separator} />
-                        <Text style={styles.description}>{data.student.SCHOOL_NAME}</Text>
-                        <View style={styles.separator} />
-                        <Text style={styles.description}>GRADE: {data.student.GRADE}</Text>
-                        <View style={styles.separator} />
-                        <Text style={styles.description}>SECTION: {data.student.SECTION}</Text>
-                        <View style={styles.separator} />
-                        <Text style={styles.description}>MEDIUM: ENGLISH</Text>
+        <ScreenWrapper>
+            <View style={styles.container}>
+                <LottieView
+                    source={require('../commons/jsonfiles/sbg.json')} // Adjust the path to your Lottie file
+                    autoPlay
+                    loop
+                    style={styles.lottieBackground}
+                />
+                {/* Row 1 */}
+                <View style={styles.row}>
+                    <View style={styles.column11}>
+                        <Menu
+                            visible={menuVisible}
+                            anchor={<Text style={styles.menuBar} onPress={showMenu}>☰</Text>}
+                            onRequestClose={hideMenu}
+                        >
+                            <MenuItem onPress={handleLogout}>Logout</MenuItem>
+                        </Menu>
+                    </View>
+                    <View style={styles.column12}>
+                        <Text style={styles.schoolName}>{userData.student.SCHOOL_NAME}</Text>
                     </View>
                 </View>
+                {/* Row 2 */}
+                <View style={styles.row}>
+                    <View style={styles.column21}>
+                        <Image source={{ uri: userData.student.STUDENT_PIC }} style={styles.profilePic} />
+                        <Text style={styles.studentId}>{userData.student.STUDENT_ID}</Text>
+                        <Text style={styles.studentName}>{userData.student.STUDENT_NAME}</Text>
+                    </View>
+                    <View style={styles.column22}>
+                        <View style={styles.card}>
+                            <Text style={styles.heading}>STUDENT BIO</Text>
+                            <View style={styles.separator} />
+                            <Text style={styles.description}>{userData.student.SCHOOL_NAME}</Text>
+                            <View style={styles.separator} />
+                            <Text style={styles.description}>GRADE: {userData.student.GRADE}</Text>
+                            <View style={styles.separator} />
+                            <Text style={styles.description}>SECTION: {userData.student.SECTION}</Text>
+                            <View style={styles.separator} />
+                            <Text style={styles.description}>MEDIUM: ENGLISH</Text>
+                        </View>
+                    </View>
+                </View>
+                <View style={styles.newSection}>
+                    <Text style={styles.sectionHeading}>SERVICES</Text>
+                    <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('Homework')}>
+                        <Text style={styles.buttonText}>TODAY'S HOMEWORK</Text>
+                        <Icon name="arrow-forward" size={24} color="#E31C62" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('Notifications')}>
+                        <Text style={styles.buttonText}>NOTIFICATIONS</Text>
+                        <Icon name="arrow-forward" size={24} color="#E31C62" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('AcademicReport')}>
+                        <Text style={styles.buttonText}>ACADEMIC REPORT</Text>
+                        <Icon name="arrow-forward" size={24} color="#E31C62" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('StatisticalAnalysis')}>
+                        <Text style={styles.buttonText}>STATISTICAL ANALYSIS</Text>
+                        <Icon name="arrow-forward" size={24} color="#E31C62" />
+                    </TouchableOpacity>
+                </View>
+                <SFooterNavbar navigation={navigation} />
             </View>
-            <View style={styles.newSection}>
-                <Text style={styles.sectionHeading}>SERVICES</Text>
-                <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('Homework')}>
-                    <Text style={styles.buttonText}>TODAY'S HOMEWORK</Text>
-                    <Icon name="arrow-forward" size={24} color="#E31C62" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('Notifications')}>
-                    <Text style={styles.buttonText}>NOTIFICATIONS</Text>
-                    <Icon name="arrow-forward" size={24} color="#E31C62" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('AcademicReport')}>
-                    <Text style={styles.buttonText}>ACADEMIC REPORT</Text>
-                    <Icon name="arrow-forward" size={24} color="#E31C62" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('StatisticalAnalysis')}>
-                    <Text style={styles.buttonText}>STATISTICAL ANALYSIS</Text>
-                    <Icon name="arrow-forward" size={24} color="#E31C62" />
-                </TouchableOpacity>
-            </View>
-            <SFooterNavbar navigation={navigation} />
-        </View>
+        </ScreenWrapper>
     );
 }
 

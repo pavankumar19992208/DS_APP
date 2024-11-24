@@ -2,16 +2,20 @@ import React, { useState } from 'react';
 import { Modal, View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import PropTypes from 'prop-types';
 
-const StudentCard = ({ visible, data, subject, Max, onClose, onNext, isLast }) => {
+const StudentCard = ({ visible, data, subject, Max, onClose, onNext, isLast, onBack }) => {
     const [marks, setMarks] = useState('');
 
     const handleNext = () => {
-        console.log()
         if (marks === '' || isNaN(marks) || parseInt(marks) > Max) {
             Alert.alert('Invalid Marks', `Please enter a valid mark between 0 and ${Max}.`);
             return;
         }
         onNext(marks);
+        setMarks('');
+    };
+
+    const handleBack = () => {
+        onBack();
         setMarks('');
     };
 
@@ -31,7 +35,10 @@ const StudentCard = ({ visible, data, subject, Max, onClose, onNext, isLast }) =
                         keyboardType="numeric"
                         maxLength={3}
                     />
-                    <Button title={isLast ? "Done" : "Next"} onPress={handleNext} />
+                    <View style={styles.buttonRow}>
+                        <Button title="Back" onPress={handleBack} />
+                        <Button title={isLast ? "Done" : "Next"} onPress={handleNext} />
+                    </View>
                 </View>
             </View>
         </Modal>
@@ -45,6 +52,7 @@ StudentCard.propTypes = {
     onNext: PropTypes.func.isRequired,
     isLast: PropTypes.bool.isRequired,
     Max: PropTypes.number.isRequired,
+    onBack: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -69,6 +77,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         width: '100%',
         marginVertical: 10,
+    },
+    buttonRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
     },
 });
 

@@ -79,7 +79,7 @@ const GetStudentListScreen = ({ visible, onClose, data, setStudentList }) => {
                                     style={styles.picker}
                                     onValueChange={(itemValue) => setSelectedYear(itemValue)}
                                 >
-                                    <Picker.Item label="23-24" value="23-24" />
+                                    <Picker.Item label="23-24" value="2324" />
                                     <Picker.Item label="22-23" value="2223" />
                                     <Picker.Item label="21-22" value="2122" />
                                     <Picker.Item label="20-21" value="2021" />

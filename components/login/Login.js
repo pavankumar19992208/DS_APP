@@ -1,19 +1,20 @@
-// Login.js
 import React, { useState, useContext } from 'react';
 import { StyleSheet, View, TextInput, Button, TouchableOpacity, Text, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { BaseUrlContext } from '../../BaseUrlContext';
+import { BaseUrlContext, UserDataContext } from '../../BaseUrlContext'; // Import the contexts
 import img from '../../assets/images/large-dNk4O_UUZ-transformed (1).png';
 import Help from './Help';
 import Loader from '../commons/Loader'; // Import the Loader component
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function Login() {
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false); // State to manage loader visibility
     const baseUrl = useContext(BaseUrlContext); // Access the baseUrl from context
+    const { setUserData } = useContext(UserDataContext); // Access the setUserData function from UserDataContext
     const navigation = useNavigation();
-    //updated
+
     const handleLogin = async () => {
         setLoading(true); // Show loader
         try {
@@ -44,9 +45,11 @@ export default function Login() {
             }
 
             const data = await response.json();
+            // Store the response data in the UserDataContext
+            setUserData(data);
             // Navigate to the appropriate dashboard with the response data
             console.log(data);
-            navigation.navigate(navigateTo, { data });
+            navigation.navigate(navigateTo);
         } catch (error) {
             Alert.alert('Error', error.message);
         } finally {
@@ -62,21 +65,29 @@ export default function Login() {
                 <Image source={img} style={styles.logo} />
                 {/* Inputs and Buttons Container */}
                 <View style={styles.inputContainer}>
-                    {/* User ID Input */}
-                    <TextInput
-                        style={styles.input}
-                        placeholder="ENTER USER ID"
-                        value={userId}
-                        onChangeText={setUserId}
-                    />
+                <View style={styles.inputRow}>
+                        <Icon name="user" size={20} color="#888" style={styles.icon} />
+                        {/* User ID Input */}
+                        <TextInput
+                            style={styles.input}
+                            placeholder="ENTER USER ID"
+                            value={userId}
+                            onChangeText={setUserId}
+                            placeholderTextColor="#888" // Ensure placeholder text color is set
+                        />
+                    </View>
                     {/* Password Input */}
-                    <TextInput
-                        style={styles.input}
-                        placeholder="ENTER PASSWORD"
-                        secureTextEntry={true}
-                        value={password}
-                        onChangeText={setPassword}
-                    />
+                    <View style={styles.inputRow}>
+                        <Icon name="lock" size={20} color="#888" style={styles.icon} />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="ENTER PASSWORD"
+                            secureTextEntry={true}
+                            value={password}
+                            onChangeText={setPassword}
+                            placeholderTextColor="#888" // Ensure placeholder text color is set
+                        />
+                    </View>
                     {/* Login Button and Forgot Password */}
                     <View style={styles.row}>
                         <TouchableOpacity onPress={() => console.log('Forgot Password Pressed')} style={{ marginRight: 30 }}>
@@ -102,9 +113,23 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    inputRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#424242', // Set border color
+        marginBottom: 20,
+    },
     loginContainer: {
         width: '80%',
         alignItems: 'center',
+    },
+    input: {
+        textAlign: 'center',
+        flex: 1,
+        color: '#000', // Ensure entered text color is set
+        fontSize: 16, // Ensure text size is set
+        paddingVertical: 5,
     },
     logo: {
         width: 100,
@@ -117,6 +142,7 @@ const styles = StyleSheet.create({
     inputContainer: {
         width: '90%',
         height: 220,
+        backgroundColor:'#CFE4F3B0',
         borderRadius: 30,
         borderColor: '#E31C6296',
         borderWidth: 2,
@@ -125,13 +151,8 @@ const styles = StyleSheet.create({
         padding: 20,
         marginBottom:100,
     },
-    input: {
-        height: 40,
-        width: 200, // Ensure both inputs have the same width
-        margin: 12,
-        borderWidth: 1,
-        borderColor: '#424242', // Set border color
-        padding: 10,
+    icon: {
+        marginRight: 10,
     },
     row: {
         flexDirection: 'row',

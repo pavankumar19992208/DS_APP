@@ -1,10 +1,11 @@
-// BaseUrlContext.js
 import React, { createContext, useState, useEffect } from 'react';
 
 export const BaseUrlContext = createContext();
+export const UserDataContext = createContext(); // Create another context
 
 export const BaseUrlProvider = ({ children }) => {
     const [baseUrl, setBaseUrl] = useState('');
+    const [userData, setUserData] = useState(''); // State for another context
 
     useEffect(() => {
         const loadConfig = async () => {
@@ -23,7 +24,9 @@ export const BaseUrlProvider = ({ children }) => {
 
     return (
         <BaseUrlContext.Provider value={baseUrl}>
-            {children}
+            <UserDataContext.Provider value={{ userData, setUserData }}>
+                {children}
+            </UserDataContext.Provider>
         </BaseUrlContext.Provider>
     );
 };

@@ -38,14 +38,16 @@ const WelcomeScreen = ({ navigation }) => {
                         margin: 0,
                         fontSize: windowWidth < 900 ? 16 : (windowWidth < 1000 ? 32 : 48),
                         fontFamily: 'RubikDoodleShadow',
-                        
                     }}>
                         DIGITAL SCHOOLING
                     </Text>
-                    <Text style={{ marginLeft: 30, fontWeight: '900', fontSize: windowWidth < 900 ? 12 : 32 }}>
-                        <Text style={{ color: '#0E5E9D' }}>P2P </Text>
-                        <Text style={{ color: '#F965A0' }}>TECHWORKS</Text>
-                    </Text>
+                    <View style={styles.neuraLifeContainer}>
+                        <Text style={styles.neuraLifeText}>
+                            <Text style={{ color: '#0E5E9D' }}>neura</Text>
+                            <Text style={{ color: '#F965A0' }}>L</Text>
+                            <Text style={{ color: '#0E5E9D' }}>ife</Text>
+                        </Text>
+                    </View>
                 </View>
             </View>
         </View>
@@ -68,6 +70,16 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     titleStyle: {
+        textAlign: 'center',
+    },
+    neuraLifeContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 10,
+    },
+    neuraLifeText: {
+        fontWeight: '600',
+        fontSize: windowWidth < 900 ? 22 : 32,
         textAlign: 'center',
     },
 });

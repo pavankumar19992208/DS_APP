@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, Alert, Dimensions } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, Alert, Dimensions, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FooterNavbar from './FooterNavbar'; // Adjust the path as necessary
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import GenerateRollNumbersScreen from './Tservices/GenerateRollNumbersScreen';
 import LottieView from 'lottie-react-native'; // Import LottieView
+import ScreenWrapper from '../../ScreenWrapper';
+import Timetable from './Tservices/Timetable';
+import { UserDataContext } from '../../BaseUrlContext'; // Import UserDataContext
 
 const screenWidth = Dimensions.get('window').width;
 
-export default function TeacherDashboard({ route, navigation }) {
-    const { data } = route.params;
-    const tedata = data;
-    console.log("te", tedata);
-    console.log("dd", data);
+export default function TeacherDashboard({ navigation }) {
+    const { userData } = useContext(UserDataContext); // Use the userData from UserDataContext
+    console.log("User Data:", userData); // Log the user data
+
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [menuVisible, setMenuVisible] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
@@ -20,8 +22,11 @@ export default function TeacherDashboard({ route, navigation }) {
     const handleLogout = () => {
         Alert.alert('Logout', 'You have been logged out.');
         console.log('Logout Pressed');
-        console.log(data);
         navigation.navigate('Login'); // Redirect to the login screen
+    };
+
+    const handleParentConnect = () => {
+        navigation.navigate('ParentConnect', { data: userData }); // Navigate to the Teacher Connect screen
     };
 
     const hideMenu = () => setMenuVisible(false);
@@ -31,89 +36,93 @@ export default function TeacherDashboard({ route, navigation }) {
     };
 
     return (
-        <View style={styles.container}>
-            <LottieView
-                source={require('../commons/jsonfiles/bg2.json')} // Adjust the path to your Lottie file
-                autoPlay
-                loop
-                style={styles.lottieBackground}
-            />
-            {/* Row 1 */}
-            <View style={styles.row}>
-                <View style={styles.column11}>
-                    <Menu
-                        visible={menuVisible}
-                        anchor={<Text style={styles.menuBar} onPress={showMenu}>☰</Text>}
-                        onRequestClose={hideMenu}
-                    >
-                        <MenuItem onPress={handleLogout}>Logout</MenuItem>
-                    </Menu>
+        <ScreenWrapper>
+            <View style={styles.container}>
+                <LottieView
+                    source={require('../commons/jsonfiles/bg2.json')} // Adjust the path to your Lottie file
+                    autoPlay
+                    loop
+                    style={styles.lottieBackground}
+                />
+                {/* Row 1 */}
+                <View style={styles.row}>
+                    <View style={styles.column11}>
+                        <Menu
+                            visible={menuVisible}
+                            anchor={<Text style={styles.menuBar} onPress={showMenu}>☰</Text>}
+                            onRequestClose={hideMenu}
+                            style={styles.menu} // Apply the menu style
+                        >
+                            <MenuItem onPress={() => setModalVisible(true)}>
+                                <Text>Generate Roll Numbers</Text>
+                            </MenuItem>
+                            <MenuItem onPress={() => navigation.navigate('ReportCard', { tedata: userData })}>
+                                <Text>Report Cards</Text>
+                            </MenuItem>
+                            <MenuItem onPress={handleParentConnect}>
+                                <Text>Parent Connect</Text>
+                            </MenuItem>
+                            <MenuItem onPress={handleLogout}>
+                                <Text>Profile</Text>
+                            </MenuItem>
+                            <MenuItem onPress={handleLogout}>
+                                <Text style={{ color: 'red' }}>Logout</Text>
+                            </MenuItem>
+                        </Menu>
+                    </View>
+                    <View style={styles.column12}>
+                        <Text style={styles.schoolName}>{userData.teacher.SCHOOL_NAME}</Text>
+                    </View>
                 </View>
-                <View style={styles.column12}>
-                    <Text style={styles.schoolName}>{data.teacher.SCHOOL_NAME}</Text>
-                </View>
-            </View>
-            {/* Row 2 */}
-            <View style={styles.row}>
-                <View style={styles.column21}>
-                    <Image source={{ uri: data.teacher.TEACHER_PIC }} style={styles.profilePic} />
-                    <Text style={styles.teacherId}>{data.teacher.TEACHER_ID}</Text>
-                    <Text style={styles.teacherName}>{data.teacher.TEACHER_NAME}</Text>
-                </View>
-                <View style={styles.column22}>
-                    <TouchableOpacity onPress={toggleExpanded}>
-                        <View style={styles.accordionHeader}>
-                            <Text style={styles.accordionHeaderText}>SUBJECTS TAUGHT</Text>
-                            <Icon name={isCollapsed ? 'keyboard-arrow-down' : 'keyboard-arrow-up'} size={24} color="#FFF" />
+                {/* Row 2 */}
+                <View style={styles.row}>
+                    <View style={styles.column21}>
+                        <Image
+                            source={userData.teacher.profilepic ? { uri: userData.teacher.profilepic } : require('../../assets/images/teacherf.png')}
+                            style={styles.profilePic}
+                        />
+                        <Text style={styles.teacherId}>{userData.teacher.userid}</Text>
+                        <Text style={styles.teacherName}>{userData.teacher.fullName}</Text>
+                    </View>
+                    <View style={[styles.column22, { marginBottom: 30 }]}>
+                        <TouchableOpacity onPress={toggleExpanded}>
+                            <View style={styles.accordionHeader}>
+                                <Text style={styles.accordionHeaderText}>SUBJECTS ALLOCATED</Text>
+                                <Icon name={isCollapsed ? 'keyboard-arrow-down' : 'keyboard-arrow-up'} size={24} color="#FFF" />
+                            </View>
+                        </TouchableOpacity>
+                        {!isCollapsed && (
+                            <View style={styles.subjectsContainer}>
+                                {Object.entries(userData.teacher.subjectSpecialization).map(([className, subjects], index) => (
+                                    <View key={index} style={styles.classContainer}>
+                                        <Text style={styles.className}>{className}</Text>
+                                        {subjects.map((subject, subIndex) => (
+                                            <Text key={subIndex} style={styles.subject}>{subject}</Text>
+                                        ))}
+                                    </View>
+                                ))}
+                            </View>
+                        )}
+                        <View style={styles.buttonRow}>
+                            <TouchableOpacity onPress={() => navigation.navigate('MarkAttendance', { data: userData })}>
+                                <Image source={require('../../assets/images/attendance.png')} style={[styles.icon, { marginLeft: 20, width: 40, height: 40 }]} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => navigation.navigate('UploadHomework')}>
+                                <Image source={require('../../assets/images/home_work.png')} style={[styles.icon, { marginRight: 20, width: 40, height: 40 }]} />
+                            </TouchableOpacity>
                         </View>
-                    </TouchableOpacity>
-                    {!isCollapsed && (
-                        <View style={styles.subjectsContainer}>
-                            <FlatList
-                                data={data.teacher.subjects}
-                                renderItem={({ item }) => <Text style={styles.subject}>{item}</Text>}
-                                keyExtractor={(item, index) => index.toString()}
-                            />
-                        </View>
+                    </View>
+                </View>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <Text style={styles.sectionHeading}>Today's Schedule</Text>
+                    <Timetable />
+                    {modalVisible && (
+                        <GenerateRollNumbersScreen visible={modalVisible} onClose={() => setModalVisible(false)} data={userData} />
                     )}
-                    <TouchableOpacity onPress={() => console.log('Time Table Pressed')}>
-                        <View style={styles.accordionHeader}>
-                            <Text style={styles.accordionHeaderText}>TIME TABLE</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
+                </ScrollView>
+                <FooterNavbar navigation={navigation} data={userData} />
             </View>
-            {/* New Section */}
-            <View style={styles.newSection}>
-                <Text style={styles.sectionHeading}>SERVICES</Text>
-                <TouchableOpacity style={styles.buttonRow} onPress={() => setModalVisible(true)}>
-                    <Text style={styles.buttonText}>Generate Roll Numbers</Text>
-                    <Icon name="arrow-forward" size={24} color="#E31C62" />
-                </TouchableOpacity>
-                {modalVisible && (
-                    <GenerateRollNumbersScreen visible={modalVisible} onClose={() => setModalVisible(false)} data={data} />
-                )}
-                <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('UploadMarks', { data })}>
-                    <Text style={styles.buttonText}>Upload Marks</Text>
-                    <Icon name="arrow-forward" size={24} color="#E31C62" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('MarkAttendance')}>
-                    <Text style={styles.buttonText}>Mark Attendance</Text>
-                    <Icon name="arrow-forward" size={24} color="#E31C62" />
-                </TouchableOpacity>
-                <TouchableOpacity 
-                    style={styles.buttonRow} 
-                    onPress={() => {
-                        console.log('Navigating to ReportCard with tedata:', tedata); // Debugging log
-                        navigation.navigate('ReportCard', { tedata });
-                    }}
-                >
-                    <Text style={styles.buttonText}>REPORT CARDS</Text>
-                    <Icon name="arrow-forward" size={24} color="#E31C62" />
-                </TouchableOpacity>
-            </View>
-            <FooterNavbar navigation={navigation} />
-        </View>
+        </ScreenWrapper>
     );
 }
 
@@ -127,7 +136,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         width: '100%',
         height: '100%',
-        opacity: 0.5,
+        opacity: 0.16,
     },
     row: {
         flexDirection: 'row',
@@ -176,6 +185,15 @@ const styles = StyleSheet.create({
     teacherName: {
         fontSize: 13,
     },
+    classContainer: {
+        marginBottom: 10,
+    },
+    className: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
+        marginBottom: 5,
+    },
     subject: {
         fontSize: 16,
         marginBottom: 5,
@@ -210,8 +228,9 @@ const styles = StyleSheet.create({
         zIndex: 1, // Ensure it appears above other components
     },
     newSection: {
-        marginTop: 20,
+        marginTop: 10,
         padding: 10,
+        marginBottom: 40,
     },
     sectionHeading: {
         fontSize: 18,
@@ -227,10 +246,22 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: 10,
+        marginTop: 10,
         borderBottomWidth: 1,
+        borderTopWidth: 1,
         borderBottomColor: '#ccc',
+        borderTopColor: '#ccc',
+        width: screenWidth * 0.47, // Match the width of the accordionHeader
     },
     buttonText: {
         fontSize: 16,
+    },
+    icon: {
+        width: 30,
+        height: 30,
+    },
+    menu: {
+        marginTop: 12,
+        backgroundColor: '#E0F2FE', // Apply the background color to the menu
     },
 });

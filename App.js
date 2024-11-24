@@ -23,6 +23,7 @@ import ReportCardScreen from './components/teachersegment/Tservices/ReportCardSc
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { BaseUrlProvider } from './BaseUrlContext'; // Import the BaseUrlProvider
+import UploadHomeWork from './components/teachersegment/Tservices/UploadHomeworkScreen';
 
 const Stack = createStackNavigator();
 
@@ -43,8 +44,8 @@ export default function App() {
     return (
         <BaseUrlProvider>
             <NavigationContainer>
-                <Stack.Navigator initialRouteName="Welcome">
-                    <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
+                <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="Welcome" component={WelcomeScreen} />
                     <Stack.Screen name="Login" component={Login} />
                     <Stack.Screen name="TeacherDashboard" component={TeacherDashboard} />
                     <Stack.Screen name="StudentDashboard" component={StudentDashboard} />
@@ -57,7 +58,7 @@ export default function App() {
                     <Stack.Screen name="Planner" component={Planner} />
                     <Stack.Screen name="Learn" component={Learn} />
                     <Stack.Screen name="SendAssessment" component={SendAssessmentScreen} />
-                    <Stack.Screen name="UploadHomework" component={UploadHomeworkScreen} />
+                    <Stack.Screen name="UploadHomework" component={UploadHomeWork} />
                     <Stack.Screen name="Notify" component={NotifyScreen} />
                     <Stack.Screen name="UpdateClassWork" component={UpdateClassWorkScreen} />
                     <Stack.Screen name="UploadMarks" component={UploadMarksScreen} />
