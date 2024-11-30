@@ -27,6 +27,7 @@ export default function Login() {
                 navigateTo = 'TeacherDashboard';
             } else if (userId.startsWith('S')) {
                 url = `${baseUrl}/st_login`;
+                console.log(url);
                 navigateTo = 'StudentDashboard';
             } else {
                 throw new Error('Invalid User ID');
