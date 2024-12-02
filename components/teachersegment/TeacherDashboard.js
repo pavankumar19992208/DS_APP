@@ -25,6 +25,11 @@ export default function TeacherDashboard({ navigation }) {
         navigation.navigate('Login'); // Redirect to the login screen
     };
 
+    const onProfilePress = () => {
+        navigation.navigate('TeacherProfile', { userData });
+        hideMenu();
+    };
+
     const handleParentConnect = () => {
         navigation.navigate('ParentConnect', { data: userData }); // Navigate to the Teacher Connect screen
     };
@@ -62,7 +67,7 @@ export default function TeacherDashboard({ navigation }) {
                             <MenuItem onPress={handleParentConnect}>
                                 <Text>Parent Connect</Text>
                             </MenuItem>
-                            <MenuItem onPress={handleLogout}>
+                            <MenuItem onPress={onProfilePress}>
                                 <Text>Profile</Text>
                             </MenuItem>
                             <MenuItem onPress={handleLogout}>

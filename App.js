@@ -24,6 +24,9 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { BaseUrlProvider } from './BaseUrlContext'; // Import the BaseUrlProvider
 import UploadHomeWork from './components/teachersegment/Tservices/UploadHomeworkScreen';
+import TeacherProfile from './components/teachersegment/Tservices/TeacherProfile';
+import ParentConnect from './components/teachersegment/ParentConnect';
+
 
 const Stack = createStackNavigator();
 
@@ -64,6 +67,9 @@ export default function App() {
                     <Stack.Screen name="UploadMarks" component={UploadMarksScreen} />
                     <Stack.Screen name="MarkAttendance" component={MarkAttendanceScreen} />
                     <Stack.Screen name="ReportCard" component={ReportCardScreen} />
+                    <Stack.Screen name="TeacherProfile" component={TeacherProfile} />
+                    <Stack.Screen name="ParentConnect" component={ParentConnect} />
+                    
                 </Stack.Navigator>
             </NavigationContainer>
         </BaseUrlProvider>

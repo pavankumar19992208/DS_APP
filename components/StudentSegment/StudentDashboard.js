@@ -50,9 +50,9 @@ export default function StudentDashboard({ navigation }) {
                 {/* Row 2 */}
                 <View style={styles.row}>
                     <View style={styles.column21}>
-                        <Image source={{ uri: userData.student.STUDENT_PIC }} style={styles.profilePic} />
-                        <Text style={styles.studentId}>{userData.student.STUDENT_ID}</Text>
-                        <Text style={styles.studentName}>{userData.student.STUDENT_NAME}</Text>
+                        <Image source={{ uri: userData.student.Photo}} style={styles.profilePic} />
+                        <Text style={styles.studentId}>{userData.student.StudentId}</Text>
+                        <Text style={styles.studentName}>{userData.student.studentName}</Text>
                     </View>
                     <View style={styles.column22}>
                         <View style={styles.card}>
@@ -60,7 +60,7 @@ export default function StudentDashboard({ navigation }) {
                             <View style={styles.separator} />
                             <Text style={styles.description}>{userData.student.SCHOOL_NAME}</Text>
                             <View style={styles.separator} />
-                            <Text style={styles.description}>GRADE: {userData.student.GRADE}</Text>
+                            <Text style={styles.description}>GRADE: {userData.student.Grade}</Text>
                             <View style={styles.separator} />
                             <Text style={styles.description}>SECTION: {userData.student.SECTION}</Text>
                             <View style={styles.separator} />
