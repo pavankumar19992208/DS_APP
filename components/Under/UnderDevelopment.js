@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import LottieView from 'lottie-react-native';
-import underdevelopment from '../commons/jsonfiles/underdevelopment.json';
+import underdevelopment from '../../components/commons/jsonfiles/underdevelopment.json';
 
 const { width } = Dimensions.get('window');
 
@@ -39,9 +39,6 @@ const styles = StyleSheet.create({
     animationContainer: {
         width: 220,
         height: 220,
-       // borderWidth: 2,
-        //borderColor: 'gray',
-       // borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 20,
