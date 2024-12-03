@@ -1,13 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import LottieView from 'lottie-react-native';
-<<<<<<< HEAD:components/Under/UnderDevelopment.js
-import underdevelopment from '../../components/commons/jsonfiles/underdevelopment.json';
-=======
 import underdevelopment from './jsonfiles/underdevelopment.json';
->>>>>>> 5844ad5bedd7709e2e9356786ce68a7e39a50338:components/commons/UnderDevelopment.js
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const UnderDevelopment = ({ message }) => (
     <View style={styles.container}>
@@ -35,9 +31,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#E0F2FE',
     },
     underDevelopment: {
-        fontSize: 15,
+        fontSize: 20,
         color: 'red',
-        textDecorationLine: 'underline',
         marginBottom: 20,
     },
     animationContainer: {
@@ -48,8 +43,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     animation: {
-        width: 200,
-        height: 200,
+        width: 250,
+        height: 250,
     },
     box: {
         width: width - 32,
@@ -64,6 +59,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'gray',
         textAlign: 'center',
+        fontFamily: 'Arial',
+        lineHeight: 24,
     },
 });
 

@@ -1,23 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import UnderDevelopment from '../../commons/UnderDevelopment';
 
-const Planner = () => {
-    return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Planner Screen</Text>
-        </View>
-    );
-};
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    text: {
-        fontSize: 20,
-    },
-});
+const Planner = () => (
+    <UnderDevelopment message="This Planner screen is under construction. Please check back later." />
+);
 
 export default Planner;

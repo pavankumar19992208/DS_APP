@@ -1,19 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import UnderDevelopment from  '../../commons/UnderDevelopment';
 
-const HomeworkScreen = () => (
-    <View style={styles.container}>
-    <Text style={styles.text}>Today's Homework Screen</Text>
-</View>
+const Assessments = () => (
+    <UnderDevelopment message="This Homeworks screen is under construction. Please check back later." />
 );
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    text: {
-        fontSize: 20,
-    },
-});
-export default HomeworkScreen;
+
+export default Assessments;

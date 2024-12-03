@@ -1,19 +1,9 @@
 import React from 'react';
-import { View, Text,StyleSheet } from 'react-native';
+import UnderDevelopment from '../../commons/UnderDevelopment';
 
-const StatisticalAnalysisScreen = () => (
-    <View style={styles.container}>
-    <Text style={styles.text}>StatisticalAnalysis Screen</Text>
-</View>
+const Assessments = () => (
+    <UnderDevelopment message="This Statistical screen is under construction. Please check back later."/>
 );
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    text: {
-        fontSize: 20,
-    },
-});
-export default StatisticalAnalysisScreen;
+
+export default Assessments;
+
