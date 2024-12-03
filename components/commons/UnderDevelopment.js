@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import LottieView from 'lottie-react-native';
-import underdevelopment from '../commons/jsonfiles/underdevelopment.json';
+import underdevelopment from './jsonfiles/underdevelopment.json';
 
 const { width } = Dimensions.get('window');
 
