@@ -50,7 +50,10 @@ export default function StudentDashboard({ navigation }) {
                 {/* Row 2 */}
                 <View style={styles.row}>
                     <View style={styles.column21}>
-                        <Image source={{ uri: userData.student.Photo}} style={styles.profilePic} />
+                        <Image
+                            source={userData.student.Photo ? { uri: userData.student.Photo } : require('../../assets/images/studentm.png')}
+                            style={styles.profilePic}
+                        />
                         <Text style={styles.studentId}>{userData.student.StudentId}</Text>
                         <Text style={styles.studentName}>{userData.student.studentName}</Text>
                     </View>
