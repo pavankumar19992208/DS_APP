@@ -6,19 +6,19 @@ const SFooterNavbar = ({ navigation }) => {
     return (
         <View style={styles.footer}>
             <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('StudentDashboard')}>
-                <Icon name="home" size={30} color="#E31C62D0" />
+                <Icon name="home" size={30} color="#F965A0" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Assessments')}>
+            <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('SLinkedIn')}>
                 <Image source={require('../../assets/images/nl_logo.png')} style={styles.nlLogo} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('BotGenie')}>
                 <Image source={require('../../assets/images/genie_icon.png')} style={styles.genieLogo} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Planner')}>
-                <Icon name="event" size={30} color="#E31C62D0" />
+                <Icon name="event" size={30} color="#F965A0" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Learn')}>
-                <Icon name="auto-stories" size={30} color="#E31C62D0" />
+                <Icon name="auto-stories" size={30} color="#F965A0" />
             </TouchableOpacity>
         </View>
     );
