@@ -26,6 +26,7 @@ import UploadHomeWork from './components/teachersegment/Tservices/UploadHomework
 import TeacherProfile from './components/teachersegment/Tservices/TeacherProfile';
 import ParentConnect from './components/teachersegment/ParentConnect';
 import SLinkedIn from './components/slinkedin/SLinkedIn';
+import AddPost from './components/slinkedin/AddPost/AddPost';
 
 
 const Stack = createStackNavigator();
@@ -69,7 +70,7 @@ export default function App() {
                     <Stack.Screen name="ReportCard" component={ReportCardScreen} />
                     <Stack.Screen name="TeacherProfile" component={TeacherProfile} />
                     <Stack.Screen name="ParentConnect" component={ParentConnect} />
-                    
+                    <Stack.Screen name="AddPost" component={AddPost} />
                 </Stack.Navigator>
             </NavigationContainer>
         </BaseUrlProvider>
