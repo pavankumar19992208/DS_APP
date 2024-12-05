@@ -33,7 +33,7 @@ const SLinkedIn = ({ navigation }) => {
             if (data.message === 'Username already exists') {
                 setUsernameError('Username already exists');
             } else {
-                setUserData({ ...userData, student: { ...userData.student, UserName: username } });
+                setUserData({ ...userData,  UserName: username });
                 setModalVisible(false);
                 setUsernameError('');
                 Alert.alert('Success', 'Username updated successfully');

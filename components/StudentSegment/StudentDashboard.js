@@ -2,16 +2,18 @@ import React, { useState, useContext } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, Alert, Dimensions } from 'react-native';
 import SFooterNavbar from './SFooterNavbar';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation } from '@react-navigation/native';
-import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
+import { Menu, MenuItem } from 'react-native-material-menu';
 import LottieView from 'lottie-react-native';
-import { UserDataContext } from '../../BaseUrlContext'; // Import UserDataContext
+import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import UserDataContext and BaseUrlContext
 import ScreenWrapper from '../../ScreenWrapper'; // Import ScreenWrapper
+import AniLoader from '../commons/jsonfiles/AniLoad.json'; // Import AniLoader component
 
 export default function StudentDashboard({ navigation }) {
-    const { userData } = useContext(UserDataContext); // Access userData from UserDataContext
+    const { userData, setUserData } = useContext(UserDataContext); // Access userData from UserDataContext
+    const baseUrl = useContext(BaseUrlContext); // Access the baseUrl from context
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [menuVisible, setMenuVisible] = useState(false);
+    const [loading, setLoading] = useState(false); // State for managing loading
 
     const handleLogout = () => {
         Alert.alert('Logout', 'You have been logged out.');
@@ -23,9 +25,58 @@ export default function StudentDashboard({ navigation }) {
     const hideMenu = () => setMenuVisible(false);
     const showMenu = () => setMenuVisible(true);
 
+    const handleNavigateToSLinkedIn = async () => {
+        if (!userData.UserName) { // Check if UserName does not exist
+            const payload = {
+                UserId: userData.student.UserId,
+                Name: userData.student.Name,
+                user_type: 'student', // Assuming user_type is 'student'
+            };
+    
+            console.log('Payload:', payload); // Print the payload to the console
+    
+            setLoading(true); // Set loading to true
+    
+            try {
+                const response = await fetch(`${baseUrl}/fetchuser`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload), // Send the payload
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+    
+                const data = await response.json();
+                setUserData({ ...userData, ...data });
+    
+                navigation.navigate('SLinkedIn');
+            } catch (error) {
+                Alert.alert('Error', error.message);
+            } finally {
+                setLoading(false); // Set loading to false
+            }
+        } else {
+            navigation.navigate('SLinkedIn'); // Navigate directly if UserName exists
+        }
+    };
+
     return (
         <ScreenWrapper>
             <View style={styles.container}>
+                {loading && (
+                    <View style={styles.loaderContainer}>
+                        <LottieView
+                            source={AniLoader}
+                            autoPlay
+                            loop
+                            style={styles.loader}
+                        />
+                    </View>
+                )}
                 <LottieView
                     source={require('../commons/jsonfiles/sbg.json')} // Adjust the path to your Lottie file
                     autoPlay
@@ -55,7 +106,7 @@ export default function StudentDashboard({ navigation }) {
                             style={styles.profilePic}
                         />
                         <Text style={styles.studentId}>{userData.student.StudentId}</Text>
-                        <Text style={styles.studentName}>{userData.student.studentName}</Text>
+                        <Text style={styles.studentName}>{userData.student.Name}</Text>
                     </View>
                     <View style={styles.column22}>
                         <View style={styles.card}>
@@ -90,7 +141,7 @@ export default function StudentDashboard({ navigation }) {
                         <Icon name="arrow-forward" size={24} color="#E31C62" />
                     </TouchableOpacity>
                 </View>
-                <SFooterNavbar navigation={navigation} />
+                <SFooterNavbar navigation={navigation} handleNavigateToSLinkedIn={handleNavigateToSLinkedIn} />
             </View>
         </ScreenWrapper>
     );
@@ -98,7 +149,7 @@ export default function StudentDashboard({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#E0F2FE',
+        backgroundColor: '#E0F2FEFF',
         flex: 1,
         padding: 20,
     },
@@ -203,5 +254,20 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         opacity: 0.25,
+    },
+    loaderContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+        zIndex: 1, // Ensure the loader is on top
+    },
+    loader: {
+        width: 100,
+        height: 100,
     },
 });

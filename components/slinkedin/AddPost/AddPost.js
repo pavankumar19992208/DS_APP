@@ -1,19 +1,24 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert, ScrollView, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { UserDataContext } from '../../../BaseUrlContext'; // Import UserDataContext
+import { UserDataContext, BaseUrlContext } from '../../../BaseUrlContext'; // Import UserDataContext
 import * as ImagePicker from 'expo-image-picker';
 import { FlatList } from 'react-native-gesture-handler';
+import { Picker } from '@react-native-picker/picker';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import Firebase Storage functions
+import { storage } from '../../connections/Firebase'; // Import Firebase storage instance
 
 const AddPost = ({ navigation }) => {
     const { userData } = useContext(UserDataContext); // Access userData from UserDataContext
+    const baseUrl = useContext(BaseUrlContext); // Access baseUrl from BaseUrlContext
     const [postContent, setPostContent] = useState('');
     const [tags, setTags] = useState('');
+    const [collabWith, setCollabWith] = useState('');
     const [privacy, setPrivacy] = useState('Public');
     const [location, setLocation] = useState('');
-    const [postType, setPostType] = useState('');
     const [attachments, setAttachments] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [suggestions, setSuggestions] = useState([]); // State for suggestions
 
     useEffect(() => {
         (async () => {
@@ -35,6 +40,43 @@ const AddPost = ({ navigation }) => {
         }
     };
 
+    const handleCollabWithChange = (text) => {
+        setCollabWith(text);
+        // Fetch suggestions from friends list based on the text after @
+        const friendsList = userData.friends || []; // Assuming friends list is in userData
+        if (friendsList.length === 0) {
+            setSuggestions(['No friends to suggest']);
+        } else {
+            const matches = friendsList.filter(friend => friend.includes(text.replace('@', '')));
+            setSuggestions(matches);
+        }
+    };
+
+    const uploadAttachments = async () => {
+        const uploadedUrls = [];
+        for (let i = 0; i < attachments.length; i++) {
+            const uri = attachments[i];
+            const response = await fetch(uri);
+            const blob = await response.blob();
+            const fileName = `${userData.UserId}_${i}`;
+            const storageRef = ref(storage, `Posts/${userData.UserId}/${fileName}`);
+            await uploadBytes(storageRef, blob);
+            const downloadURL = await getDownloadURL(storageRef);
+            uploadedUrls.push(downloadURL);
+        }
+        return uploadedUrls;
+    };
+
+    const formatDateTime = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    };
+
     const handleSubmit = async () => {
         if (!postContent) {
             Alert.alert('Error', 'Post content is mandatory.');
@@ -43,21 +85,21 @@ const AddPost = ({ navigation }) => {
 
         setLoading(true);
 
-        const postData = {
-            studentName: userData.student.studentName,
-            studentId: userData.student.UserId,
-            schoolName: userData.student.SCHOOL_NAME,
-            postContent,
-            tags,
-            privacy,
-            location,
-            postType,
-            attachments,
-            timestamp: new Date().toISOString(),
-        };
-
         try {
-            const response = await fetch(`${userData.baseUrl}/addpost`, {
+            const uploadedUrls = await uploadAttachments();
+
+            const postData = {
+                UserId: userData.UserId,
+                PostContent: postContent,
+                Tags: tags.split(',').map(tag => tag.trim()), // Convert tags to list of strings
+                Collaborations: collabWith.split(',').map(collab => collab.trim()), // Convert collabWith to list of strings
+                Privacy: privacy,
+                Location: location,
+                MediaUrl: uploadedUrls,
+                TimeStamp: formatDateTime(new Date()),
+            };
+            console.log("payload:", postData);
+            const response = await fetch(`${baseUrl}/addpost`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -119,22 +161,41 @@ const AddPost = ({ navigation }) => {
             />
             <TextInput
                 style={styles.input}
-                placeholder="Privacy (e.g., Public, Connections Only)"
-                value={privacy}
-                onChangeText={setPrivacy}
+                placeholder="Collab With (e.g., @friend)"
+                value={collabWith}
+                onChangeText={handleCollabWithChange}
             />
-            <TextInput
-                style={styles.input}
-                placeholder="Location"
-                value={location}
-                onChangeText={setLocation}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Post Type (e.g., Collaboration, Achievement)"
-                value={postType}
-                onChangeText={setPostType}
-            />
+            {suggestions.length > 0 && (
+                <View style={styles.suggestionsContainer}>
+                    {suggestions.map((suggestion, index) => (
+                        <TouchableOpacity key={index} onPress={() => setCollabWith(`@${suggestion}`)}>
+                            <Text style={styles.suggestionText}>{suggestion}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+            )}
+            <View style={styles.row}>
+                <Picker
+                    selectedValue={privacy}
+                    style={styles.picker}
+                    onValueChange={(itemValue) => setPrivacy(itemValue)}
+                >
+                    <Picker.Item label="Public" value="Public" />
+                    <Picker.Item label="Friends Only" value="Friends Only" />
+                    <Picker.Item label="Private" value="Private" />
+                </Picker>
+                <View style={styles.locationContainer}>
+                    <TextInput
+                        style={styles.locationInput}
+                        placeholder="Location"
+                        value={location}
+                        onChangeText={setLocation}
+                    />
+                    <TouchableOpacity style={styles.locationIconContainer}>
+                        <Icon name="location-on" size={24} color="#0E5E9D" />
+                    </TouchableOpacity>
+                </View>
+            </View>
             <TouchableOpacity style={styles.submitButton} onPress={handleSubmit} disabled={loading}>
                 <Text style={styles.submitButtonText}>{loading ? 'Posting...' : 'Post'}</Text>
             </TouchableOpacity>
@@ -156,7 +217,7 @@ const styles = StyleSheet.create({
     },
     attachmentContainer: {
         height: Dimensions.get('window').height * 0.4,
-        width: '100%',
+        width: Dimensions.get('window').height * 0.414,
         backgroundColor: '#fff',
         borderRadius: 10,
         borderWidth: 1,
@@ -167,7 +228,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     attachmentItem: {
-        width: Dimensions.get('window').height * 0.4,
+        width: Dimensions.get('window').height * 0.41075, // Set width to the same as attachmentContainer
         height: Dimensions.get('window').height * 0.4,
         justifyContent: 'center',
         alignItems: 'center',
@@ -175,7 +236,7 @@ const styles = StyleSheet.create({
     addMoreItem: {
         justifyContent: 'center',
         alignItems: 'center',
-        width: Dimensions.get('window').height * 0.4,
+        width: Dimensions.get('window').height * 0.41075, // Set width to the same as attachmentContainer
         height: Dimensions.get('window').height * 0.4,
         borderWidth: 1,
         borderColor: '#0E5E9D',
@@ -192,6 +253,45 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         borderWidth: 1,
         borderColor: '#ccc',
+    },
+    suggestionsContainer: {
+        backgroundColor: '#fff',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        marginBottom: 15,
+    },
+    suggestionText: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 15,
+    },
+    picker: {
+        flex: 1,
+        height: 60,
+    },
+    locationContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        backgroundColor: '#fff',
+        marginLeft: 10,
+    },
+    locationInput: {
+        flex: 1,
+        padding: 10,
+    },
+    locationIconContainer: {
+        padding: 10,
     },
     attachment: {
         width: '100%',
