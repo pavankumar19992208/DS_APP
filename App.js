@@ -9,7 +9,6 @@ import StatisticalAnalysisScreen from './components/StudentSegment/StServices/St
 import AcademicReportScreen from './components/StudentSegment/StServices/AcademicReportScreen';
 import NotificationsScreen from './components/StudentSegment/StServices/NotificationsScreen';
 import HomeworkScreen from './components/StudentSegment/StServices/HomeworkScreen';
-import Assessments from './components/StudentSegment/StServices/Assessments';
 import BotGenie from './components/StudentSegment/StServices/BotGenie';
 import Planner from './components/StudentSegment/StServices/Planner';
 import Learn from './components/StudentSegment/StServices/Learn';
@@ -26,6 +25,7 @@ import { BaseUrlProvider } from './BaseUrlContext'; // Import the BaseUrlProvide
 import UploadHomeWork from './components/teachersegment/Tservices/UploadHomeworkScreen';
 import TeacherProfile from './components/teachersegment/Tservices/TeacherProfile';
 import ParentConnect from './components/teachersegment/ParentConnect';
+import SLinkedIn from './components/slinkedin/SLinkedIn';
 
 
 const Stack = createStackNavigator();
@@ -56,7 +56,7 @@ export default function App() {
                     <Stack.Screen name="Notifications" component={NotificationsScreen} />
                     <Stack.Screen name="AcademicReport" component={AcademicReportScreen} />
                     <Stack.Screen name="StatisticalAnalysis" component={StatisticalAnalysisScreen} />
-                    <Stack.Screen name="Assessments" component={Assessments} />
+                    <Stack.Screen name="SLinkedIn" component={SLinkedIn} />
                     <Stack.Screen name="BotGenie" component={BotGenie} />
                     <Stack.Screen name="Planner" component={Planner} />
                     <Stack.Screen name="Learn" component={Learn} />
