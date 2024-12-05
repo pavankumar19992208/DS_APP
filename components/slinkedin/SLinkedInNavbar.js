@@ -20,15 +20,6 @@ const SLinkedInNavbar = ({ navigation }) => {
             <TouchableOpacity
                 style={[
                     styles.iconContainer,
-                    currentRoute === 'SLinkedIn' && styles.activeIconContainer,
-                ]}
-                onPress={() => navigation.navigate('SLinkedIn')}
-            >
-                <Icon name="rss-feed" size={30} color="#0E5E9D" />
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={[
-                    styles.iconContainer,
                     currentRoute === 'AddPost' && styles.activeIconContainer,
                 ]}
                 onPress={() => navigation.navigate('AddPost')}
@@ -38,11 +29,20 @@ const SLinkedInNavbar = ({ navigation }) => {
             <TouchableOpacity
                 style={[
                     styles.iconContainer,
-                    currentRoute === 'Notifications' && styles.activeIconContainer,
+                    currentRoute === 'SLinkedIn' && styles.activeIconContainer,
                 ]}
-                onPress={() => navigation.navigate('Notifications')}
+                onPress={() => navigation.navigate('SLinkedIn')}
             >
-                <Icon name="notifications" size={30} color="#0E5E9D" />
+                <Icon name="rss-feed" size={30} color="#0E5E9D" />
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={[
+                    styles.iconContainer,
+                    currentRoute === 'SearchUsers' && styles.activeIconContainer,
+                ]}
+                onPress={() => navigation.navigate('SearchUsers')}
+            >
+                <Icon name="search" size={30} color="#0E5E9D" />
             </TouchableOpacity>
             <TouchableOpacity
                 style={[

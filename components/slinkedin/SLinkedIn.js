@@ -25,7 +25,7 @@ const SLinkedIn = ({ navigation }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ UserId: userData.student.UserId, userName: username }),
+                body: JSON.stringify({ UserId: userData.student?.UserId ?? '', userName: username }),
             });
 
             const data = await response.json();
@@ -33,7 +33,7 @@ const SLinkedIn = ({ navigation }) => {
             if (data.message === 'Username already exists') {
                 setUsernameError('Username already exists');
             } else {
-                setUserData({ ...userData, student: { ...userData.student, UserName: username } });
+                setUserData({ ...userData, UserName: username });
                 setModalVisible(false);
                 setUsernameError('');
                 Alert.alert('Success', 'Username updated successfully');
@@ -49,16 +49,16 @@ const SLinkedIn = ({ navigation }) => {
             <View style={styles.topNavbar}>
                 <View style={styles.column1}>
                     <Image
-                        source={userData.student.Photo ? { uri: userData.student.Photo } : require('../../assets/images/studentm.png')} // Replace with actual profile picture source
+                        source={userData.student?.Photo ? { uri: userData.student.Photo } : require('../../assets/images/studentm.png')} // Replace with actual profile picture source
                         style={styles.profilePic}
                     />
                 </View>
                 <View style={styles.column2}>
                     <View style={styles.row1}>
-                        <Text style={styles.studentName}>{userData.student.Name}</Text>
+                        <Text style={styles.studentName}>{userData.student?.Name ?? ''}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.schoolName}>{userData.student.SCHOOL_NAME}</Text>
+                        <Text style={styles.schoolName}>{userData.student?.SCHOOL_NAME ?? ''}</Text>
                     </View>
                 </View>
                 <View style={styles.column3}>

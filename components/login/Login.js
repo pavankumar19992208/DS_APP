@@ -6,11 +6,13 @@ import img from '../../assets/images/large-dNk4O_UUZ-transformed (1).png';
 import Help from './Help';
 import Loader from '../commons/Loader'; // Import the Loader component
 import Icon from 'react-native-vector-icons/FontAwesome';
+import RegisterTestUserModal from './RegisterTestUserModal'; // Import the RegisterTestUserModal component
 
 export default function Login() {
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false); // State to manage loader visibility
+    const [modalVisible, setModalVisible] = useState(false); // State to manage modal visibility
     const baseUrl = useContext(BaseUrlContext); // Access the baseUrl from context
     const { setUserData } = useContext(UserDataContext); // Access the setUserData function from UserDataContext
     const navigation = useNavigation();
@@ -20,11 +22,15 @@ export default function Login() {
         try {
             let url = '';
             let navigateTo = '';
-
+            
             if (userId.startsWith('T')) {
                 url = `${baseUrl}/teacher_login`;
                 console.log(url);
                 navigateTo = 'TeacherDashboard';
+            }else if (userId.startsWith('Q')) {
+                url = `${baseUrl}/testerlogin`;
+                console.log(url);
+                navigateTo = 'StudentDashboard';
             } else if (userId.startsWith('S')) {
                 url = `${baseUrl}/st_login`;
                 console.log(url);
@@ -102,6 +108,10 @@ export default function Login() {
                     </View>
                 </View>
             </View>
+            <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.registerButton}>
+                <Text style={styles.registerButtonText}>Register</Text>
+            </TouchableOpacity>
+            <RegisterTestUserModal visible={modalVisible} onClose={() => setModalVisible(false)} />
             <Help />
         </View>
     );
@@ -168,4 +178,15 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         color: '#ED1111',
     },
+    registerButton: {
+        marginTop: 20,
+        padding: 10,
+        backgroundColor: '#0E5E9D',
+        borderRadius: 5,
+    },
+    registerButtonText: {
+        color: '#fff',
+        fontSize: 16,
+    },
 });
+
