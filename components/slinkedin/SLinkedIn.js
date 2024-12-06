@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions, Alert, Mod
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SLinkedInNavbar from './SLinkedInNavbar'; // Import the new component
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import UserDataContext and BaseUrlContext
+import Feed from './Feed'; // Import the Feed component
 
 const SLinkedIn = ({ navigation }) => {
     const { userData, setUserData } = useContext(UserDataContext); // Access userData from UserDataContext
@@ -70,7 +71,7 @@ const SLinkedIn = ({ navigation }) => {
 
             {/* Middle Section for Feed */}
             <View style={styles.feedContainer}>
-                <Text>Feed goes here...</Text>
+                <Feed />
             </View>
 
             {/* Bottom Navbar */}

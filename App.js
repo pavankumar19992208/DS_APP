@@ -27,6 +27,7 @@ import TeacherProfile from './components/teachersegment/Tservices/TeacherProfile
 import ParentConnect from './components/teachersegment/ParentConnect';
 import SLinkedIn from './components/slinkedin/SLinkedIn';
 import AddPost from './components/slinkedin/AddPost/AddPost';
+import SearchUsers from './components/slinkedin/SearchUsers';
 
 
 const Stack = createStackNavigator();
@@ -71,6 +72,7 @@ export default function App() {
                     <Stack.Screen name="TeacherProfile" component={TeacherProfile} />
                     <Stack.Screen name="ParentConnect" component={ParentConnect} />
                     <Stack.Screen name="AddPost" component={AddPost} />
+                    <Stack.Screen name="SearchUsers" component={SearchUsers} />   
                 </Stack.Navigator>
             </NavigationContainer>
         </BaseUrlProvider>
