@@ -1,5 +1,6 @@
-import React, { useState, useContext } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image, Alert, Dimensions } from 'react-native';
+import React, { useState, useContext,useEffect } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, Image, Alert, Dimensions,FlatList,Modal,Button,ScrollView } from 'react-native';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import SFooterNavbar from './SFooterNavbar';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Menu, MenuItem } from 'react-native-material-menu';
@@ -8,12 +9,135 @@ import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Impor
 import ScreenWrapper from '../../ScreenWrapper'; // Import ScreenWrapper
 import AniLoader from '../commons/jsonfiles/AniLoad.json'; // Import AniLoader component
 
+const staticHomeworkData = [
+    { H_id: 1, subject: 'Maths', title: 'Algebra Homework', description: 'Solve the algebra  ', attachments: [], updatedBy: 'Teacher A' },
+    { H_id: 2, subject: 'Science', title: 'Physics Homework', description: 'Read twerth asdf bvcxz drtgfds ijkngtfd cdserfdas thst he chapter on motion', attachments: [], updatedBy: 'Teacher B' },
+    { H_id: 3, subject: 'Social', title: 'History Homework', description: 'Write an essay on World War II', attachments: [], updatedBy: 'Teacher C' },
+    { H_id: 4, subject: 'English', title: 'Literature Homework', description: 'Analyze the poem', attachments: [], updatedBy: 'Teacher D' },
+];
+const ClassworkRoute = ({ classwork }) => (
+    <View style={styles.scene}>
+        <FlatList
+            data={classwork}
+            keyExtractor={(item) => item.H_id.toString()}
+            renderItem={({ item }) => (
+                <View style={styles.itemContainer}>
+                    <Text style={styles.itemTitle}>{item.HomeWork.title}</Text>
+                    <Text style={styles.itemDescription}>{item.HomeWork.description}</Text>
+                </View>
+            )}
+            ListEmptyComponent={<Text>No classwork available</Text>}
+        />
+    </View>
+);
+
+const HomeworkRoute = ({ homework }) => {
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedHomework, setSelectedHomework] = useState(null);
+
+    const handlePress = (item) => {
+        setSelectedHomework(item);
+        setModalVisible(true);
+    };
+    return (
+        <View style={styles.scene}>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.subjectButton} onPress={() => handlePress(staticHomeworkData[0])}>
+                    <Text style={styles.buttonText}>Maths</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.subjectButton} onPress={() => handlePress(staticHomeworkData[1])}>
+                    <Text style={styles.buttonText}>Science</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.subjectButton} onPress={() => handlePress(staticHomeworkData[2])}>
+                    <Text style={styles.buttonText}>Social</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.subjectButton} onPress={() => handlePress(staticHomeworkData[3])}>
+                    <Text style={styles.buttonText}>English</Text>
+                </TouchableOpacity>
+            </View>
+            {selectedHomework && (
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        setModalVisible(!modalVisible);
+                    }}
+                >
+                  <View style={styles.modalContainer}>
+                        <View style={styles.modalView}>
+                            <ScrollView  contentContainerStyle={styles.scrollViewContent}>
+                                <Text style={styles.modalTitle}>Subject: {selectedHomework.subject}</Text>
+                                <View style={styles.separator} />
+                                <Text style={styles.modalDetail}>Title: {selectedHomework.title}</Text>
+                                <View style={styles.separator} />
+                                <Text style={styles.modalDetail}>Description: {selectedHomework.description}</Text>
+                                <View style={styles.separator} />
+                                <Text style={styles.modalDetail}>Attachments: {selectedHomework.attachments.length}</Text>
+                                <View style={styles.separator} />
+                                <Text style={styles.modalDetail}>Updated By: {selectedHomework.updatedBy}</Text>
+                                <View style={styles.separator} />
+                                <Button title="Close" onPress={() => setModalVisible(false)} />
+                            </ScrollView>
+                        </View>
+                    </View>   
+                </Modal>
+            )}
+        </View>
+    );
+};  
 export default function StudentDashboard({ navigation }) {
     const { userData, setUserData } = useContext(UserDataContext); // Access userData from UserDataContext
     const baseUrl = useContext(BaseUrlContext); // Access the baseUrl from context
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [menuVisible, setMenuVisible] = useState(false);
     const [loading, setLoading] = useState(false); // State for managing loading
+    const [classwork, setClasswork] = useState([]);
+    const [homework, setHomework] = useState([]);
+
+    const [index, setIndex] = useState(0);
+    const [routes] = useState([
+        { key: 'classwork', title: 'CLASSWORK' },
+        { key: 'homework', title: 'HOMEWORK' },
+    ]);
+
+    const renderScene = ({ route }) => {
+        switch (route.key) {
+             case 'classwork':
+                return <ClassworkRoute classwork={classwork} />;
+            case 'homework':
+                return <HomeworkRoute homework={homework} />;
+            default:
+                return null;
+        }
+    };
+    // useEffect(() => {
+    //     const fetchClasswork = async () => {
+    //         try {
+    //             const response = await fetch(`${baseUrl}/classwork`);
+    //             const data = await response.json();
+    //             setClasswork(data);
+    //         } catch (error) {
+    //             console.error('Failed to fetch classwork:', error);
+    //         }
+    //     };
+
+    //     const fetchHomework = async () => {
+    //         try {
+    //             const response = await fetch(`${baseUrl}/homework`);
+    //             const data = await response.json();
+    //             const today = new Date().toISOString().split('T')[0];
+    //             const recentHomework = data.filter(item => item.CreatedAt === today);
+    //             setHomework(data);
+    //         } catch (error) {
+    //             console.error('Failed to fetch homework:', error);
+    //         }
+    //     };
+
+    //     fetchClasswork();
+    //     fetchHomework();
+    // }, [baseUrl]);
+
 
     const handleLogout = () => {
         Alert.alert('Logout', 'You have been logged out.');
@@ -63,7 +187,6 @@ export default function StudentDashboard({ navigation }) {
             navigation.navigate('SLinkedIn'); // Navigate directly if UserName exists
         }
     };
-
     return (
         <ScreenWrapper>
             <View style={styles.container}>
@@ -122,7 +245,7 @@ export default function StudentDashboard({ navigation }) {
                         </View>
                     </View>
                 </View>
-                <View style={styles.newSection}>
+                {/* <View style={styles.newSection}>
                     <Text style={styles.sectionHeading}>SERVICES</Text>
                     <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('Homework')}>
                         <Text style={styles.buttonText}>TODAY'S HOMEWORK</Text>
@@ -140,7 +263,21 @@ export default function StudentDashboard({ navigation }) {
                         <Text style={styles.buttonText}>STATISTICAL ANALYSIS</Text>
                         <Icon name="arrow-forward" size={24} color="#E31C62" />
                     </TouchableOpacity>
-                </View>
+                </View> */}
+                 <TabView
+                    navigationState={{ index, routes }}
+                    renderScene={renderScene}
+                    onIndexChange={setIndex}
+                    initialLayout={{ width: Dimensions.get('window').width }}
+                    renderTabBar={props => (
+                        <TabBar
+                            {...props}
+                            indicatorStyle={styles.indicator}
+                            style={styles.tabBar}
+                            labelStyle={styles.tabLabel}
+                        />
+                    )}
+                />
                 <SFooterNavbar navigation={navigation} handleNavigateToSLinkedIn={handleNavigateToSLinkedIn} />
             </View>
         </ScreenWrapper>
@@ -270,4 +407,78 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
     },
+    tabBar: {
+        backgroundColor: '#3C70D8',
+    },
+    indicator: {
+        backgroundColor: '#E31C62',
+    },
+    tabLabel: {
+        color: '#FFF',
+        fontWeight: 'bold',
+    },
+    scene: {
+        flex: 1,
+        //backgroundColor: '#fff',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginBottom: 10,
+        marginTop: 10,
+    },
+    subjectButton: {
+        backgroundColor: '#3C70D8',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: '#FFF',
+        fontSize: 16,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: '#E0F2FEFF',
+        borderRadius: 20,
+        padding: 20,
+        //alignItems: 'flex-start',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        width: '90%',
+        maxHeight: '90%',
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        //marginBottom: 15,
+        //paddingRight: 100,
+        textAlign: 'left',
+    },
+    modalDetail: {
+        fontSize: 16,
+        //marginBottom: 10,
+       // paddingRight: 50,
+       textAlign:'left',
+    },
+    separator: {
+        height: 1,
+        backgroundColor: '#ccc',
+        marginVertical: 10,
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    scrollViewContent: {
+        flexGrow: 1,
+    },
+    
 });
