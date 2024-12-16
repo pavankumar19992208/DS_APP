@@ -76,18 +76,18 @@ export default function TeacherDashboard({ navigation }) {
                         </Menu>
                     </View>
                     <View style={styles.column12}>
-                        <Text style={styles.schoolName}>{userData.teacher.SCHOOL_NAME}</Text>
+                        <Text style={styles.schoolName}>{userData.user.SCHOOL_NAME}</Text>
                     </View>
                 </View>
                 {/* Row 2 */}
                 <View style={styles.row}>
                     <View style={styles.column21}>
                         <Image
-                            source={userData.teacher.profilepic ? { uri: userData.teacher.profilepic } : require('../../assets/images/teacherf.png')}
+                            source={userData.user.profilepic ? { uri: userData.user.profilepic } : require('../../assets/images/teacherf.png')}
                             style={styles.profilePic}
                         />
-                        <Text style={styles.teacherId}>{userData.teacher.userid}</Text>
-                        <Text style={styles.teacherName}>{userData.teacher.fullName}</Text>
+                        <Text style={styles.teacherId}>{userData.user.userid}</Text>
+                        <Text style={styles.teacherName}>{userData.user.fullName}</Text>
                     </View>
                     <View style={[styles.column22, { marginBottom: 30 }]}>
                         <TouchableOpacity onPress={toggleExpanded}>
@@ -98,7 +98,7 @@ export default function TeacherDashboard({ navigation }) {
                         </TouchableOpacity>
                         {!isCollapsed && (
                             <View style={styles.subjectsContainer}>
-                                {Object.entries(userData.teacher.subjectSpecialization).map(([className, subjects], index) => (
+                                {Object.entries(userData.user.subjectSpecialization).map(([className, subjects], index) => (
                                     <View key={index} style={styles.classContainer}>
                                         <Text style={styles.className}>{className}</Text>
                                         {subjects.map((subject, subIndex) => (

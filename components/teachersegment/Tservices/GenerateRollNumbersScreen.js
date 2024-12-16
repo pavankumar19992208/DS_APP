@@ -15,13 +15,13 @@ const GenerateRollNumbersScreen = ({ visible, onClose, data }) => {
     const baseUrl = useContext(BaseUrlContext); // Use the BaseUrlContext
 
     const handleGenerate = async () => {
-        console.log(data.teacher.TEACHER_NAME);
+        console.log(data.user.TEACHER_NAME);
         setLoading(true);
         setResponseMessage('');
         setShowTick(false);
         setResponseTextColor('red'); // Reset color to red initially
         const details = {
-            schoolId: data.teacher.SCHOOL_ID,
+            schoolId: data.user.SCHOOL_ID,
             year: selectedYear,
             grade: selectedGrade,
             section: selectedSection,
@@ -82,7 +82,7 @@ const GenerateRollNumbersScreen = ({ visible, onClose, data }) => {
                                 <>
                                     <Text style={{ fontSize: 16, color: 'green' }}>check teacher name before continue</Text>
                                     <View style={styles.headerRow}>
-                                        <Text style={styles.headerText}>{data.teacher.TEACHER_NAME}</Text>
+                                        <Text style={styles.headerText}>{data.user.TEACHER_NAME}</Text>
                                         <Picker
                                             selectedValue={selectedYear}
                                             style={styles.picker}

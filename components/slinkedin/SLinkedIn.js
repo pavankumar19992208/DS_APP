@@ -26,7 +26,7 @@ const SLinkedIn = ({ navigation }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ UserId: userData.student?.UserId ?? '', userName: username }),
+                body: JSON.stringify({ UserId: userData.user?.UserId ?? '', userName: username }),
             });
 
             const data = await response.json();
@@ -49,29 +49,31 @@ const SLinkedIn = ({ navigation }) => {
             {/* Top Navbar */}
             <View style={styles.topNavbar}>
                 <View style={styles.column1}>
-                    <Image
-                        source={userData.student?.Photo ? { uri: userData.student.Photo } : require('../../assets/images/studentm.png')} // Replace with actual profile picture source
-                        style={styles.profilePic}
-                    />
+                    <TouchableOpacity onPress={() => navigation.navigate('Profile', { profileId: userData.UserId })}>
+                        <Image
+                            source={userData.user?.Photo ? { uri: userData.user.Photo } : require('../../assets/images/studentm.png')} // Replace with actual profile picture source
+                            style={styles.profilePic}
+                        />
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.column2}>
                     <View style={styles.row1}>
-                        <Text style={styles.studentName}>{userData.student?.Name ?? ''}</Text>
+                        <Text style={styles.studentName}>{userData.user?.Name ?? ''}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.schoolName}>{userData.student?.SCHOOL_NAME ?? ''}</Text>
+                        <Text style={styles.schoolName}>{userData.user?.SCHOOL_NAME ?? ''}</Text>
                     </View>
                 </View>
                 <View style={styles.column3}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Challenges')}>
-                        <Icon name="emoji-events" size={40} color="#E31C62D0" />
+                    <TouchableOpacity onPress={() => navigation.navigate('NlNotifications')}>
+                        <Icon name="notifications" size={40} color="#E31C62D0" />
                     </TouchableOpacity>
                 </View>
             </View>
 
             {/* Middle Section for Feed */}
             <View style={styles.feedContainer}>
-                <Feed />
+                <Feed navigation={navigation} />
             </View>
 
             {/* Bottom Navbar */}

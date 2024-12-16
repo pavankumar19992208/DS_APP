@@ -28,6 +28,9 @@ import ParentConnect from './components/teachersegment/ParentConnect';
 import SLinkedIn from './components/slinkedin/SLinkedIn';
 import AddPost from './components/slinkedin/AddPost/AddPost';
 import SearchUsers from './components/slinkedin/SearchUsers';
+import Profile from './components/slinkedin/Profile';
+import Notifications from './components/slinkedin/Notifications';
+import Chat from './components/slinkedin/Chat';
 
 
 const Stack = createStackNavigator();
@@ -72,7 +75,10 @@ export default function App() {
                     <Stack.Screen name="TeacherProfile" component={TeacherProfile} />
                     <Stack.Screen name="ParentConnect" component={ParentConnect} />
                     <Stack.Screen name="AddPost" component={AddPost} />
-                    <Stack.Screen name="SearchUsers" component={SearchUsers} />   
+                    <Stack.Screen name="SearchUsers" component={SearchUsers} />  
+                    <Stack.Screen name="Profile" component={Profile} /> 
+                    <Stack.Screen name="NlNotifications" component={Notifications} />
+                    <Stack.Screen name="Chat" component={Chat} />
                 </Stack.Navigator>
             </NavigationContainer>
         </BaseUrlProvider>

@@ -17,7 +17,7 @@ const TeacherProfile = ({ route }) => {
         }
     };
 
-    const [profileData, setProfileData] = useState(userData.teacher);
+    const [profileData, setProfileData] = useState(userData.user);
     const [currentAddress, setCurrentAddress] = useState(parseJSON(profileData.currentAddress));
     const [editableFields, setEditableFields] = useState({
         contactNumber: false,

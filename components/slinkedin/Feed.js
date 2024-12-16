@@ -3,7 +3,9 @@ import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Dimensions, 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import UserDataContext and BaseUrlContext
 
-const Feed = () => {
+const { width, height } = Dimensions.get('window');
+
+const Feed = ({ navigation }) => {
     const { userData } = useContext(UserDataContext); // Access userData from UserDataContext
     const baseUrl = useContext(BaseUrlContext); // Access baseUrl from BaseUrlContext
     const [posts, setPosts] = useState([]);
@@ -43,24 +45,23 @@ const Feed = () => {
     };
 
     const renderPost = ({ item }) => {
+        console.log("UserId: ", item.UserId);
         const mediaUrls = JSON.parse(item.MediaUrl);
         return (
             <View style={styles.postContainer}>
                 {/* Row 1 */}
                 <View style={styles.row1}>
                     <View style={styles.column1}>
-                        <Image
-                            source={userData.student?.Photo ? { uri: userData.student.Photo } : require('../../assets/images/studentm.png')}
-                            style={styles.profilePic}
-                        />
+                        <TouchableOpacity onPress={() => navigation.navigate('Profile', { profileId: item.UserId })}>
+                            <Image
+                                source={userData.user?.Photo ? { uri: userData.user.Photo } : require('../../assets/images/studentm.png')}
+                                style={styles.profilePic}
+                            />
+                        </TouchableOpacity>
                     </View>
-                    <View style={styles.column6}>
-                    <View style={styles.row5}>
-                        <Text style={styles.studentName}>{userData.student?.Name ?? ''}</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.schoolName}>{userData.student?.SCHOOL_NAME ?? ''}</Text>
-                    </View>
+                    <View style={styles.column2}>
+                        <Text style={styles.studentName}>{userData.user?.Name ?? ''}</Text>
+                        <Text style={styles.schoolName}>{userData.user?.SCHOOL_NAME ?? ''}</Text>
                     </View>
                     <View style={styles.column3}>
                         <TouchableOpacity>
@@ -105,10 +106,10 @@ const Feed = () => {
                 </View>
                 {/* Row 4 */}
                 <View style={styles.row4}>
-                    <View style={styles.column1}>
+                    <View style={styles.columni}>
                         <Text>{new Date(item.TimeStamp).toLocaleString()}</Text>
                     </View>
-                    <View style={styles.column2}>
+                    <View style={styles.columni}>
                         <Text>{item.Location ?? ''}</Text>
                     </View>
                 </View>
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 2,
-        width: Dimensions.get('window').width - 20, // Ensure the width does not exceed the device width
+        width: width - 20, // Ensure the width does not exceed the device width
         alignSelf: 'center', // Center the post container
     },
     row1: {
@@ -146,20 +147,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 10,
     },
-    row: {
-        height: '35%',
-        marginTop: 10,
-        // justifyContent: 'top',
-    },
-    row5: {
-        height: '40%',
-        // paddingTop: 20,
-        marginBottom: 15,
-        // justifyContent: 'center',
-    },
     column1: {
         width: '15%',
         alignItems: 'center',
+    },
+    column2: {
+        flex: 1,
+        justifyContent: 'center',
     },
     column3: {
         width: '15%',
@@ -172,17 +166,23 @@ const styles = StyleSheet.create({
     },
     studentName: {
         fontWeight: 'bold',
-        fontSize: 12,
+        fontSize: 16,
     },
     schoolName: {
-        fontSize: 10,
+        fontSize: 14,
+    },
+    postContentContainer: {
+        marginBottom: 10,
+    },
+    postContent: {
+        fontSize: 14,
     },
     row2: {
         height: 200,
         marginBottom: 10,
     },
     media: {
-        width: Dimensions.get('window').width - 40,
+        width: width - 40,
         height: '100%',
         borderRadius: 5,
     },
@@ -197,25 +197,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
-    column1: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    morePostsButton: {
+        alignSelf: 'flex-end',
+        marginTop: 10,
     },
-    column2: {
-        maxWidth: '70%',
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    column6: {
-        maxWidth: '70%',
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    postContentContainer: {
-        marginBottom: 10,
-    },
-    postContent: {
+    morePostsText: {
         fontSize: 14,
+        color: '#0E5E9D',
     },
 });
 

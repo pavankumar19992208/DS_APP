@@ -28,8 +28,8 @@ export default function StudentDashboard({ navigation }) {
     const handleNavigateToSLinkedIn = async () => {
         if (!userData.UserName) { // Check if UserName does not exist
             const payload = {
-                UserId: userData.student?.UserId ?? '',
-                Name: userData.student?.Name ?? '',
+                UserId: userData.user?.UserId ?? '',
+                Name: userData.user?.Name ?? '',
                 user_type: 'student', // Assuming user_type is 'student'
             };
     
@@ -95,28 +95,28 @@ export default function StudentDashboard({ navigation }) {
                         </Menu>
                     </View>
                     <View style={styles.column12}>
-                        <Text style={styles.schoolName}>{userData.student?.SCHOOL_NAME ?? ''}</Text>
+                        <Text style={styles.schoolName}>{userData.user?.SCHOOL_NAME ?? ''}</Text>
                     </View>
                 </View>
                 {/* Row 2 */}
                 <View style={styles.row}>
                     <View style={styles.column21}>
                         <Image
-                            source={userData.student?.Photo ? { uri: userData.student.Photo } : require('../../assets/images/studentm.png')}
+                            source={userData.user?.Photo ? { uri: userData.user.Photo } : require('../../assets/images/studentm.png')}
                             style={styles.profilePic}
                         />
-                        <Text style={styles.studentId}>{userData.student?.StudentId ?? ''}</Text>
-                        <Text style={styles.studentName}>{userData.student?.Name ?? ''}</Text>
+                        <Text style={styles.studentId}>{userData.user?.StudentId ?? ''}</Text>
+                        <Text style={styles.studentName}>{userData.user?.Name ?? ''}</Text>
                     </View>
                     <View style={styles.column22}>
                         <View style={styles.card}>
                             <Text style={styles.heading}>STUDENT BIO</Text>
                             <View style={styles.separator} />
-                            <Text style={styles.description}>{userData.student?.SCHOOL_NAME ?? ''}</Text>
+                            <Text style={styles.description}>{userData.user?.SCHOOL_NAME ?? ''}</Text>
                             <View style={styles.separator} />
-                            <Text style={styles.description}>GRADE: {userData.student?.Grade ?? ''}</Text>
+                            <Text style={styles.description}>GRADE: {userData.user?.Grade ?? ''}</Text>
                             <View style={styles.separator} />
-                            <Text style={styles.description}>SECTION: {userData.student?.SECTION ?? ''}</Text>
+                            <Text style={styles.description}>SECTION: {userData.user?.SECTION ?? ''}</Text>
                             <View style={styles.separator} />
                             <Text style={styles.description}>MEDIUM: ENGLISH</Text>
                         </View>

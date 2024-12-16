@@ -43,7 +43,7 @@ const ReportCardScreen = ({ route }) => {
         const payload = {
             exam: selectedExam,
             studentId: selectedStudent.STUDENT_ID,
-            schoolId: tedata.teacher.SCHOOL_ID,
+            schoolId: tedata.user.SCHOOL_ID,
             year: selectedYear,
         };
         console.log(payload);

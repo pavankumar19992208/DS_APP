@@ -155,7 +155,7 @@ const AddPost = ({ navigation }) => {
             />
             <TextInput
                 style={styles.input}
-                placeholder="Tags (e.g., @student, @teacher)"
+                placeholder="Tags (e.g., @username)"
                 value={tags}
                 onChangeText={setTags}
             />

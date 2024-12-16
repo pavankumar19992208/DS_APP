@@ -41,7 +41,7 @@ export default function UploadMarksScreen({ route, navigation }) {
         const payload = {
             grade: selectedGrade,
             section: selectedSection,
-            schoolId: data.teacher.SCHOOL_ID,
+            schoolId: data.user.SCHOOL_ID,
         };
         console.log(payload);
 
@@ -84,7 +84,7 @@ export default function UploadMarksScreen({ route, navigation }) {
 
     const handleFinalSubmit = async () => {
         const payload = {
-            schoolId: data.teacher.SCHOOL_ID,
+            schoolId: data.user.SCHOOL_ID,
             Tmarks: marksTable,
             exam: selectedExam,
             grade: selectedGrade,
@@ -117,7 +117,7 @@ export default function UploadMarksScreen({ route, navigation }) {
         setIsModalVisible(false);
     };
 
-    if (!data || !data.teacher) {
+    if (!data || !data.user) {
         console.log(data);
         return (
             <View style={styles.container}>

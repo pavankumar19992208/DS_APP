@@ -22,7 +22,7 @@ const MarkAttendanceScreen = ({ data }) => {
     const handleTakeAttendance = async () => {
         console.log("gg", userData);
         const details = {
-            schoolId: userData.teacher.SCHOOL_ID,
+            schoolId: userData.user.SCHOOL_ID,
             year: '2324',
             grade: selectedGrade,
             section: selectedSection,
@@ -51,7 +51,7 @@ const MarkAttendanceScreen = ({ data }) => {
             date: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
             status: item.status,
             remarks: item.remarks || null,
-            recorded_by: userData.teacher.TEACHER_ID,
+            recorded_by: userData.user.TEACHER_ID,
         }));
 
         try {

@@ -84,7 +84,7 @@ const UploadHomeWork = ({ navigation }) => {
         }
 
         const homeworkData = {
-            SchoolId: userData.teacher.SCHOOL_ID,
+            SchoolId: userData.user.SCHOOL_ID,
             Class_: selectedClass,
             Sec: selectedSection,
             Subject: subject,
@@ -95,7 +95,7 @@ const UploadHomeWork = ({ navigation }) => {
             },
             CreatedAt: assignedDate.toISOString().split('T')[0], // Convert to YYYY-MM-DD format
             DueDate: dueDate.toISOString().split('T')[0], // Convert to YYYY-MM-DD format
-            UpdatedBy: userData.teacher.TEACHER_ID
+            UpdatedBy: userData.user.TEACHER_ID
         };
 
         try {
@@ -135,7 +135,7 @@ const UploadHomeWork = ({ navigation }) => {
                 onValueChange={(itemValue) => setSubject(itemValue)}
             >
                 <Picker.Item label="Select Subject" value="" />
-                {userData.teacher.subjects.map((subject, index) => (
+                {userData.user.subjects.map((subject, index) => (
                     <Picker.Item key={index} label={subject} value={subject} />
                 ))}
             </Picker>

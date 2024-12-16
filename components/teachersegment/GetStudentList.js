@@ -21,7 +21,7 @@ const GetStudentListScreen = ({ visible, onClose, data, setStudentList }) => {
         setResponseTextColor('red');
         
         const details = {
-            schoolId: data.teacher.SCHOOL_ID,
+            schoolId: data.user.SCHOOL_ID,
             year: selectedYear,
             grade: selectedGrade,
             section: selectedSection,
@@ -41,7 +41,7 @@ const GetStudentListScreen = ({ visible, onClose, data, setStudentList }) => {
                 setResponseMessage(data.message);
                 setResponseTextColor('green');
                 
-                setStudentList({ data: data1, schoolId: data.teacher.SCHOOL_ID, year: selectedYear, tdata: data });
+                setStudentList({ data: data1, schoolId: data.user.SCHOOL_ID, year: selectedYear, tdata: data });
                 onClose();
                 return;
             }
@@ -73,7 +73,7 @@ const GetStudentListScreen = ({ visible, onClose, data, setStudentList }) => {
                         <>
                             <Text style={{ fontSize: 16, color: 'green' }}>Select year, grade, and section</Text>
                             <View style={styles.headerRow}>
-                                <Text style={styles.headerText}>{data.teacher.TEACHER_NAME}</Text>
+                                <Text style={styles.headerText}>{data.user.TEACHER_NAME}</Text>
                                 <Picker
                                     selectedValue={selectedYear}
                                     style={styles.picker}

@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
-import { View, TextInput, FlatList, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, TextInput, FlatList, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { BaseUrlContext } from '../../BaseUrlContext'; // Import the BaseUrlContext
 
-const SearchUsers = () => {
+const SearchUsers = ({ navigation }) => {
     const baseUrl = useContext(BaseUrlContext); // Access the baseUrl from context
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
@@ -34,7 +34,14 @@ const SearchUsers = () => {
                 data={results}
                 keyExtractor={(item) => item.UserId}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.resultItem}>
+                    <TouchableOpacity 
+                        style={styles.resultItem} 
+                        onPress={() => navigation.navigate('Profile', { profileId: item.UserId })}
+                    >
+                        <Image
+                            source={item.Photo ? { uri: item.Photo } : require('../../assets/images/studentm.png')}
+                            style={styles.profilePic}
+                        />
                         <Text style={styles.resultText}>{item.UserName} ({item.Name})</Text>
                     </TouchableOpacity>
                 )}
@@ -58,9 +65,17 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     resultItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
         padding: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
+    },
+    profilePic: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        marginRight: 10,
     },
     resultText: {
         fontSize: 16,
