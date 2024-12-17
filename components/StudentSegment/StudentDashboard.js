@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image, Alert, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, Alert, Dimensions,ScrollView } from 'react-native';
 import SFooterNavbar from './SFooterNavbar';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Menu, MenuItem } from 'react-native-material-menu';
@@ -7,6 +7,12 @@ import LottieView from 'lottie-react-native';
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import UserDataContext and BaseUrlContext
 import ScreenWrapper from '../../ScreenWrapper'; // Import ScreenWrapper
 import AniLoader from '../commons/jsonfiles/AniLoad.json'; // Import AniLoader component
+
+const homeWorkImage = require('../../assets/images/home_work.png');
+const classWorkImage = require('../../assets/images/class_work.png');
+const notificationImage = require('../../assets/images/notifications.png');
+const AcademicReportImage = require('../../assets/images/academic_report.png');
+const StatisticalAnalysisImage = require('../../assets/images/s_analysis.png');
 
 export default function StudentDashboard({ navigation }) {
     const { userData, setUserData } = useContext(UserDataContext); // Access userData from UserDataContext
@@ -122,25 +128,47 @@ export default function StudentDashboard({ navigation }) {
                         </View>
                     </View>
                 </View>
+                <ScrollView style={styles.scrollView}>
                 <View style={styles.newSection}>
                     <Text style={styles.sectionHeading}>SERVICES</Text>
-                    <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('Homework')}>
-                        <Text style={styles.buttonText}>TODAY'S HOMEWORK</Text>
-                        <Icon name="arrow-forward" size={24} color="#E31C62" />
+                    <View style={styles.servicesRow}>
+                    <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('Homework')}>
+                        <Image source={homeWorkImage} style={styles.homeWorkImage} />
+                        <Text style={styles.buttonText}>HOME WORK</Text>
+                        {/* <Icon name="arrow-forward" size={24} color="#E31C62" /> */}
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('Notifications')}>
+                    <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('Homework')}>
+                        {/* <Text style={styles.buttonText}>TODAY'S HOMEWORK</Text> */}
+                        <Image source={classWorkImage} style={styles.homeWorkImage} />
+                        <Text style={styles.buttonText} >CLASS WORK</Text>
+                        {/* <Icon name="arrow-forward" size={24} color="#E31C62" /> */}
+                    </TouchableOpacity>
+                    </View>
+                    <View style={styles.servicesRow}>
+                    <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('Notifications')}>
+                        {/* <Text style={styles.buttonText}>NOTIFICATIONS</Text>
+                        <Icon name="arrow-forward" size={24} color="#E31C62" /> */}
+                        <Image source={notificationImage} style={styles.classWorkImage} />
                         <Text style={styles.buttonText}>NOTIFICATIONS</Text>
-                        <Icon name="arrow-forward" size={24} color="#E31C62" />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('AcademicReport')}>
+                    <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('AcademicReport')}>
+                        {/* <Text style={styles.buttonText}>ACADEMIC REPORT</Text> */}
+                        {/* <Icon name="arrow-forward" size={24} color="#E31C62" /> */}
+                        <Image source={AcademicReportImage} style={styles.classWorkImage} />
                         <Text style={styles.buttonText}>ACADEMIC REPORT</Text>
-                        <Icon name="arrow-forward" size={24} color="#E31C62" />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('StatisticalAnalysis')}>
+                    </View>
+                    <View style={styles.servicesRow}>
+                    <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('StatisticalAnalysis')}>
+                        {/* <Icon name="arrow-forward" size={24} color="#E31C62" /> */}
+                        <Image source={StatisticalAnalysisImage} style={styles.classWorkImage} />
                         <Text style={styles.buttonText}>STATISTICAL ANALYSIS</Text>
-                        <Icon name="arrow-forward" size={24} color="#E31C62" />
                     </TouchableOpacity>
+                    </View>
+                    
+
                 </View>
+                </ScrollView>
                 <SFooterNavbar navigation={navigation} handleNavigateToSLinkedIn={handleNavigateToSLinkedIn} />
             </View>
         </ScreenWrapper>
@@ -226,8 +254,10 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
     newSection: {
-        marginTop: 20,
+        //marginTop: 3,
         padding: 10,
+        width:'80%',
+        //marginLeft: '1%',
     },
     sectionHeading: {
         fontSize: 18,
@@ -237,6 +267,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#000',
         color: '#E31C62',
         marginBottom: 10,
+        left: 20,
     },
     buttonRow: {
         flexDirection: 'row',
@@ -247,7 +278,8 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc',
     },
     buttonText: {
-        fontSize: 16,
+        fontSize: 10,
+        marginTop: 10,
     },
     lottieBackground: {
         position: 'absolute',
@@ -269,5 +301,44 @@ const styles = StyleSheet.create({
     loader: {
         width: 100,
         height: 100,
+    },
+    homeWorkImage: {
+        width: 65,
+        height: 65,
+    },
+    classWorkImage: {
+        width: 65,
+        height: 65,
+        //left: 4,
+    },
+    servicesRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        marginBottom: 10,
+
+    },
+    // serviceButton: {
+    //    paddingTop: 5,
+    //     borderBottomWidth: 1,
+    //     borderBottomColor: '#ccc',
+    // },
+    serviceButton: {
+        backgroundColor: '#E0F2FEFF',
+        borderRadius: 10,
+        padding: 5,
+        margin: 5,
+        width: '55%',
+        height: '90%',
+        marginLeft: 5,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.10,
+        shadowRadius: 3.84,
+        elevation: 5,
+        alignItems: 'center',
     },
 });
