@@ -135,32 +135,25 @@ export default function StudentDashboard({ navigation }) {
                     <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('Homework')}>
                         <Image source={homeWorkImage} style={styles.homeWorkImage} />
                         <Text style={styles.buttonText}>HOME WORK</Text>
-                        {/* <Icon name="arrow-forward" size={24} color="#E31C62" /> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('Homework')}>
-                        {/* <Text style={styles.buttonText}>TODAY'S HOMEWORK</Text> */}
                         <Image source={classWorkImage} style={styles.homeWorkImage} />
                         <Text style={styles.buttonText} >CLASS WORK</Text>
-                        {/* <Icon name="arrow-forward" size={24} color="#E31C62" /> */}
+
                     </TouchableOpacity>
                     </View>
                     <View style={styles.servicesRow}>
                     <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('Notifications')}>
-                        {/* <Text style={styles.buttonText}>NOTIFICATIONS</Text>
-                        <Icon name="arrow-forward" size={24} color="#E31C62" /> */}
                         <Image source={notificationImage} style={styles.classWorkImage} />
                         <Text style={styles.buttonText}>NOTIFICATIONS</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('AcademicReport')}>
-                        {/* <Text style={styles.buttonText}>ACADEMIC REPORT</Text> */}
-                        {/* <Icon name="arrow-forward" size={24} color="#E31C62" /> */}
                         <Image source={AcademicReportImage} style={styles.classWorkImage} />
                         <Text style={styles.buttonText}>ACADEMIC REPORT</Text>
                     </TouchableOpacity>
                     </View>
                     <View style={styles.servicesRow}>
                     <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('StatisticalAnalysis')}>
-                        {/* <Icon name="arrow-forward" size={24} color="#E31C62" /> */}
                         <Image source={StatisticalAnalysisImage} style={styles.classWorkImage} />
                         <Text style={styles.buttonText}>STATISTICAL ANALYSIS</Text>
                     </TouchableOpacity>
@@ -254,10 +247,8 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
     newSection: {
-        //marginTop: 3,
         padding: 10,
         width:'80%',
-        //marginLeft: '1%',
     },
     sectionHeading: {
         fontSize: 18,
@@ -318,11 +309,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
 
     },
-    // serviceButton: {
-    //    paddingTop: 5,
-    //     borderBottomWidth: 1,
-    //     borderBottomColor: '#ccc',
-    // },
     serviceButton: {
         backgroundColor: '#E0F2FEFF',
         borderRadius: 10,
