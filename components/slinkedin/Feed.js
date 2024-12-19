@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Dimensions, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import UserDataContext and BaseUrlContext
+import SkeletonLoader  from '../commons/SkeletonLoader';
 
 const { width, height } = Dimensions.get('window');
 
@@ -10,6 +11,8 @@ const Feed = ({ navigation }) => {
     const baseUrl = useContext(BaseUrlContext); // Access baseUrl from BaseUrlContext
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
+   // const [profileLoading, setProfileLoading] = useState(false);
+
 
     useEffect(() => {
         fetchPosts();
@@ -43,6 +46,12 @@ const Feed = ({ navigation }) => {
             setLoading(false);
         }
     };
+    // const navigateToProfile = (profileId) => {
+    //     setProfileLoading(true);
+    //     navigation.navigate('Profile', { profileId });
+    //     setProfileLoading(false);
+    // };
+
 
     const renderPost = ({ item }) => {
         console.log("UserId: ", item.UserId);
@@ -50,9 +59,12 @@ const Feed = ({ navigation }) => {
         return (
             <View style={styles.postContainer}>
                 {/* Row 1 */}
+                {/* <Loader visible={loading} />  */}
                 <View style={styles.row1}>
                     <View style={styles.column1}>
                         <TouchableOpacity onPress={() => navigation.navigate('Profile', { profileId: item.UserId })}>
+                        {/* <TouchableOpacity onPress={() => navigateToProfile(item.UserId)}> */}
+                        
                             <Image
                                 source={userData.user?.Photo ? { uri: userData.user.Photo } : require('../../assets/images/studentm.png')}
                                 style={styles.profilePic}
@@ -116,14 +128,25 @@ const Feed = ({ navigation }) => {
             </View>
         );
     };
-
     return (
+        <View style={{ flex: 1 }}>
+        {loading ? (
+            <FlatList
+                data={[...Array(5).keys()]} // Create an array with 5 elements for the skeleton loader
+                renderItem={() => <SkeletonLoader />}
+                keyExtractor={(item) => item.toString()}
+                showsVerticalScrollIndicator={false} // Hide vertical scroll bar
+            />
+        ) : (
         <FlatList
             data={posts}
             renderItem={renderPost}
             keyExtractor={(item) => item.PostId.toString()}
             ListFooterComponent={loading && <Text>Loading...</Text>}
+            showsVerticalScrollIndicator={false} // Hide vertical scroll bar
         />
+        )}
+        </View>
     );
 };
 

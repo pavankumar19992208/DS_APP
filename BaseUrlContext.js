@@ -4,7 +4,7 @@ export const BaseUrlContext = createContext();
 export const UserDataContext = createContext(); // Create another context
 
 export const BaseUrlProvider = ({ children }) => {
-    const [baseUrl, setBaseUrl] = useState('https://4fbc-2405-201-c01d-402a-cc22-a956-8fb2-5347.ngrok-free.app');
+    const [baseUrl, setBaseUrl] = useState('https://733e-2405-201-c01d-402a-7542-d3b8-cd1c-1bce.ngrok-free.app');
     const [userData, setUserData] = useState(''); // State for another context
 
     // useEffect(() => {
