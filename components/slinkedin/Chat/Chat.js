@@ -15,15 +15,16 @@ const Chat = ({ navigation }) => {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [friends, setFriends] = useState([]);
+    const [chats, setChats] = useState([]);
 
     useEffect(() => {
         fetchFriendsProfiles();
+        fetchChats();
     }, []);
 
     const fetchFriendsProfiles = async () => {
         try {
             const friendsList = JSON.parse(userData.friends_list || '[]');
-            console.log('Friends List:', friendsList);
             const friendsProfiles = await Promise.all(
                 friendsList.map(async (friendId) => {
                     const response = await fetch(`${baseUrl}/profiledata`, {
@@ -41,9 +42,30 @@ const Chat = ({ navigation }) => {
             );
             setFriends(friendsProfiles.filter(profile => profile !== null));
             setResults(friendsProfiles.filter(profile => profile !== null));
-            console.log('Friends Profiles:', friendsProfiles);
         } catch (error) {
             console.error('Error fetching friends profiles:', error);
+        }
+    };
+
+    const fetchChats = async () => {
+        try {
+            const response = await fetch(`${baseUrl}/getchats`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ UserId: userData.UserId }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            setChats(data);
+            console.log("chat data", data);
+        } catch (error) {
+            console.error('Error fetching chats:', error);
         }
     };
 
@@ -92,6 +114,42 @@ const Chat = ({ navigation }) => {
         }
     };
 
+    const formatMessageTime = (messageTime) => {
+        const date = new Date(messageTime);
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+
+        if (date.toDateString() === today.toDateString()) {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        } else if (date.toDateString() === yesterday.toDateString()) {
+            return 'Yesterday';
+        } else {
+            const day = date.getDate();
+            const month = date.toLocaleString('default', { month: 'short' });
+            return `${day} ${month}`;
+        }
+    };
+
+    const renderChatItem = ({ item }) => (
+        <TouchableOpacity 
+            style={styles.chatContainer} 
+            onPress={() => navigation.navigate('ChatScreen', { chatId: item.ChatId, friendProfile: item.FriendProfile })}
+        >
+            <Image
+                source={item.FriendProfile.Photo ? { uri: item.FriendProfile.Photo } : require('../../../assets/images/studentm.png')}
+                style={styles.profilePic}
+            />
+            <View style={styles.chatDetails}>
+                <Text style={styles.userName}>{item.FriendProfile.UserName || item.FriendProfile.Name}</Text>
+                <Text style={styles.latestMessage}>{item.LatestMessage}</Text>
+            </View>
+            <View style={styles.messageTimeContainer}>
+                <Text style={styles.messageTime}>{formatMessageTime(item.MessageTime)}</Text>
+            </View>
+        </TouchableOpacity>
+    );
+
     return (
         <>
         <View style={styles.container}>
@@ -119,7 +177,12 @@ const Chat = ({ navigation }) => {
             {/* Content */}
             <View style={styles.content}>
                 {activeTab === 'chats' ? (
-                    <Text style={styles.placeholderText}>Chats will be displayed here</Text>
+                    <FlatList
+                        data={chats}
+                        keyExtractor={(item) => item.ChatId.toString()}
+                        renderItem={renderChatItem}
+                        contentContainerStyle={styles.chatList}
+                    />
                 ) : (
                     <Text style={styles.placeholderText}>Circles will be displayed here</Text>
                 )}
@@ -178,11 +241,8 @@ const Chat = ({ navigation }) => {
             </Modal>
 
             {/* Bottom Navbar */}
-            {/* <View style={styles.navbarContainer}>
-                <SLinkedInNavbar navigation={navigation} />
-            </View> */}
+            <SLinkedInNavbar navigation={navigation} />
         </View>
-        <SLinkedInNavbar navigation={navigation} />
         </>
     );
 };
@@ -223,6 +283,44 @@ const styles = StyleSheet.create({
     },
     placeholderText: {
         fontSize: 18,
+        color: '#888',
+    },
+    chatList: {
+        padding: 10,
+    },
+    chatContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        backgroundColor: '#fff',
+        borderRadius: 5,
+        marginBottom: 10,
+        height: height * 0.08,
+        width: width * 0.95, // Set width to 90% of screen width
+    },
+    profilePic: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        marginRight: 10,
+    },
+    chatDetails: {
+        flex: 1,
+    },
+    userName: {
+        fontSize: 14,
+        fontWeight: 'bold',
+    },
+    latestMessage: {
+        fontSize: 14,
+        color: '#888',
+    },
+    messageTimeContainer: {
+        alignItems: 'flex-end',
+    },
+    messageTime: {
+        paddingTop: 25,
+        fontSize: 12,
         color: '#888',
     },
     modalContainer: {

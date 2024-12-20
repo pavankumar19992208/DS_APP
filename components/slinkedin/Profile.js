@@ -125,7 +125,7 @@ const Profile = ({ route }) => {
                     </View>
                     <View style={styles.postColumn2}>
                         <Text style={styles.postStudentName}>{profile.Name ?? ''}</Text>
-                        <Text style={styles.postSchoolName}>{profile.SCHOOL_NAME ?? ''}</Text>
+                        <Text style={styles.postSchoolName}>{userData.userData.SCHOOL_NAME ?? ''}</Text>
                     </View>
                     <View style={styles.postColumn3}>
                         <TouchableOpacity>
@@ -186,7 +186,7 @@ const Profile = ({ route }) => {
         return  <Loader visible={loading} /> 
     }
 
-    const isFriend = userData.friends_list?.includes(profileId);
+    const isFriend = userData.userData.friends_list?.includes(profileId);
 
     return (
         <View style={styles.container}>

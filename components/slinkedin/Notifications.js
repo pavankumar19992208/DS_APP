@@ -42,14 +42,13 @@ const Notifications = ({ navigation }) => {
     };
 
     const fetchFriendRequests = async () => {
-        console.log("userData:", userData.user.UserId);
         try {
             const response = await fetch(`${baseUrl}/fetchfriendrequests`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ UserId: userData.user.UserId }),
+                body: JSON.stringify({ UserId: userData.UserId }),
             });
 
             if (!response.ok) {
@@ -57,8 +56,8 @@ const Notifications = ({ navigation }) => {
             }
 
             const data = await response.json();
-            console.log("requests:", data);
-            setFriendRequests(data);
+            const filteredRequests = data.filter(request => !userData.friends_list.includes(request.UserId));
+            setFriendRequests(filteredRequests);
         } catch (error) {
             console.error('Error fetching friend requests:', error);
         }
@@ -71,7 +70,7 @@ const Notifications = ({ navigation }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ UserId: userData.user.UserId, FriendId: friendId }),
+                body: JSON.stringify({ UserId: userData.UserId, FriendId: friendId }),
             });
 
             if (response.ok) {
@@ -95,7 +94,7 @@ const Notifications = ({ navigation }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ UserId: userData.user.UserId, FriendId: friendId }),
+                body: JSON.stringify({ UserId: userData.UserId, FriendId: friendId }),
             });
 
             if (response.ok) {
