@@ -40,11 +40,7 @@
     "react-native-screens": "~4.1.0",
     "react-native-skeleton-placeholder": "^5.2.4",
     "react-native-splash-screen": "^3.3.0",
-<<<<<<< HEAD
-    "react-native-tab-view": "^4.0.5",
-=======
     "react-native-svg": "^15.10.1",
->>>>>>> d1af1d228b9f6385c24b1c491145966f02b48d9f
     "react-native-table-component": "^1.2.2",
     "react-native-vector-icons": "^10.2.0"
   },
