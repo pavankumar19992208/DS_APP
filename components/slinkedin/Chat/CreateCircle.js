@@ -91,7 +91,7 @@ const CreateCircle = ({ setCreateCircleVisible, navigation }) => {
                 body: JSON.stringify({
                     CircleName: circleName,
                     CreatedBy: userData.UserId,
-                    Users: selectedFriends,
+                    Users: [...selectedFriends, userData.UserId],
                     CreatedAt: new Date(),
                     Description: circleDescription,
                 }),

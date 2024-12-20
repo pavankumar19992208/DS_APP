@@ -52,7 +52,8 @@ const Chat = ({ navigation }) => {
 
     const fetchCircles = async () => {
         try {
-            const chatIds = JSON.parse(userData.chats || '[]').map(chat => chat.ChatId);
+            const chatIds = JSON.parse(userData.circles || '[]').map(chat => chat.ChatId);
+            console.log("chatIds", chatIds);
             const response = await fetch(`${baseUrl}/getcircles`, {
                 method: 'POST',
                 headers: {
