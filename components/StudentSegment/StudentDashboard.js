@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import React, { useState, useContext,useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, Alert, Dimensions,FlatList,Modal,Button,ScrollView } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+=======
+import React, { useState, useContext } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, Image, Alert, Dimensions,ScrollView } from 'react-native';
+>>>>>>> d1af1d228b9f6385c24b1c491145966f02b48d9f
 import SFooterNavbar from './SFooterNavbar';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Menu, MenuItem } from 'react-native-material-menu';
@@ -9,6 +14,7 @@ import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Impor
 import ScreenWrapper from '../../ScreenWrapper'; // Import ScreenWrapper
 import AniLoader from '../commons/jsonfiles/AniLoad.json'; // Import AniLoader component
 
+<<<<<<< HEAD
 const staticHomeworkData = [
     { H_id: 1, subject: 'Maths', title: 'Algebra Homework', description: 'Solve the algebra  ', attachments: [], updatedBy: 'Teacher A' },
     { H_id: 2, subject: 'Science', title: 'Physics Homework', description: 'Read twerth asdf bvcxz drtgfds ijkngtfd cdserfdas thst he chapter on motion', attachments: [], updatedBy: 'Teacher B' },
@@ -86,6 +92,14 @@ const HomeworkRoute = ({ homework }) => {
         </View>
     );
 };  
+=======
+const homeWorkImage = require('../../assets/images/home_work.png');
+const classWorkImage = require('../../assets/images/class_work.png');
+const notificationImage = require('../../assets/images/notifications.png');
+const AcademicReportImage = require('../../assets/images/academic_report.png');
+const StatisticalAnalysisImage = require('../../assets/images/s_analysis.png');
+
+>>>>>>> d1af1d228b9f6385c24b1c491145966f02b48d9f
 export default function StudentDashboard({ navigation }) {
     const { userData, setUserData } = useContext(UserDataContext); // Access userData from UserDataContext
     const baseUrl = useContext(BaseUrlContext); // Access the baseUrl from context
@@ -245,24 +259,40 @@ export default function StudentDashboard({ navigation }) {
                         </View>
                     </View>
                 </View>
+<<<<<<< HEAD
                 {/* <View style={styles.newSection}>
+=======
+                <ScrollView style={styles.scrollView}>
+                <View style={styles.newSection}>
+>>>>>>> d1af1d228b9f6385c24b1c491145966f02b48d9f
                     <Text style={styles.sectionHeading}>SERVICES</Text>
-                    <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('Homework')}>
-                        <Text style={styles.buttonText}>TODAY'S HOMEWORK</Text>
-                        <Icon name="arrow-forward" size={24} color="#E31C62" />
+                    <View style={styles.servicesRow}>
+                    <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('Homework')}>
+                        <Image source={homeWorkImage} style={styles.homeWorkImage} />
+                        <Text style={styles.buttonText}>HOME WORK</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('Notifications')}>
+                    <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('Homework')}>
+                        <Image source={classWorkImage} style={styles.homeWorkImage} />
+                        <Text style={styles.buttonText} >CLASS WORK</Text>
+
+                    </TouchableOpacity>
+                    </View>
+                    <View style={styles.servicesRow}>
+                    <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('Notifications')}>
+                        <Image source={notificationImage} style={styles.classWorkImage} />
                         <Text style={styles.buttonText}>NOTIFICATIONS</Text>
-                        <Icon name="arrow-forward" size={24} color="#E31C62" />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('AcademicReport')}>
+                    <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('AcademicReport')}>
+                        <Image source={AcademicReportImage} style={styles.classWorkImage} />
                         <Text style={styles.buttonText}>ACADEMIC REPORT</Text>
-                        <Icon name="arrow-forward" size={24} color="#E31C62" />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonRow} onPress={() => navigation.navigate('StatisticalAnalysis')}>
+                    </View>
+                    <View style={styles.servicesRow}>
+                    <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('StatisticalAnalysis')}>
+                        <Image source={StatisticalAnalysisImage} style={styles.classWorkImage} />
                         <Text style={styles.buttonText}>STATISTICAL ANALYSIS</Text>
-                        <Icon name="arrow-forward" size={24} color="#E31C62" />
                     </TouchableOpacity>
+<<<<<<< HEAD
                 </View> */}
                  <TabView
                     navigationState={{ index, routes }}
@@ -278,6 +308,13 @@ export default function StudentDashboard({ navigation }) {
                         />
                     )}
                 />
+=======
+                    </View>
+                    
+
+                </View>
+                </ScrollView>
+>>>>>>> d1af1d228b9f6385c24b1c491145966f02b48d9f
                 <SFooterNavbar navigation={navigation} handleNavigateToSLinkedIn={handleNavigateToSLinkedIn} />
             </View>
         </ScreenWrapper>
@@ -363,8 +400,8 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
     newSection: {
-        marginTop: 20,
         padding: 10,
+        width:'80%',
     },
     sectionHeading: {
         fontSize: 18,
@@ -374,6 +411,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#000',
         color: '#E31C62',
         marginBottom: 10,
+        left: 20,
     },
     buttonRow: {
         flexDirection: 'row',
@@ -384,7 +422,8 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc',
     },
     buttonText: {
-        fontSize: 16,
+        fontSize: 10,
+        marginTop: 10,
     },
     lottieBackground: {
         position: 'absolute',
@@ -407,6 +446,7 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
     },
+<<<<<<< HEAD
     tabBar: {
         backgroundColor: '#3C70D8',
     },
@@ -443,11 +483,38 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 20,
         //alignItems: 'flex-start',
+=======
+    homeWorkImage: {
+        width: 65,
+        height: 65,
+    },
+    classWorkImage: {
+        width: 65,
+        height: 65,
+        //left: 4,
+    },
+    servicesRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        marginBottom: 10,
+
+    },
+    serviceButton: {
+        backgroundColor: '#E0F2FEFF',
+        borderRadius: 10,
+        padding: 5,
+        margin: 5,
+        width: '55%',
+        height: '90%',
+        marginLeft: 5,
+>>>>>>> d1af1d228b9f6385c24b1c491145966f02b48d9f
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
             height: 2,
         },
+<<<<<<< HEAD
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
@@ -481,4 +548,11 @@ const styles = StyleSheet.create({
         flexGrow: 1,
     },
     
+=======
+        shadowOpacity: 0.10,
+        shadowRadius: 3.84,
+        elevation: 5,
+        alignItems: 'center',
+    },
+>>>>>>> d1af1d228b9f6385c24b1c491145966f02b48d9f
 });

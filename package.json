@@ -26,18 +26,25 @@
     "lottie-ios": "^3.1.8",
     "lottie-react-native": "^7.1.0",
     "react": "18.3.1",
+    "react-content-loader": "^7.0.2",
     "react-native": "0.76.2",
     "react-native-document-picker": "^9.3.1",
     "react-native-elements": "^3.4.3",
     "react-native-file-picker": "^0.0.21",
     "react-native-gesture-handler": "~2.20.2",
+    "react-native-linear-gradient": "^2.8.3",
     "react-native-material-menu": "^2.0.0",
     "react-native-multi-select": "^0.1.1",
     "react-native-reanimated": "~3.16.1",
     "react-native-safe-area-context": "4.12.0",
     "react-native-screens": "~4.1.0",
+    "react-native-skeleton-placeholder": "^5.2.4",
     "react-native-splash-screen": "^3.3.0",
+<<<<<<< HEAD
     "react-native-tab-view": "^4.0.5",
+=======
+    "react-native-svg": "^15.10.1",
+>>>>>>> d1af1d228b9f6385c24b1c491145966f02b48d9f
     "react-native-table-component": "^1.2.2",
     "react-native-vector-icons": "^10.2.0"
   },

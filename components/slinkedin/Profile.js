@@ -3,13 +3,17 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions, FlatList, 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import BaseUrlContext
 const { width, height } = Dimensions.get('window');
+import Loader from '../commons/Loader';
+import SkeletonLoader from '../commons/SkeletonLoader';
 
 const Profile = ({ route }) => {
     const { profileId } = route.params;
     const [profile, setProfile] = useState(null);
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [loadingPosts, setLoadingPosts] = useState(false);
     const [showAllPosts, setShowAllPosts] = useState(false);
+   // const [showAllPosts, setShowAllPosts] = useState(false);
     const baseUrl = useContext(BaseUrlContext); // Access baseUrl from BaseUrlContext
     const userData = useContext(UserDataContext); // Access userData from UserDataContext
 
@@ -22,6 +26,7 @@ const Profile = ({ route }) => {
         console.log("profileId: ", profileId);
         console.log("userData: ", userData);
         try {
+            
             const response = await fetch(`${baseUrl}/profiledata`, {
                 method: 'POST',
                 headers: {
@@ -50,7 +55,7 @@ const Profile = ({ route }) => {
     };
 
     const fetchPosts = async (postIds) => {
-        setLoading(true);
+        setLoadingPosts(true);
         const payload = { post_ids: Array.isArray(postIds) ? postIds : JSON.parse(postIds) };
         console.log('Fetching posts with payload:', payload); // Print the payload to the console
         console.log('baseUrl:', baseUrl);
@@ -73,7 +78,7 @@ const Profile = ({ route }) => {
         } catch (error) {
             Alert.alert('Error', error.message);
         } finally {
-            setLoading(false);
+            setLoadingPosts(false);
         }
     };
 
@@ -178,7 +183,7 @@ const Profile = ({ route }) => {
     };
 
     if (!profile) {
-        return <Text>Loading...</Text>;
+        return  <Loader visible={loading} /> 
     }
 
     const isFriend = userData.friends_list?.includes(profileId);
@@ -186,6 +191,7 @@ const Profile = ({ route }) => {
     return (
         <View style={styles.container}>
             {/* Row 1 */}
+           {/* // <Loader visible={loading} />  */}
             <View style={styles.row1}>
                 <View style={styles.column1}>
                     <Image
@@ -222,7 +228,13 @@ const Profile = ({ route }) => {
             {/* Row 2 */}
             <View style={styles.row2}>
                 <Text style={styles.postsTitle}>Posts</Text>
-                {posts === null ? (
+                {loadingPosts ? (
+                    <FlatList
+                        data={[...Array(5).keys()]} // Create an array with 5 elements for the skeleton loader
+                        renderItem={() => <SkeletonLoader />}
+                        keyExtractor={(item) => item.toString()}
+                    />
+                ) : posts === null ? (
                     <Text>You don't have any uploaded posts yet</Text>
                 ) : (
                     <FlatList
