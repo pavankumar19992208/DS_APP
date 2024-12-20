@@ -1,8 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Modal, TextInput, FlatList, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList, Image, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SLinkedInNavbar from '../SLinkedInNavbar'; // Import the SLinkedInNavbar component
 import { UserDataContext, BaseUrlContext } from '../../../BaseUrlContext'; // Import BaseUrlContext
+import CreateChat from './CreateChat'; // Import CreateChat component
+import CreateCircle from './CreateCircle'; // Import CreateCircle component
 
 const { width, height } = Dimensions.get('window');
 
@@ -11,41 +13,20 @@ const Chat = ({ navigation }) => {
     const { userData } = useContext(UserDataContext); // Access userData from UserDataContext
     const [activeTab, setActiveTab] = useState('chats');
     const [modalVisible, setModalVisible] = useState(false);
-    const [searchVisible, setSearchVisible] = useState(false);
-    const [query, setQuery] = useState('');
-    const [results, setResults] = useState([]);
-    const [friends, setFriends] = useState([]);
+    const [createChatVisible, setCreateChatVisible] = useState(false);
+    const [createCircleVisible, setCreateCircleVisible] = useState(false);
     const [chats, setChats] = useState([]);
+    const [circles, setCircles] = useState([]);
 
     useEffect(() => {
-        fetchFriendsProfiles();
         fetchChats();
     }, []);
 
-    const fetchFriendsProfiles = async () => {
-        try {
-            const friendsList = JSON.parse(userData.friends_list || '[]');
-            const friendsProfiles = await Promise.all(
-                friendsList.map(async (friendId) => {
-                    const response = await fetch(`${baseUrl}/profiledata`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ UserId: friendId }),
-                    });
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    return null;
-                })
-            );
-            setFriends(friendsProfiles.filter(profile => profile !== null));
-            setResults(friendsProfiles.filter(profile => profile !== null));
-        } catch (error) {
-            console.error('Error fetching friends profiles:', error);
+    useEffect(() => {
+        if (activeTab === 'circles') {
+            fetchCircles();
         }
-    };
+    }, [activeTab]);
 
     const fetchChats = async () => {
         try {
@@ -69,38 +50,15 @@ const Chat = ({ navigation }) => {
         }
     };
 
-    const handleNewChat = () => {
-        setModalVisible(false);
-        setSearchVisible(true);
-    };
-
-    const handleNewCircle = () => {
-        setModalVisible(false);
-        navigation.navigate('NewCircle');
-    };
-
-    const handleSearch = (text) => {
-        setQuery(text);
-        if (text) {
-            const filteredResults = friends.filter(friend =>
-                (friend.UserName && friend.UserName.toLowerCase().includes(text.toLowerCase())) ||
-                (friend.Name && friend.Name.toLowerCase().includes(text.toLowerCase()))
-            );
-            setResults(filteredResults);
-        } else {
-            setResults(friends);
-        }
-    };
-
-    const handleSelectFriend = async (friend) => {
-        setSearchVisible(false);
+    const fetchCircles = async () => {
         try {
-            const response = await fetch(`${baseUrl}/createchat`, {
+            const chatIds = JSON.parse(userData.chats || '[]').map(chat => chat.ChatId);
+            const response = await fetch(`${baseUrl}/getcircles`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ UserId1: userData.UserId, UserId2: friend.UserId }),
+                body: JSON.stringify({ ChatIds: chatIds }),
             });
 
             if (!response.ok) {
@@ -108,9 +66,10 @@ const Chat = ({ navigation }) => {
             }
 
             const data = await response.json();
-            navigation.navigate('ChatScreen', { chatId: data.ChatId, friendProfile: friend });
+            setCircles(data);
+            console.log("circle data", data);
         } catch (error) {
-            console.error('Error creating chat:', error);
+            console.error('Error fetching circles:', error);
         }
     };
 
@@ -150,8 +109,25 @@ const Chat = ({ navigation }) => {
         </TouchableOpacity>
     );
 
+    const renderCircleItem = ({ item }) => (
+        <TouchableOpacity 
+            style={styles.chatContainer} 
+            onPress={() => navigation.navigate('ChatScreen', { chatId: item.ChatId, friendProfile: { Name: item.CircleName } })}
+        >
+            <View style={styles.circleProfilePic}>
+                <Text style={styles.circleProfilePicText}>{item.CircleName.charAt(0)}</Text>
+            </View>
+            <View style={styles.chatDetails}>
+                <Text style={styles.userName}>{item.CircleName}</Text>
+                <Text style={styles.latestMessage}>{item.LatestMessage}</Text>
+            </View>
+            <View style={styles.messageTimeContainer}>
+                <Text style={styles.messageTime}>{formatMessageTime(item.MessageTime)}</Text>
+            </View>
+        </TouchableOpacity>
+    );
+
     return (
-        <>
         <View style={styles.container}>
             {/* Top Row */}
             <View style={styles.topRow}>
@@ -184,7 +160,16 @@ const Chat = ({ navigation }) => {
                         contentContainerStyle={styles.chatList}
                     />
                 ) : (
-                    <Text style={styles.placeholderText}>Circles will be displayed here</Text>
+                    circles.length > 0 ? (
+                        <FlatList
+                            data={circles}
+                            keyExtractor={(item) => item.ChatId.toString()}
+                            renderItem={renderCircleItem}
+                            contentContainerStyle={styles.chatList}
+                        />
+                    ) : (
+                        <Text style={styles.placeholderText}>You aren't part of any circles.</Text>
+                    )
                 )}
             </View>
 
@@ -197,53 +182,39 @@ const Chat = ({ navigation }) => {
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalView}>
-                        <TouchableOpacity style={styles.modalButton} onPress={handleNewChat}>
+                        <TouchableOpacity style={styles.modalButton} onPress={() => { setModalVisible(false); setCreateChatVisible(true); }}>
                             <Text style={styles.modalButtonText}>New Chat</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.modalButton} onPress={handleNewCircle}>
+                        <TouchableOpacity style={styles.modalButton} onPress={() => { setModalVisible(false); setCreateCircleVisible(true); }}>
                             <Text style={styles.modalButtonText}>New Circle</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
 
-            {/* Search Modal for New Chat */}
+            {/* Create Chat Modal */}
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={searchVisible}
-                onRequestClose={() => setSearchVisible(false)}
+                visible={createChatVisible}
+                onRequestClose={() => setCreateChatVisible(false)}
             >
-                <View style={styles.searchContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Search friends..."
-                        value={query}
-                        onChangeText={handleSearch}
-                    />
-                    <FlatList
-                        data={results}
-                        keyExtractor={(item) => item.UserId}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity 
-                                style={styles.resultItem} 
-                                onPress={() => handleSelectFriend(item)}
-                            >
-                                <Image
-                                    source={item.Photo ? { uri: item.Photo } : require('../../../assets/images/studentm.png')}
-                                    style={styles.profilePic}
-                                />
-                                <Text style={styles.resultText}>{item.UserName} ({item.Name})</Text>
-                            </TouchableOpacity>
-                        )}
-                    />
-                </View>
+                <CreateChat setCreateChatVisible={setCreateChatVisible} navigation={navigation} />
+            </Modal>
+
+            {/* Create Circle Modal */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={createCircleVisible}
+                onRequestClose={() => setCreateCircleVisible(false)}
+            >
+                <CreateCircle setCreateCircleVisible={setCreateCircleVisible} navigation={navigation} />
             </Modal>
 
             {/* Bottom Navbar */}
             <SLinkedInNavbar navigation={navigation} />
         </View>
-        </>
     );
 };
 
@@ -304,6 +275,20 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         marginRight: 10,
     },
+    circleProfilePic: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: '#0E5E9D',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 10,
+    },
+    circleProfilePicText: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
     chatDetails: {
         flex: 1,
     },
@@ -354,35 +339,6 @@ const styles = StyleSheet.create({
     },
     modalButtonText: {
         color: '#fff',
-        fontSize: 16,
-    },
-    searchContainer: {
-        flex: 1,
-        backgroundColor: '#E0F2FE',
-        padding: 20,
-    },
-    input: {
-        height: 40,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        marginBottom: 20,
-    },
-    resultItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-    },
-    profilePic: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        marginRight: 10,
-    },
-    resultText: {
         fontSize: 16,
     },
     navbarContainer: {

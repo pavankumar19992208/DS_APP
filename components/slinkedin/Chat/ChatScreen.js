@@ -221,7 +221,7 @@ const ChatScreen = ({ route, navigation }) => {
             <View style={[styles.messageContainer, isUserMessage ? styles.userMessage : styles.friendMessage]}>
                 {isUserMessage ? (
                     <>
-                        <Text style={styles.messageText}>{item.Content}</Text>
+                        <Text style={[styles.messageText, styles.userMessageText]}>{item.Content}</Text>
                         {item.sending ? (
                             <ActivityIndicator size="small" color="gray" style={styles.loader} />
                         ) : (
@@ -364,18 +364,23 @@ const styles = StyleSheet.create({
         flexShrink: 1,
     },
     userMessage: {
-        width:"auto",
+        width: 'auto',
         alignSelf: 'flex-end',
         backgroundColor: '#DCF8C6',
     },
     friendMessage: {
-        width:"auto",
+        width: 'auto',
         alignSelf: 'flex-start',
         backgroundColor: '#fff',
     },
     messageText: {
         fontSize: 16,
         flex: 1,
+        marginRight: 4,
+    },
+    userMessageText: {
+        textAlign: 'right',
+        marginRight: 4,
     },
     loader: {
         marginRight: 4,

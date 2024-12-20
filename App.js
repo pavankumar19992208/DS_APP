@@ -32,6 +32,8 @@ import Profile from './components/slinkedin/Profile';
 import Notifications from './components/slinkedin/Notifications';
 import Chat from './components/slinkedin/Chat/Chat';
 import ChatScreen from './components/slinkedin/Chat/ChatScreen';
+import CreateCircle from './components/slinkedin/Chat/CreateCircle';
+import CreateChat from './components/slinkedin/Chat/CreateChat';
 
 
 const Stack = createStackNavigator();
@@ -81,6 +83,8 @@ export default function App() {
                     <Stack.Screen name="NlNotifications" component={Notifications} />
                     <Stack.Screen name="Chat" component={Chat} />
                     <Stack.Screen name="ChatScreen" component={ChatScreen} />
+                    <Stack.Screen name="CreateCircle" component={CreateCircle} />
+                    <Stack.Screen name="CreateChat" component={CreateChat} />
                 </Stack.Navigator>
             </NavigationContainer>
         </BaseUrlProvider>
