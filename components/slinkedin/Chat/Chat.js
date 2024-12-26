@@ -5,7 +5,7 @@ import SLinkedInNavbar from '../SLinkedInNavbar'; // Import the SLinkedInNavbar 
 import { UserDataContext, BaseUrlContext } from '../../../BaseUrlContext'; // Import BaseUrlContext
 import CreateChat from './CreateChat'; // Import CreateChat component
 import CreateCircle from './CreateCircle'; // Import CreateCircle component
-
+import ScreenWrapper from '../../../ScreenWrapper';
 const { width, height } = Dimensions.get('window');
 
 const Chat = ({ navigation }) => {
@@ -129,6 +129,7 @@ const Chat = ({ navigation }) => {
     );
 
     return (
+        <ScreenWrapper>
         <View style={styles.container}>
             {/* Top Row */}
             <View style={styles.topRow}>
@@ -216,6 +217,7 @@ const Chat = ({ navigation }) => {
             {/* Bottom Navbar */}
             <SLinkedInNavbar navigation={navigation} />
         </View>
+        </ScreenWrapper>
     );
 };
 

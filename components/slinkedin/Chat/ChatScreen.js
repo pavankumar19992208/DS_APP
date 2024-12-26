@@ -73,10 +73,13 @@ const ChatScreen = ({ route, navigation }) => {
             try {
                 const newMessage = JSON.parse(event.data);
                 console.log('Received message:', newMessage);
-                setMessages((prev) => [
-                    ...prev,
-                    { ...newMessage, localId: Date.now() }, // Add a unique local ID
-                ]);
+                setMessages((prev) => {
+                    // Check if the message already exists
+                    if (!prev.some(msg => msg.localId === newMessage.localId)) {
+                        return [...prev, { ...newMessage, localId: Date.now() }];
+                    }
+                    return prev;
+                });
                 setFetchError(false);
             } catch (err) {
                 console.error('Error parsing WebSocket message:', err);

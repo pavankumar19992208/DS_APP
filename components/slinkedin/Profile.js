@@ -171,10 +171,10 @@ const Profile = ({ route }) => {
                 </View>
                 {/* Row 4 */}
                 <View style={styles.postRow4}>
-                    <View style={styles.postColumn1}>
+                    <View style={styles.postColumnu}>
                         <Text>{new Date(item.TimeStamp).toLocaleString()}</Text>
                     </View>
-                    <View style={styles.postColumn2}>
+                    <View style={styles.postColumnu}>
                         <Text>{item.Location ?? ''}</Text>
                     </View>
                 </View>
