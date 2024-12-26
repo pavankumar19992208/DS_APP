@@ -112,6 +112,11 @@ const Feed = ({ navigation }) => {
                     </View>
                     <View style={styles.column3}>
                         <TouchableOpacity>
+                            <Icon name="bookmark-outline" size={24} color="#E31C62" />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.column4}>
+                        <TouchableOpacity style={{ marginLeft: 10}}>
                             <Icon name="share" size={24} color="#E31C62" />
                         </TouchableOpacity>
                     </View>
