@@ -20,7 +20,7 @@ const Feed = ({ navigation }) => {
 
     const fetchPosts = async () => {
         setLoading(true);
-        const postIds = Array.isArray(userData.posts) ? userData.posts : JSON.parse(userData.posts);
+        const postIds = Array.isArray(userData.feed) ? userData.feed : JSON.parse(userData.feed);
         const payload = { post_ids: postIds };
         console.log('Fetching posts with payload:', payload); // Print the payload to the console
 
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     row2: {
-        height: 200,
+        height: height * 0.4, // Set height to 40% of screen height
         marginBottom: 10,
     },
     media: {

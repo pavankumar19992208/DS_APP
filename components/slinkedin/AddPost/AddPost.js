@@ -43,7 +43,8 @@ const AddPost = ({ navigation }) => {
     const handleCollabWithChange = (text) => {
         setCollabWith(text);
         // Fetch suggestions from friends list based on the text after @
-        const friendsList = userData.friends || []; // Assuming friends list is in userData
+        const friendsList = Array.isArray(userData.friends_list) ? userData.friends_list : []; // Ensure friends list is an array
+        console.log("friendsList:", friendsList);
         if (friendsList.length === 0) {
             setSuggestions(['No friends to suggest']);
         } else {
@@ -82,12 +83,12 @@ const AddPost = ({ navigation }) => {
             Alert.alert('Error', 'Post content is mandatory.');
             return;
         }
-
+    
         setLoading(true);
-
+    
         try {
             const uploadedUrls = await uploadAttachments();
-
+    
             const postData = {
                 UserId: userData.UserId,
                 PostContent: postContent,
@@ -97,6 +98,7 @@ const AddPost = ({ navigation }) => {
                 Location: location,
                 MediaUrl: uploadedUrls,
                 TimeStamp: formatDateTime(new Date()),
+                FriendsList: userData.friends_list || [], // Include the friends list
             };
             console.log("payload:", postData);
             const response = await fetch(`${baseUrl}/addpost`, {
@@ -106,11 +108,11 @@ const AddPost = ({ navigation }) => {
                 },
                 body: JSON.stringify(postData),
             });
-
+    
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
+    
             Alert.alert('Success', 'Post added successfully.');
             navigation.navigate('SLinkedIn');
         } catch (error) {
