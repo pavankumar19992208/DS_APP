@@ -2,9 +2,10 @@ import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions, FlatList, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import BaseUrlContext
-const { width, height } = Dimensions.get('window');
 import Loader from '../commons/Loader';
 import SkeletonLoader from '../commons/SkeletonLoader';
+
+const { width, height } = Dimensions.get('window');
 
 const Profile = ({ route }) => {
     const { profileId } = route.params;
@@ -152,10 +153,10 @@ const Profile = ({ route }) => {
                 {/* Row 3 */}
                 <View style={styles.postRow3}>
                     <View style={styles.postColumn1}>
-                        <TouchableOpacity>
+                        <TouchableOpacity style={{ marginRight: 20}}>
                             <Icon name="favorite-border" size={24} color="#E31C62" />
                         </TouchableOpacity>
-                        <Text>{item.likesCount ?? 0}</Text>
+                        <Text style={{ marginRight: 20}}>{item.likesCount ?? 0}</Text>
                     </View>
                     <View style={styles.postColumn2}>
                         <TouchableOpacity>
@@ -163,8 +164,13 @@ const Profile = ({ route }) => {
                         </TouchableOpacity>
                         <Text>{item.commentsCount ?? 0}</Text>
                     </View>
-                    <View style={styles.postColumn3}>
+                    <View style={styles.postcolumn3}>
                         <TouchableOpacity>
+                            <Icon name="bookmark-outline" size={24} color="#E31C62" />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.postColumn4}>
+                        <TouchableOpacity style={{ marginLeft: 10}}>
                             <Icon name="share" size={24} color="#E31C62" />
                         </TouchableOpacity>
                     </View>
@@ -214,14 +220,16 @@ const Profile = ({ route }) => {
                     <TouchableOpacity style={styles.button}>
                         <Text style={styles.buttonText}>Posts: {profile.posts_count ?? 0}</Text>
                     </TouchableOpacity>
-                    {isFriend ? (
-                        <TouchableOpacity style={styles.button} onPress={handleUnfriend}>
-                            <Text style={styles.buttonText}>Unfriend</Text>
-                        </TouchableOpacity>
-                    ) : (
-                        <TouchableOpacity style={styles.button} onPress={handleFriendRequest}>
-                            <Text style={styles.buttonText}>Send Friend Request</Text>
-                        </TouchableOpacity>
+                    {profileId !== userData.UserId && (
+                        isFriend ? (
+                            <TouchableOpacity style={styles.button} onPress={handleUnfriend}>
+                                <Text style={styles.buttonText}>Unfriend</Text>
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity style={styles.button} onPress={handleFriendRequest}>
+                                <Text style={styles.buttonText}>Send Friend Request</Text>
+                            </TouchableOpacity>
+                        )
                     )}
                 </View>
             )}
@@ -369,7 +377,7 @@ const styles = StyleSheet.create({
     },
     media: {
         width: width - 40,
-        height: '100%',
+        height: height * 0.4,
         borderRadius: 5,
     },
     postRow2: {

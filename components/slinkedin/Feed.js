@@ -20,7 +20,7 @@ const Feed = ({ navigation }) => {
 
     const fetchPosts = async () => {
         setLoading(true);
-        const postIds = Array.isArray(userData.posts) ? userData.posts : JSON.parse(userData.posts);
+        const postIds = Array.isArray(userData.feed) ? userData.feed : JSON.parse(userData.feed);
         const payload = { post_ids: postIds };
         console.log('Fetching posts with payload:', payload); // Print the payload to the console
 
@@ -99,10 +99,10 @@ const Feed = ({ navigation }) => {
                 {/* Row 3 */}
                 <View style={styles.row3}>
                     <View style={styles.column1}>
-                        <TouchableOpacity>
+                        <TouchableOpacity style={{ marginRight: 20}}>
                             <Icon name="favorite-border" size={24} color="#E31C62" />
                         </TouchableOpacity>
-                        <Text>{item.likesCount ?? 0}</Text>
+                        <Text style={{ marginRight: 20}}>{item.likesCount ?? 0}</Text>
                     </View>
                     <View style={styles.column2}>
                         <TouchableOpacity>
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     },
     media: {
         width: width - 40,
-        height: '100%',
+        height:  height * 0.4,
         borderRadius: 5,
     },
     row3: {
