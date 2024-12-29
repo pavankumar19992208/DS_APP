@@ -2,11 +2,11 @@ import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert, ScrollView, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { UserDataContext, BaseUrlContext } from '../../../BaseUrlContext'; // Import UserDataContext
-import * as ImagePicker from 'expo-image-picker';
 import { FlatList } from 'react-native-gesture-handler';
 import { Picker } from '@react-native-picker/picker';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import Firebase Storage functions
 import { storage } from '../../connections/Firebase'; // Import Firebase storage instance
+import * as ImagePicker from 'expo-image-picker'; // Import Expo Image Picker
 
 const AddPost = ({ navigation }) => {
     const { userData } = useContext(UserDataContext); // Access userData from UserDataContext
@@ -32,7 +32,8 @@ const AddPost = ({ navigation }) => {
     const handleAddAttachment = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsMultipleSelection: true,
+            allowsEditing: true,
+            allowsMultipleSelection: false, // Disable multiple selection
         });
 
         if (!result.canceled) {
