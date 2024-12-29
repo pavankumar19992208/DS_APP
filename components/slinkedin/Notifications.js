@@ -118,7 +118,7 @@ const Notifications = ({ navigation }) => {
     );
 
     const renderFriendRequest = ({ item }) => (
-        <View style={styles.friendRequestItem}>
+        <TouchableOpacity style={styles.friendRequestItem} onPress={() => navigation.navigate('Profile', { profileId: item.UserId })}>
             <Image
                 source={item.Photo ? { uri: item.Photo } : require('../../assets/images/studentm.png')}
                 style={styles.profilePic}
@@ -142,7 +142,7 @@ const Notifications = ({ navigation }) => {
                     </TouchableOpacity>
                 </>
             )}
-        </View>
+        </TouchableOpacity>
     );
 
     return (

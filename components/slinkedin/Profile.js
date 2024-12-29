@@ -17,16 +17,23 @@ const Profile = ({ route }) => {
     const baseUrl = useContext(BaseUrlContext); // Access baseUrl from BaseUrlContext
     const userData = useContext(UserDataContext); // Access userData from UserDataContext
 
+    // useEffect(() => {
+    //     fetchProfile();
+    // }, []);
     useEffect(() => {
-        fetchProfile();
-    }, []);
+        if (profileId) {
+            fetchProfile();
+        } else {
+            console.error('Profile ID is missing');
+            Alert.alert('Error', 'Profile ID is missing');
+        }
+    }, [profileId]);
 
     const fetchProfile = async () => {
         setLoading(true);
         console.log("profileId: ", profileId);
         console.log("userData: ", userData);
-        try {
-            
+        try { 
             const response = await fetch(`${baseUrl}/profiledata`, {
                 method: 'POST',
                 headers: {
@@ -36,7 +43,8 @@ const Profile = ({ route }) => {
             });
 
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                const errorText = await response.text();
+                throw new Error(`Network response was not ok: ${errorText}`);
             }
 
             const data = await response.json();
@@ -48,6 +56,7 @@ const Profile = ({ route }) => {
                 setPosts(null);
             }
         } catch (error) {
+            console.error('error fetching profile:', error);
             Alert.alert('Error', error.message);
         } finally {
             setLoading(false);
@@ -69,6 +78,7 @@ const Profile = ({ route }) => {
             });
 
             if (!response.ok) {
+                const errorText = await response.text();
                 throw new Error('Network response was not ok');
             }
 
