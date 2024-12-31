@@ -216,7 +216,8 @@ const Profile = ({ route }) => {
                 </View>
             </View>
             {/* New Row for Buttons */}
-            {userData.UserId !== profileId && (
+            
+                console.log("userData.UserId: ", userData.userData.UserId),
                 <View style={styles.buttonRow}>
                     <TouchableOpacity style={styles.button}>
                         <Text style={styles.buttonText}>Friends: {profile.friends_count ?? 0}</Text>
@@ -224,6 +225,8 @@ const Profile = ({ route }) => {
                     <TouchableOpacity style={styles.button}>
                         <Text style={styles.buttonText}>Posts: {profile.posts_count ?? 0}</Text>
                     </TouchableOpacity>
+                    {userData.userData.UserId !== profileId && (
+                        <>
                     {isFriend ? (
                         <TouchableOpacity style={styles.button} onPress={handleUnfriend}>
                             <Text style={styles.buttonText}>Unfriend</Text>
@@ -232,9 +235,12 @@ const Profile = ({ route }) => {
                         <TouchableOpacity style={styles.button} onPress={handleFriendRequest}>
                             <Text style={styles.buttonText}>Send Friend Request</Text>
                         </TouchableOpacity>
+                        
+                    )}
+                    </>
                     )}
                 </View>
-            )}
+        
             {/* Row 2 */}
             <View style={styles.row2}>
                 <Text style={styles.postsTitle}>Posts</Text>
