@@ -65,18 +65,25 @@ const AddPost = ({ navigation }) => {
     
     const handleCollabWithChange = async (text) => {
         setCollabWith(text);
-        const friendsList = Array.isArray(userData.friends_list) ? userData.friends_list : []; // Ensure friends list is an array
+        console.log("friendsList--: ", userData.friends_list[0]);
+        const friendsList = userData.friends_list; // Ensure friends list is an array
+        console.log("friendsList: ", friendsList);
         const matches = friendsList.filter(friend => friend.includes(text.replace('@', '')));
+        console.log("matches: ", matches);
         const names = await Promise.all(matches.map(id => fetchFriendName(id)));
+        console.log("names: ", names);
         setSuggestions(names.filter(name => name)); // Filter out null values
     };
     
     const handleTagsChange = async (text) => {
         setTags(text);
-        const friendsList = Array.isArray(userData.friends_list) ? userData.friends_list : []; // Ensure friends list is an array
+        console.log("friendsList--: ", userData.friends_list[0]);
+        const friendsList = userData.friends_list; // Ensure friends list is an array
+        console.log("friendsList: ", friendsList);
         const matches = friendsList.filter(friend => friend.includes(text.replace('@', '')));
+        console.log("matches: ", matches);
         const names = await Promise.all(matches.map(id => fetchFriendName(id)));
-        setSuggestions(names.filter(name => name)); // Filter out null values
+        console.log("names: ", names);
     };
 
     const uploadAttachments = async () => {
