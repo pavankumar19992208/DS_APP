@@ -99,10 +99,10 @@ const Feed = ({ navigation }) => {
                 {/* Row 3 */}
                 <View style={styles.row3}>
                     <View style={styles.column1}>
-                        <TouchableOpacity>
+                        <TouchableOpacity style={{ marginRight: 20}}>
                             <Icon name="favorite-border" size={24} color="#E31C62" />
                         </TouchableOpacity>
-                        <Text>{item.likesCount ?? 0}</Text>
+                        <Text style={{ marginRight: 20}}>{item.likesCount ?? 0}</Text>
                     </View>
                     <View style={styles.column2}>
                         <TouchableOpacity>
@@ -112,6 +112,11 @@ const Feed = ({ navigation }) => {
                     </View>
                     <View style={styles.column3}>
                         <TouchableOpacity>
+                            <Icon name="bookmark-outline" size={24} color="#E31C62" />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.column4}>
+                        <TouchableOpacity style={{ marginLeft: 10}}>
                             <Icon name="share" size={24} color="#E31C62" />
                         </TouchableOpacity>
                     </View>
@@ -201,12 +206,12 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     row2: {
-        height: height * 0.4, // Set height to 40% of screen height
+        height: "fit-content",
         marginBottom: 10,
     },
     media: {
         width: width - 40,
-        height: '100%',
+        height:  height * 0.4,
         borderRadius: 5,
     },
     row3: {
