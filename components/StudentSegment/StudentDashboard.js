@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image, Alert, Dimensions,ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, Alert, Dimensions, ScrollView } from 'react-native';
 import SFooterNavbar from './SFooterNavbar';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Menu, MenuItem } from 'react-native-material-menu';
@@ -7,6 +7,7 @@ import LottieView from 'lottie-react-native';
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import UserDataContext and BaseUrlContext
 import ScreenWrapper from '../../ScreenWrapper'; // Import ScreenWrapper
 import AniLoader from '../commons/jsonfiles/AniLoad.json'; // Import AniLoader component
+import ChangePasswordModal from '../commons/ChangePasswordModal'; // Import ChangePasswordModal
 
 const homeWorkImage = require('../../assets/images/home_work.png');
 const classWorkImage = require('../../assets/images/class_work.png');
@@ -22,7 +23,7 @@ export default function StudentDashboard({ navigation }) {
     const [loading, setLoading] = useState(false); // State for managing loading
     const [classwork, setClasswork] = useState([]);
     const [homework, setHomework] = useState([]);
-
+    const [isChangePasswordModalVisible, setIsChangePasswordModalVisible] = useState(false); // State for managing modal visibility
     const [index, setIndex] = useState(0);
     const [routes] = useState([
         { key: 'classwork', title: 'CLASSWORK' },
@@ -39,33 +40,39 @@ export default function StudentDashboard({ navigation }) {
                 return null;
         }
     };
-    // useEffect(() => {
-    //     const fetchClasswork = async () => {
-    //         try {
-    //             const response = await fetch(`${baseUrl}/classwork`);
-    //             const data = await response.json();
-    //             setClasswork(data);
-    //         } catch (error) {
-    //             console.error('Failed to fetch classwork:', error);
-    //         }
-    //     };
 
-    //     const fetchHomework = async () => {
-    //         try {
-    //             const response = await fetch(`${baseUrl}/homework`);
-    //             const data = await response.json();
-    //             const today = new Date().toISOString().split('T')[0];
-    //             const recentHomework = data.filter(item => item.CreatedAt === today);
-    //             setHomework(data);
-    //         } catch (error) {
-    //             console.error('Failed to fetch homework:', error);
-    //         }
-    //     };
+    const handleChangePassword = async (currentPassword, newPassword) => {
+        setLoading(true); // Set loading to true
 
-    //     fetchClasswork();
-    //     fetchHomework();
-    // }, [baseUrl]);
+        try {
+            const payload = {
+                UserId: userData.user?.UserId ?? '',
+                currentPassword,
+                newPassword,
+                usertype: 'student',
+            };
+            console.log('Payload:', payload); // Print the payload to the console
+            const response = await fetch(`${baseUrl}/updatepassword`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload), // Send the payload
+            });
 
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            Alert.alert('Success', 'Password updated successfully.');
+            handleLogout(); // Logout the user
+        } catch (error) {
+            Alert.alert('Error', error.message);
+        } finally {
+            setLoading(false); // Set loading to false
+            setIsChangePasswordModalVisible(false); // Hide the modal
+        }
+    };
 
     const handleLogout = () => {
         Alert.alert('Logout', 'You have been logged out.');
@@ -115,6 +122,7 @@ export default function StudentDashboard({ navigation }) {
             navigation.navigate('SLinkedIn'); // Navigate directly if UserName exists
         }
     };
+
     return (
         <ScreenWrapper>
             <View style={styles.container}>
@@ -143,6 +151,7 @@ export default function StudentDashboard({ navigation }) {
                             onRequestClose={hideMenu}
                         >
                             <MenuItem onPress={handleLogout}>Logout</MenuItem>
+                            <MenuItem onPress={() => setIsChangePasswordModalVisible(true)}>Change Password</MenuItem>
                         </Menu>
                     </View>
                     <View style={styles.column12}>
@@ -208,6 +217,11 @@ export default function StudentDashboard({ navigation }) {
                 </View>
                 </ScrollView>
                 <SFooterNavbar navigation={navigation} handleNavigateToSLinkedIn={handleNavigateToSLinkedIn} />
+                <ChangePasswordModal
+                    visible={isChangePasswordModalVisible}
+                    onClose={() => setIsChangePasswordModalVisible(false)}
+                    onSubmit={handleChangePassword}
+                />
             </View>
         </ScreenWrapper>
     );

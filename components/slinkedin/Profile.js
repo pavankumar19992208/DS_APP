@@ -18,16 +18,23 @@ const Profile = ({ route }) => {
     const baseUrl = useContext(BaseUrlContext); // Access baseUrl from BaseUrlContext
     const userData = useContext(UserDataContext); // Access userData from UserDataContext
 
+    // useEffect(() => {
+    //     fetchProfile();
+    // }, []);
     useEffect(() => {
-        fetchProfile();
-    }, []);
+        if (profileId) {
+            fetchProfile();
+        } else {
+            console.error('Profile ID is missing');
+            Alert.alert('Error', 'Profile ID is missing');
+        }
+    }, [profileId]);
 
     const fetchProfile = async () => {
         setLoading(true);
         console.log("profileId: ", profileId);
         console.log("userData: ", userData);
-        try {
-            
+        try { 
             const response = await fetch(`${baseUrl}/profiledata`, {
                 method: 'POST',
                 headers: {
@@ -37,7 +44,8 @@ const Profile = ({ route }) => {
             });
 
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                const errorText = await response.text();
+                throw new Error(`Network response was not ok: ${errorText}`);
             }
 
             const data = await response.json();
@@ -49,6 +57,7 @@ const Profile = ({ route }) => {
                 setPosts(null);
             }
         } catch (error) {
+            console.error('error fetching profile:', error);
             Alert.alert('Error', error.message);
         } finally {
             setLoading(false);
@@ -70,6 +79,7 @@ const Profile = ({ route }) => {
             });
 
             if (!response.ok) {
+                const errorText = await response.text();
                 throw new Error('Network response was not ok');
             }
 
@@ -177,10 +187,10 @@ const Profile = ({ route }) => {
                 </View>
                 {/* Row 4 */}
                 <View style={styles.postRow4}>
-                    <View style={styles.postColumn1}>
+                    <View style={styles.postColumnu}>
                         <Text>{new Date(item.TimeStamp).toLocaleString()}</Text>
                     </View>
-                    <View style={styles.postColumn2}>
+                    <View style={styles.postColumnu}>
                         <Text>{item.Location ?? ''}</Text>
                     </View>
                 </View>
@@ -212,7 +222,8 @@ const Profile = ({ route }) => {
                 </View>
             </View>
             {/* New Row for Buttons */}
-            {userData.UserId !== profileId && (
+            
+                console.log("userData.UserId: ", userData.userData.UserId),
                 <View style={styles.buttonRow}>
                     <TouchableOpacity style={styles.button}>
                         <Text style={styles.buttonText}>Friends: {profile.friends_count ?? 0}</Text>
@@ -220,19 +231,22 @@ const Profile = ({ route }) => {
                     <TouchableOpacity style={styles.button}>
                         <Text style={styles.buttonText}>Posts: {profile.posts_count ?? 0}</Text>
                     </TouchableOpacity>
-                    {profileId !== userData.UserId && (
-                        isFriend ? (
-                            <TouchableOpacity style={styles.button} onPress={handleUnfriend}>
-                                <Text style={styles.buttonText}>Unfriend</Text>
-                            </TouchableOpacity>
-                        ) : (
-                            <TouchableOpacity style={styles.button} onPress={handleFriendRequest}>
-                                <Text style={styles.buttonText}>Send Friend Request</Text>
-                            </TouchableOpacity>
-                        )
+                    {userData.userData.UserId !== profileId && (
+                        <>
+                    {isFriend ? (
+                        <TouchableOpacity style={styles.button} onPress={handleUnfriend}>
+                            <Text style={styles.buttonText}>Unfriend</Text>
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity style={styles.button} onPress={handleFriendRequest}>
+                            <Text style={styles.buttonText}>Send Friend Request</Text>
+                        </TouchableOpacity>
+                        
+                    )}
+                    </>
                     )}
                 </View>
-            )}
+        
             {/* Row 2 */}
             <View style={styles.row2}>
                 <Text style={styles.postsTitle}>Posts</Text>

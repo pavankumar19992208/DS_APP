@@ -21,6 +21,7 @@ const ChatScreen = ({ route, navigation }) => {
     const [caption, setCaption] = useState('');
     const [fetchError, setFetchError] = useState(false);
     const [sending, setSending] = useState(false);
+    const [isSending, setIsSending] = useState(false); // Add isSending flag
     const ws = useRef(null);
 
     useEffect(() => {
@@ -40,7 +41,7 @@ const ChatScreen = ({ route, navigation }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ ChatId: chatId }),
+                body: JSON.stringify({ ChatId: chatId.toString() }),
             });
 
             if (!response.ok) {
@@ -61,30 +62,27 @@ const ChatScreen = ({ route, navigation }) => {
     };
 
     const setupWebSocket = () => {
-        console.log("chatId", chatId);
-        ws.current = new WebSocket(`${baseUrl.replace(/^http/, 'ws')}/ws/chat/${chatId}`);
+        const wsUrl = baseUrl.replace(/^http/, 'ws') + `/ws/chat/${chatId}`;
+        ws.current = new WebSocket(wsUrl);
 
         ws.current.onopen = () => {
-            console.log('WebSocket connection opened');
+            console.log('WebSocket connected:', wsUrl);
         };
 
         ws.current.onmessage = (event) => {
-            console.log('Raw WebSocket message:', event.data);
             try {
-                // Strip the prefix before parsing the JSON
-                const jsonStartIndex = event.data.indexOf('{');
-                const jsonString = event.data.substring(jsonStartIndex);
-                const newMessage = JSON.parse(jsonString);
-                setMessages((prevMessages) => {
+                const newMessage = JSON.parse(event.data);
+                console.log('Received message:', newMessage);
+                setMessages((prev) => {
                     // Check if the message already exists
-                    if (!prevMessages.some(msg => msg.id === newMessage.id)) {
-                        return [...prevMessages, newMessage];
+                    if (!prev.some(msg => msg.localId === newMessage.localId)) {
+                        return [...prev, { ...newMessage, localId: Date.now() }];
                     }
-                    return prevMessages;
+                    return prev;
                 });
-                setFetchError(false); // Hide the "Send your first message" message
-            } catch (error) {
-                console.error('Error parsing WebSocket message:', error);
+                setFetchError(false);
+            } catch (err) {
+                console.error('Error parsing WebSocket message:', err);
             }
         };
 
@@ -92,24 +90,28 @@ const ChatScreen = ({ route, navigation }) => {
             console.error('WebSocket error:', error);
         };
 
-        ws.current.onclose = () => {
-            console.log('WebSocket connection closed');
+        ws.current.onclose = (e) => {
+            console.log('WebSocket closed, reconnecting...', e.reason);
+            setTimeout(setupWebSocket, 3000); // Attempt reconnection after 3 seconds
         };
     };
 
     const handleSendMessage = async () => {
+        if (isSending || ws.current.readyState !== WebSocket.OPEN) return; // Prevent multiple sends and check WebSocket connection
         if (message.trim() || attachments.length > 0) {
             setSending(true);
+            setIsSending(true); // Set isSending flag
             try {
                 const uploadedUrls = await uploadAttachments();
 
                 const newMessage = {
-                    ChatId: chatId,
+                    ChatId: chatId.toString(),
                     SenderId: userData.UserId,
                     Content: message,
                     MessageType: 'text',
                     MediaUrl: uploadedUrls,
                     sending: true,
+                    localId: Date.now(), // Add a unique local ID
                 };
 
                 // Send the message to the WebSocket server
@@ -130,7 +132,7 @@ const ChatScreen = ({ route, navigation }) => {
                 // Update the messages state to mark the message as sent
                 setMessages((prevMessages) =>
                     prevMessages.map((msg) =>
-                        msg === newMessage ? { ...msg, sending: false } : msg
+                        msg.localId === newMessage.localId ? { ...msg, sending: false } : msg
                     )
                 );
 
@@ -145,6 +147,7 @@ const ChatScreen = ({ route, navigation }) => {
                 console.error('Error sending message:', error);
             } finally {
                 setSending(false);
+                setIsSending(false); // Reset isSending flag
             }
         }
     };
@@ -219,24 +222,12 @@ const ChatScreen = ({ route, navigation }) => {
         const isUserMessage = item.SenderId === userData.UserId;
         return (
             <View style={[styles.messageContainer, isUserMessage ? styles.userMessage : styles.friendMessage]}>
-                {isUserMessage ? (
-                    <>
-                        <Text style={[styles.messageText, styles.userMessageText]}>{item.Content}</Text>
-                        {item.sending ? (
-                            <ActivityIndicator size="small" color="gray" style={styles.loader} />
-                        ) : (
-                            <Icon name="check" size={20} color="gray" style={styles.checkIcon} />
-                        )}
-                    </>
-                ) : (
-                    <>
-                        {item.sending ? (
-                            <ActivityIndicator size="small" color="gray" style={styles.loader} />
-                        ) : (
-                            <Icon name="check" size={20} color="gray" style={styles.checkIcon} />
-                        )}
-                        <Text style={styles.messageText}>{item.Content}</Text>
-                    </>
+                <Text style={[styles.messageText, isUserMessage && styles.userMessageText]}>{item.Content}</Text>
+                {isUserMessage && item.sending && (
+                    <ActivityIndicator size="small" color="gray" style={styles.loader} />
+                )}
+                {isUserMessage && !item.sending && (
+                    <Icon name="check" size={20} color="gray" style={styles.checkIcon} />
                 )}
             </View>
         );

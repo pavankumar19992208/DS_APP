@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     row2: {
-        height: 200,
+        height: "fit-content",
         marginBottom: 10,
     },
     media: {
