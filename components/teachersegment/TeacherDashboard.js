@@ -1,23 +1,60 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, Alert, Dimensions, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, Dimensions, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FooterNavbar from './FooterNavbar'; // Adjust the path as necessary
-import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
+import { Menu, MenuItem } from 'react-native-material-menu';
 import GenerateRollNumbersScreen from './Tservices/GenerateRollNumbersScreen';
 import LottieView from 'lottie-react-native'; // Import LottieView
 import ScreenWrapper from '../../ScreenWrapper';
 import Timetable from './Tservices/Timetable';
-import { UserDataContext } from '../../BaseUrlContext'; // Import UserDataContext
+import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import UserDataContext and BaseUrlContext
+import ChangePasswordModal from '../commons/ChangePasswordModal'; // Import ChangePasswordModal
 
 const screenWidth = Dimensions.get('window').width;
 
 export default function TeacherDashboard({ navigation }) {
     const { userData } = useContext(UserDataContext); // Use the userData from UserDataContext
+    const baseUrl = useContext(BaseUrlContext); // Access the baseUrl from context
     console.log("User Data:", userData); // Log the user data
 
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [menuVisible, setMenuVisible] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+    const [isChangePasswordModalVisible, setIsChangePasswordModalVisible] = useState(false); // State for managing modal visibility
+    const [loading, setLoading] = useState(false); // State for managing loading
+
+    const handleChangePassword = async (currentPassword, newPassword) => {
+        setLoading(true); // Set loading to true
+
+        try {
+            const payload = {
+                UserId: userData.user?.UserId ?? '',
+                currentPassword,
+                newPassword,
+                usertype: 'teacher',
+            };
+
+            const response = await fetch(`${baseUrl}/updatepassword`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload), // Send the payload
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            Alert.alert('Success', 'Password updated successfully.');
+            handleLogout(); // Logout the user
+        } catch (error) {
+            Alert.alert('Error', error.message);
+        } finally {
+            setLoading(false); // Set loading to false
+            setIsChangePasswordModalVisible(false); // Hide the modal
+        }
+    };
 
     const handleLogout = () => {
         Alert.alert('Logout', 'You have been logged out.');
@@ -43,6 +80,16 @@ export default function TeacherDashboard({ navigation }) {
     return (
         <ScreenWrapper>
             <View style={styles.container}>
+                {loading && (
+                    <View style={styles.loaderContainer}>
+                        <LottieView
+                            source={require('../commons/jsonfiles/AniLoad.json')}
+                            autoPlay
+                            loop
+                            style={styles.loader}
+                        />
+                    </View>
+                )}
                 <LottieView
                     source={require('../commons/jsonfiles/bg2.json')} // Adjust the path to your Lottie file
                     autoPlay
@@ -69,6 +116,9 @@ export default function TeacherDashboard({ navigation }) {
                             </MenuItem>
                             <MenuItem onPress={onProfilePress}>
                                 <Text>Profile</Text>
+                            </MenuItem>
+                            <MenuItem onPress={() => setIsChangePasswordModalVisible(true)}>
+                                <Text>Change Password</Text>
                             </MenuItem>
                             <MenuItem onPress={handleLogout}>
                                 <Text style={{ color: 'red' }}>Logout</Text>
@@ -126,6 +176,11 @@ export default function TeacherDashboard({ navigation }) {
                     )}
                 </ScrollView>
                 <FooterNavbar navigation={navigation} data={userData} />
+                <ChangePasswordModal
+                    visible={isChangePasswordModalVisible}
+                    onClose={() => setIsChangePasswordModalVisible(false)}
+                    onSubmit={handleChangePassword}
+                />
             </View>
         </ScreenWrapper>
     );
@@ -268,5 +323,20 @@ const styles = StyleSheet.create({
     menu: {
         marginTop: 12,
         backgroundColor: '#E0F2FE', // Apply the background color to the menu
+    },
+    loaderContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+        zIndex: 1, // Ensure the loader is on top
+    },
+    loader: {
+        width: 100,
+        height: 100,
     },
 });

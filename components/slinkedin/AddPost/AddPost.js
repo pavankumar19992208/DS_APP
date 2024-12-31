@@ -9,7 +9,7 @@ import { storage } from '../../connections/Firebase'; // Import Firebase storage
 import * as ImagePicker from 'expo-image-picker'; // Import Expo Image Picker
 
 const AddPost = ({ navigation }) => {
-    const { userData } = useContext(UserDataContext); // Access userData from UserDataContext
+    const { userData, setUserData } = useContext(UserDataContext); // Access userData from UserDataContext
     const baseUrl = useContext(BaseUrlContext); // Access baseUrl from BaseUrlContext
     const [postContent, setPostContent] = useState('');
     const [tags, setTags] = useState('');
@@ -41,17 +41,42 @@ const AddPost = ({ navigation }) => {
         }
     };
 
-    const handleCollabWithChange = (text) => {
-        setCollabWith(text);
-        // Fetch suggestions from friends list based on the text after @
-        const friendsList = Array.isArray(userData.friends_list) ? userData.friends_list : []; // Ensure friends list is an array
-        console.log("friendsList:", friendsList);
-        if (friendsList.length === 0) {
-            setSuggestions(['No friends to suggest']);
-        } else {
-            const matches = friendsList.filter(friend => friend.includes(text.replace('@', '')));
-            setSuggestions(matches);
+    const fetchFriendName = async (id) => {
+        try {
+            const response = await fetch(`${baseUrl}/profiledata`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ UserId: id }),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const data = await response.json();
+            return data.Name; // Assuming the response contains a friend object with a Name property
+        } catch (error) {
+            console.error('Error fetching friend name:', error);
+            return null;
         }
+    };
+    
+    const handleCollabWithChange = async (text) => {
+        setCollabWith(text);
+        const friendsList = Array.isArray(userData.friends_list) ? userData.friends_list : []; // Ensure friends list is an array
+        const matches = friendsList.filter(friend => friend.includes(text.replace('@', '')));
+        const names = await Promise.all(matches.map(id => fetchFriendName(id)));
+        setSuggestions(names.filter(name => name)); // Filter out null values
+    };
+    
+    const handleTagsChange = async (text) => {
+        setTags(text);
+        const friendsList = Array.isArray(userData.friends_list) ? userData.friends_list : []; // Ensure friends list is an array
+        const matches = friendsList.filter(friend => friend.includes(text.replace('@', '')));
+        const names = await Promise.all(matches.map(id => fetchFriendName(id)));
+        setSuggestions(names.filter(name => name)); // Filter out null values
     };
 
     const uploadAttachments = async () => {
@@ -160,7 +185,7 @@ const AddPost = ({ navigation }) => {
                 style={styles.input}
                 placeholder="Tags (e.g., @username)"
                 value={tags}
-                onChangeText={setTags}
+                onChangeText={handleTagsChange}
             />
             <TextInput
                 style={styles.input}
