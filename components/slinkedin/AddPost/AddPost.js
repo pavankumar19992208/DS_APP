@@ -7,7 +7,7 @@ import { Picker } from '@react-native-picker/picker';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import Firebase Storage functions
 import { storage } from '../../connections/Firebase'; // Import Firebase storage instance
 import * as ImagePicker from 'expo-image-picker'; // Import Expo Image Picker
-
+import ScreenWrapper from '../../../ScreenWrapper';
 const AddPost = ({ navigation }) => {
     const { userData, setUserData } = useContext(UserDataContext); // Access userData from UserDataContext
     const baseUrl = useContext(BaseUrlContext); // Access baseUrl from BaseUrlContext
@@ -169,6 +169,7 @@ const AddPost = ({ navigation }) => {
     );
 
     return (
+        <ScreenWrapper>
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.heading}>Add Post</Text>
             <View style={styles.attachmentContainer}>
@@ -235,6 +236,7 @@ const AddPost = ({ navigation }) => {
                 <Text style={styles.submitButtonText}>{loading ? 'Posting...' : 'Post'}</Text>
             </TouchableOpacity>
         </ScrollView>
+        </ScreenWrapper>
     );
 };
 

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { View, TextInput, FlatList, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { BaseUrlContext } from '../../BaseUrlContext'; // Import the BaseUrlContext
-
+import ScreenWrapper from '../../ScreenWrapper';
 const SearchUsers = ({ navigation }) => {
     const baseUrl = useContext(BaseUrlContext); // Access the baseUrl from context
     const [query, setQuery] = useState('');
@@ -23,6 +23,7 @@ const SearchUsers = ({ navigation }) => {
     };
 
     return (
+        <ScreenWrapper>
         <View style={styles.container}>
             <TextInput
                 style={styles.input}
@@ -47,6 +48,7 @@ const SearchUsers = ({ navigation }) => {
                 )}
             />
         </View>
+        </ScreenWrapper>
     );
 };
 

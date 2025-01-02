@@ -5,7 +5,7 @@ import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Impor
 const { width, height } = Dimensions.get('window');
 import Loader from '../commons/Loader';
 import SkeletonLoader from '../commons/SkeletonLoader';
-
+import ScreenWrapper from '../../ScreenWrapper';
 const Profile = ({ route }) => {
     const { profileId } = route.params;
     const [profile, setProfile] = useState(null);
@@ -199,6 +199,7 @@ const Profile = ({ route }) => {
     const isFriend = userData.userData.friends_list?.includes(profileId);
 
     return (
+        <ScreenWrapper>
         <View style={styles.container}>
             {/* Row 1 */}
            {/* // <Loader visible={loading} />  */}
@@ -268,6 +269,7 @@ const Profile = ({ route }) => {
                 )}
             </View>
         </View>
+        </ScreenWrapper>
     );
 };
 
