@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions, ImageBackground } from 'react-nativ
 import LottieView from 'lottie-react-native';
 import underdevelopment from './jsonfiles/underdevelopment.json';
 
-const { width, height } = Dimensions.get('window');
+const { width} = Dimensions.get('window');
 
 const UnderDevelopment = ({ message }) => (
     <View style={styles.container}>

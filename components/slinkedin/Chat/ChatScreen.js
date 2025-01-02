@@ -6,7 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import Firebase Storage functions
 import { storage } from '../../connections/Firebase'; // Import Firebase storage instance
-
+import ScreenWrapper from '../../../ScreenWrapper';
 const { width, height } = Dimensions.get('window');
 
 const ChatScreen = ({ route, navigation }) => {
@@ -234,6 +234,7 @@ const ChatScreen = ({ route, navigation }) => {
     };
 
     return (
+        <ScreenWrapper>
         <View style={styles.container}>
             {/* Friend Profile Details */}
             {friendProfile && (
@@ -308,6 +309,7 @@ const ChatScreen = ({ route, navigation }) => {
                 </View>
             </Modal>
         </View>
+        </ScreenWrapper>
     );
 };
 

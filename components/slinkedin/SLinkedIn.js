@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import SLinkedInNavbar from './SLinkedInNavbar'; // Import the new component
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import UserDataContext and BaseUrlContext
 import Feed from './Feed'; // Import the Feed component
+import ScreenWrapper from '../../ScreenWrapper';
 
 const SLinkedIn = ({ navigation }) => {
     const { userData, setUserData } = useContext(UserDataContext); // Access userData from UserDataContext
@@ -45,6 +46,7 @@ const SLinkedIn = ({ navigation }) => {
     };
 
     return (
+        <ScreenWrapper>
         <View style={styles.container}>
             {/* Top Navbar */}
             <View style={styles.topNavbar}>
@@ -105,6 +107,7 @@ const SLinkedIn = ({ navigation }) => {
                 </View>
             </Modal>
         </View>
+        </ScreenWrapper>
     );
 };
 

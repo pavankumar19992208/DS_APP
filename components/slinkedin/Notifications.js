@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Dimensions } from 'react-native';
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import BaseUrlContext
 import SLinkedInNavbar from './SLinkedInNavbar'; // Import the SLinkedInNavbar component
-
+import ScreenWrapper from '../../ScreenWrapper';
 const { width, height } = Dimensions.get('window');
 
 const Notifications = ({ navigation }) => {
@@ -146,7 +146,7 @@ const Notifications = ({ navigation }) => {
     );
 
     return (
-        <>
+        <ScreenWrapper>
             <View style={styles.container}>
                 <View style={styles.tabContainer}>
                     <TouchableOpacity
@@ -185,7 +185,7 @@ const Notifications = ({ navigation }) => {
                 )}
             </View>
             <SLinkedInNavbar navigation={navigation} />
-        </>
+            </ScreenWrapper>
     );
 };
 

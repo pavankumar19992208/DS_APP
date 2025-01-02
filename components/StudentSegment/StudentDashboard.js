@@ -176,7 +176,7 @@ export default function StudentDashboard({ navigation }) {
                             <View style={styles.separator} />
                             <Text style={styles.description}>GRADE: {userData.user?.Grade ?? ''}</Text>
                             <View style={styles.separator} />
-                            <Text style={styles.description}>SECTION: {userData.user?.SECTION ?? ''}</Text>
+                            <Text style={styles.description}>SECTION: A</Text>
                             <View style={styles.separator} />
                             <Text style={styles.description}>MEDIUM: ENGLISH</Text>
                         </View>
