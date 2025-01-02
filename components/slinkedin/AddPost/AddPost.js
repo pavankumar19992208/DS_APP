@@ -8,9 +8,10 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../connections/Firebase'; // Import Firebase storage instance
 import * as ImagePicker from 'expo-image-picker'; // Import Expo Image Picker
 import ScreenWrapper from '../../../ScreenWrapper';
+
 const AddPost = ({ navigation }) => {
     const { userData, setUserData } = useContext(UserDataContext); // Access userData from UserDataContext
-    const baseUrl = useContext(BaseUrlContext); // Access baseUrl from BaseUrlContext
+    const baseUrl = useContext(BaseUrlContext); // Access baseUrl from context
     const [postContent, setPostContent] = useState('');
     const [tags, setTags] = useState('');
     const [collabWith, setCollabWith] = useState('');
@@ -19,6 +20,7 @@ const AddPost = ({ navigation }) => {
     const [attachments, setAttachments] = useState([]);
     const [loading, setLoading] = useState(false);
     const [suggestions, setSuggestions] = useState([]); // State for suggestions
+    const [showSuggestions, setShowSuggestions] = useState(false); // State to control visibility of suggestions container
 
     useEffect(() => {
         (async () => {
@@ -65,25 +67,20 @@ const AddPost = ({ navigation }) => {
     
     const handleCollabWithChange = async (text) => {
         setCollabWith(text);
-        console.log("friendsList--: ", userData.friends_list[0]);
-        const friendsList = userData.friends_list; // Ensure friends list is an array
-        console.log("friendsList: ", friendsList);
+        setShowSuggestions(true); // Show suggestions container
+        const friendsList = Array.isArray(userData.friends_list) ? userData.friends_list : []; // Ensure friends list is an array
         const matches = friendsList.filter(friend => friend.includes(text.replace('@', '')));
-        console.log("matches: ", matches);
         const names = await Promise.all(matches.map(id => fetchFriendName(id)));
-        console.log("names: ", names);
         setSuggestions(names.filter(name => name)); // Filter out null values
     };
     
     const handleTagsChange = async (text) => {
         setTags(text);
-        console.log("friendsList--: ", userData.friends_list[0]);
-        const friendsList = userData.friends_list; // Ensure friends list is an array
-        console.log("friendsList: ", friendsList);
+        setShowSuggestions(true); // Show suggestions container
+        const friendsList = Array.isArray(userData.friends_list) ? userData.friends_list : []; // Ensure friends list is an array
         const matches = friendsList.filter(friend => friend.includes(text.replace('@', '')));
-        console.log("matches: ", matches);
         const names = await Promise.all(matches.map(id => fetchFriendName(id)));
-        console.log("names: ", names);
+        setSuggestions(names.filter(name => name)); // Filter out null values
     };
 
     const uploadAttachments = async () => {
@@ -194,20 +191,28 @@ const AddPost = ({ navigation }) => {
                 placeholder="Tags (e.g., @username)"
                 value={tags}
                 onChangeText={handleTagsChange}
+                onFocus={() => setShowSuggestions(true)} // Show suggestions container when input is focused
             />
             <TextInput
                 style={styles.input}
                 placeholder="Collab With (e.g., @friend)"
                 value={collabWith}
                 onChangeText={handleCollabWithChange}
+                onFocus={() => setShowSuggestions(true)} // Show suggestions container when input is focused
             />
-            {suggestions.length > 0 && (
+            {showSuggestions && suggestions.length > 0 && (
                 <View style={styles.suggestionsContainer}>
                     {suggestions.map((suggestion, index) => (
-                        <TouchableOpacity key={index} onPress={() => setCollabWith(`@${suggestion}`)}>
+                        <TouchableOpacity key={index} onPress={() => {
+                            setCollabWith(`@${suggestion}`);
+                            setShowSuggestions(false); // Hide suggestions container after selection
+                        }}>
                             <Text style={styles.suggestionText}>{suggestion}</Text>
                         </TouchableOpacity>
                     ))}
+                    <TouchableOpacity style={styles.doneButton} onPress={() => setShowSuggestions(false)}>
+                        <Text style={styles.doneButtonText}>Done</Text>
+                    </TouchableOpacity>
                 </View>
             )}
             <View style={styles.row}>
@@ -292,16 +297,29 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
     },
     suggestionsContainer: {
+        position: 'absolute',
+        top: '50%', // Adjust this value as needed
+        left: '10%', // Adjust this value as needed
+        width: '80%',
         backgroundColor: '#fff',
         borderRadius: 5,
         borderWidth: 1,
         borderColor: '#ccc',
-        marginBottom: 15,
+        zIndex: 1, // Ensure it appears above other components
+        padding: 10,
     },
     suggestionText: {
         padding: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
+    },
+    doneButton: {
+        marginTop: 10,
+        alignSelf: 'flex-end',
+    },
+    doneButtonText: {
+        color: '#0E5E9D',
+        fontWeight: 'bold',
     },
     row: {
         flexDirection: 'row',
