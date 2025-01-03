@@ -8,6 +8,7 @@ import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Impor
 import ScreenWrapper from '../../ScreenWrapper'; // Import ScreenWrapper
 import AniLoader from '../commons/jsonfiles/AniLoad.json'; // Import AniLoader component
 import ChangePasswordModal from '../commons/ChangePasswordModal'; // Import ChangePasswordModal
+import Info from '../commons/info/Info'; // Import Info component
 
 const homeWorkImage = require('../../assets/images/home_work.png');
 const classWorkImage = require('../../assets/images/class_work.png');
@@ -222,6 +223,7 @@ export default function StudentDashboard({ navigation }) {
                     onClose={() => setIsChangePasswordModalVisible(false)}
                     onSubmit={handleChangePassword}
                 />
+                <Info keyword="slinkedin" /> {/* Add Info component with keyword */}
             </View>
         </ScreenWrapper>
     );

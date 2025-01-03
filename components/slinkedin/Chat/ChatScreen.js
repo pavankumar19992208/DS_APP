@@ -504,7 +504,8 @@ const styles = StyleSheet.create({
     },
     skeletonMessageText: {
         height: 15,
-        backgroundColor: 'rgba(187, 187, 187, 0.4)',        marginBottom: 5,
+        backgroundColor: 'rgba(187, 187, 187, 0.4)',
+        marginBottom: 5,
         borderRadius: 5,
         flex: 1,
         alignSelf: 'center',
