@@ -22,6 +22,7 @@ const ChatScreen = ({ route, navigation }) => {
     const [fetchError, setFetchError] = useState(false);
     const [sending, setSending] = useState(false);
     const [isSending, setIsSending] = useState(false); // Add isSending flag
+    const [loadingMessages, setLoadingMessages] = useState(true); // State to track loading status for messages
     const ws = useRef(null);
 
     useEffect(() => {
@@ -58,6 +59,8 @@ const ChatScreen = ({ route, navigation }) => {
         } catch (error) {
             console.error('Error fetching messages:', error);
             setFetchError(true);
+        } finally {
+            setLoadingMessages(false); // Set loading status to false
         }
     };
 
@@ -233,6 +236,16 @@ const ChatScreen = ({ route, navigation }) => {
         );
     };
 
+    const renderSkeletonLoader = ({ index }) => {
+        const isUserMessage = index % 2 === 0;
+        return (
+            <View style={[styles.skeletonMessageContainer, isUserMessage ? styles.userMessage : styles.friendMessage]}>
+                <View style={styles.skeletonMessageText} />
+                <View style={styles.skeletonMessageText} />
+            </View>
+        );
+    };
+
     return (
         <ScreenWrapper>
         <View style={styles.container}>
@@ -254,6 +267,13 @@ const ChatScreen = ({ route, navigation }) => {
                 <View style={styles.centeredView}>
                     <Text style={styles.centeredText}>Send your first message to start communication</Text>
                 </View>
+            ) : loadingMessages ? (
+                <FlatList
+                    data={Array(5).fill({})} // Placeholder data for skeleton loader
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={renderSkeletonLoader}
+                    contentContainerStyle={styles.messagesList}
+                />
             ) : (
                 <FlatList
                     data={messages}
@@ -402,7 +422,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'rgba(0, 0, 0, 0.25)',
     },
     modalView: {
         width: '80%',
@@ -410,13 +430,13 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 20,
         alignItems: 'center',
-        shadowColor: '#000',
+        shadowColor: '#0000',
         shadowOffset: {
             width: 0,
-            height: 2,
+            height: 5,
         },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
+        shadowOpacity: 0.005,
+        shadowRadius: 0.5,
         elevation: 5,
     },
     selectedImage: {
@@ -460,6 +480,34 @@ const styles = StyleSheet.create({
     centeredText: {
         fontSize: 16,
         color: 'gray',
+    },
+    skeletonMessageContainer: {
+        width: 'auto',
+        padding: 10,
+        backgroundColor: '#ccc',
+        borderRadius: 5,
+        marginBottom: 10,
+        maxWidth: '80%',
+        alignSelf: 'flex-start',
+        flexDirection: 'row',
+        alignItems: 'center',
+        flexShrink: 1,
+        height:50,
+    },
+    userMessage: {
+        alignSelf: 'flex-end',
+        backgroundColor: '#DCF8C6',
+    },
+    friendMessage: {
+        alignSelf: 'flex-start',
+        backgroundColor: '#fff',
+    },
+    skeletonMessageText: {
+        height: 15,
+        backgroundColor: 'rgba(187, 187, 187, 0.4)',        marginBottom: 5,
+        borderRadius: 5,
+        flex: 1,
+        alignSelf: 'center',
     },
 });
 

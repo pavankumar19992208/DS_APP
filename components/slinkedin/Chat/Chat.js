@@ -17,6 +17,8 @@ const Chat = ({ navigation }) => {
     const [createCircleVisible, setCreateCircleVisible] = useState(false);
     const [chats, setChats] = useState([]);
     const [circles, setCircles] = useState([]);
+    const [loadingChats, setLoadingChats] = useState(true); // State to track loading status for chats
+    const [loadingCircles, setLoadingCircles] = useState(true); // State to track loading status for circles
 
     useEffect(() => {
         fetchChats();
@@ -47,6 +49,8 @@ const Chat = ({ navigation }) => {
             console.log("chat data", data);
         } catch (error) {
             console.error('Error fetching chats:', error);
+        } finally {
+            setLoadingChats(false); // Set loading status to false
         }
     };
 
@@ -71,6 +75,8 @@ const Chat = ({ navigation }) => {
             console.log("circle data", data);
         } catch (error) {
             console.error('Error fetching circles:', error);
+        } finally {
+            setLoadingCircles(false); // Set loading status to false
         }
     };
 
@@ -128,6 +134,16 @@ const Chat = ({ navigation }) => {
         </TouchableOpacity>
     );
 
+    const renderSkeletonLoader = () => (
+        <View style={styles.skeletonContainer}>
+            <View style={styles.skeletonProfilePic} />
+            <View style={styles.skeletonDetails}>
+                <View style={styles.skeletonText} />
+                <View style={styles.skeletonText} />
+            </View>
+        </View>
+    );
+
     return (
         <ScreenWrapper>
         <View style={styles.container}>
@@ -155,22 +171,40 @@ const Chat = ({ navigation }) => {
             {/* Content */}
             <View style={styles.content}>
                 {activeTab === 'chats' ? (
-                    <FlatList
-                        data={chats}
-                        keyExtractor={(item) => item.ChatId.toString()}
-                        renderItem={renderChatItem}
-                        contentContainerStyle={styles.chatList}
-                    />
-                ) : (
-                    circles.length > 0 ? (
+                    loadingChats ? (
                         <FlatList
-                            data={circles}
-                            keyExtractor={(item) => item.ChatId.toString()}
-                            renderItem={renderCircleItem}
+                            data={Array(5).fill({})} // Placeholder data for skeleton loader
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={renderSkeletonLoader}
                             contentContainerStyle={styles.chatList}
                         />
                     ) : (
-                        <Text style={styles.placeholderText}>You aren't part of any circles.</Text>
+                        <FlatList
+                            data={chats}
+                            keyExtractor={(item) => item.ChatId.toString()}
+                            renderItem={renderChatItem}
+                            contentContainerStyle={styles.chatList}
+                        />
+                    )
+                ) : (
+                    loadingCircles ? (
+                        <FlatList
+                            data={Array(5).fill({})} // Placeholder data for skeleton loader
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={renderSkeletonLoader}
+                            contentContainerStyle={styles.chatList}
+                        />
+                    ) : (
+                        circles.length > 0 ? (
+                            <FlatList
+                                data={circles}
+                                keyExtractor={(item) => item.ChatId.toString()}
+                                renderItem={renderCircleItem}
+                                contentContainerStyle={styles.chatList}
+                            />
+                        ) : (
+                            <Text style={styles.placeholderText}>You aren't part of any circles.</Text>
+                        )
                     )
                 )}
             </View>
@@ -349,6 +383,32 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
+    },
+    skeletonContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        backgroundColor: '#fff',
+        borderRadius: 5,
+        marginBottom: 10,
+        height: height * 0.08,
+        width: width * 0.95, // Set width to 90% of screen width
+    },
+    skeletonProfilePic: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: '#ccc',
+        marginRight: 10,
+    },
+    skeletonDetails: {
+        flex: 1,
+    },
+    skeletonText: {
+        height: 10,
+        backgroundColor: '#ccc',
+        marginBottom: 5,
+        borderRadius: 5,
     },
 });
 

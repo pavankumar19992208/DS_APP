@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Dimensions, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import UserDataContext and BaseUrlContext
-import SkeletonLoader  from '../commons/SkeletonLoader';
+import SkeletonLoader from '../commons/SkeletonLoader';
 
 const { width, height } = Dimensions.get('window');
 
@@ -11,8 +11,7 @@ const Feed = ({ navigation }) => {
     const baseUrl = useContext(BaseUrlContext); // Access baseUrl from BaseUrlContext
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
-   // const [profileLoading, setProfileLoading] = useState(false);
-
+    const [message, setMessage] = useState(''); // State for message
 
     useEffect(() => {
         fetchPosts();
@@ -21,6 +20,13 @@ const Feed = ({ navigation }) => {
     const fetchPosts = async () => {
         setLoading(true);
         const postIds = Array.isArray(userData.feed) ? userData.feed : JSON.parse(userData.feed);
+
+        if (!postIds || postIds.length === 0) {
+            setMessage('Post or make connections to get the feed');
+            setLoading(false);
+            return;
+        }
+
         const payload = { post_ids: postIds };
         console.log('Fetching posts with payload:', payload); // Print the payload to the console
 
@@ -46,12 +52,6 @@ const Feed = ({ navigation }) => {
             setLoading(false);
         }
     };
-    // const navigateToProfile = (profileId) => {
-    //     setProfileLoading(true);
-    //     navigation.navigate('Profile', { profileId });
-    //     setProfileLoading(false);
-    // };
-
 
     const renderPost = ({ item }) => {
         console.log("UserId: ", item.UserId);
@@ -59,12 +59,9 @@ const Feed = ({ navigation }) => {
         return (
             <View style={styles.postContainer}>
                 {/* Row 1 */}
-                {/* <Loader visible={loading} />  */}
                 <View style={styles.row1}>
                     <View style={styles.column1}>
                         <TouchableOpacity onPress={() => navigation.navigate('Profile', { profileId: item.UserId })}>
-                        {/* <TouchableOpacity onPress={() => navigateToProfile(item.UserId)}> */}
-                        
                             <Image
                                 source={userData.user?.Photo ? { uri: userData.user.Photo } : require('../../assets/images/studentm.png')}
                                 style={styles.profilePic}
@@ -99,10 +96,10 @@ const Feed = ({ navigation }) => {
                 {/* Row 3 */}
                 <View style={styles.row3}>
                     <View style={styles.column1}>
-                        <TouchableOpacity style={{ marginRight: 20}}>
+                        <TouchableOpacity style={{ marginRight: 20 }}>
                             <Icon name="favorite-border" size={24} color="#E31C62" />
                         </TouchableOpacity>
-                        <Text style={{ marginRight: 20}}>{item.likesCount ?? 0}</Text>
+                        <Text style={{ marginRight: 20 }}>{item.likesCount ?? 0}</Text>
                     </View>
                     <View style={styles.column2}>
                         <TouchableOpacity>
@@ -116,7 +113,7 @@ const Feed = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.column4}>
-                        <TouchableOpacity style={{ marginLeft: 10}}>
+                        <TouchableOpacity style={{ marginLeft: 10 }}>
                             <Icon name="share" size={24} color="#E31C62" />
                         </TouchableOpacity>
                     </View>
@@ -133,24 +130,29 @@ const Feed = ({ navigation }) => {
             </View>
         );
     };
+
     return (
         <View style={{ flex: 1 }}>
-        {loading ? (
-            <FlatList
-                data={[...Array(5).keys()]} // Create an array with 5 elements for the skeleton loader
-                renderItem={() => <SkeletonLoader />}
-                keyExtractor={(item) => item.toString()}
-                showsVerticalScrollIndicator={false} // Hide vertical scroll bar
-            />
-        ) : (
-        <FlatList
-            data={posts}
-            renderItem={renderPost}
-            keyExtractor={(item) => item.PostId.toString()}
-            ListFooterComponent={loading && <Text>Loading...</Text>}
-            showsVerticalScrollIndicator={false} // Hide vertical scroll bar
-        />
-        )}
+            {loading ? (
+                <FlatList
+                    data={[...Array(5).keys()]} // Create an array with 5 elements for the skeleton loader
+                    renderItem={() => <SkeletonLoader />}
+                    keyExtractor={(item) => item.toString()}
+                    showsVerticalScrollIndicator={false} // Hide vertical scroll bar
+                />
+            ) : message ? (
+                <View style={styles.messageContainer}>
+                    <Text style={styles.messageText}>{message}</Text>
+                </View>
+            ) : (
+                <FlatList
+                    data={posts}
+                    renderItem={renderPost}
+                    keyExtractor={(item) => item.PostId.toString()}
+                    ListFooterComponent={loading && <Text>Loading...</Text>}
+                    showsVerticalScrollIndicator={false} // Hide vertical scroll bar
+                />
+            )}
         </View>
     );
 };
@@ -211,7 +213,7 @@ const styles = StyleSheet.create({
     },
     media: {
         width: width - 40,
-        height:  height * 0.4,
+        height: height * 0.4,
         borderRadius: 5,
     },
     row3: {
@@ -232,6 +234,16 @@ const styles = StyleSheet.create({
     morePostsText: {
         fontSize: 14,
         color: '#0E5E9D',
+    },
+    messageContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    messageText: {
+        fontSize: 16,
+        color: '#0E5E9D',
+        textAlign: 'center',
     },
 });
 

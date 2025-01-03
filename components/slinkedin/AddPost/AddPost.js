@@ -1,8 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert, ScrollView, Dimensions } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert, ScrollView, Dimensions, Modal, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { UserDataContext, BaseUrlContext } from '../../../BaseUrlContext'; // Import UserDataContext
-import { FlatList } from 'react-native-gesture-handler';
 import { Picker } from '@react-native-picker/picker';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import Firebase Storage functions
 import { storage } from '../../connections/Firebase'; // Import Firebase storage instance
@@ -13,14 +12,18 @@ const AddPost = ({ navigation }) => {
     const { userData, setUserData } = useContext(UserDataContext); // Access userData from UserDataContext
     const baseUrl = useContext(BaseUrlContext); // Access baseUrl from context
     const [postContent, setPostContent] = useState('');
-    const [tags, setTags] = useState('');
-    const [collabWith, setCollabWith] = useState('');
+    const [tags, setTags] = useState([]);
+    const [collabWith, setCollabWith] = useState([]);
     const [privacy, setPrivacy] = useState('Public');
     const [location, setLocation] = useState('');
     const [attachments, setAttachments] = useState([]);
     const [loading, setLoading] = useState(false);
     const [suggestions, setSuggestions] = useState([]); // State for suggestions
     const [showSuggestions, setShowSuggestions] = useState(false); // State to control visibility of suggestions container
+    const [searchText, setSearchText] = useState(''); // State for search text
+    const [selectedField, setSelectedField] = useState(''); // State to track which field is being edited
+    const [suggestionsTitle, setSuggestionsTitle] = useState(''); // State for suggestions title
+    const [selectedSuggestions, setSelectedSuggestions] = useState([]); // State for selected suggestions
 
     useEffect(() => {
         (async () => {
@@ -65,22 +68,30 @@ const AddPost = ({ navigation }) => {
         }
     };
     
-    const handleCollabWithChange = async (text) => {
-        setCollabWith(text);
-        setShowSuggestions(true); // Show suggestions container
+    const handleSearchChange = async (text) => {
+        setSearchText(text);
         const friendsList = Array.isArray(userData.friends_list) ? userData.friends_list : []; // Ensure friends list is an array
-        const matches = friendsList.filter(friend => friend.includes(text.replace('@', '')));
+        const matches = friendsList.filter(friend => friend.toLowerCase().includes(text.toLowerCase()));
         const names = await Promise.all(matches.map(id => fetchFriendName(id)));
         setSuggestions(names.filter(name => name)); // Filter out null values
     };
-    
-    const handleTagsChange = async (text) => {
-        setTags(text);
-        setShowSuggestions(true); // Show suggestions container
+
+    const handleFieldFocus = async (field) => {
+        setSelectedField(field);
+        setShowSuggestions(true);
+        setSuggestionsTitle(field === 'tags' ? 'Tag Your Friends' : 'Collab With');
         const friendsList = Array.isArray(userData.friends_list) ? userData.friends_list : []; // Ensure friends list is an array
-        const matches = friendsList.filter(friend => friend.includes(text.replace('@', '')));
-        const names = await Promise.all(matches.map(id => fetchFriendName(id)));
+        const names = await Promise.all(friendsList.map(id => fetchFriendName(id)));
         setSuggestions(names.filter(name => name)); // Filter out null values
+    };
+
+    const handleSuggestionSelect = (suggestion) => {
+        if (selectedField === 'tags') {
+            setTags([...tags, suggestion]);
+        } else if (selectedField === 'collabWith') {
+            setCollabWith([...collabWith, suggestion]);
+        }
+        setSelectedSuggestions([...selectedSuggestions, suggestion]);
     };
 
     const uploadAttachments = async () => {
@@ -122,8 +133,8 @@ const AddPost = ({ navigation }) => {
             const postData = {
                 UserId: userData.UserId,
                 PostContent: postContent,
-                Tags: tags.split(',').map(tag => tag.trim()), // Convert tags to list of strings
-                Collaborations: collabWith.split(',').map(collab => collab.trim()), // Convert collabWith to list of strings
+                Tags: tags, // Use tags array
+                Collaborations: collabWith, // Use collabWith array
                 Privacy: privacy,
                 Location: location,
                 MediaUrl: uploadedUrls,
@@ -165,6 +176,16 @@ const AddPost = ({ navigation }) => {
         </TouchableOpacity>
     );
 
+    const renderSuggestionItem = ({ item }) => {
+        const isSelected = selectedSuggestions.includes(item);
+        return (
+            <TouchableOpacity onPress={() => handleSuggestionSelect(item)} style={[styles.suggestionItem, isSelected && styles.selectedSuggestionItem]}>
+                <Text style={styles.suggestionText}>{item}</Text>
+                {isSelected && <Icon name="check" size={20} color="#fff" style={styles.checkIcon} />}
+            </TouchableOpacity>
+        );
+    };
+
     return (
         <ScreenWrapper>
         <ScrollView contentContainerStyle={styles.container}>
@@ -189,32 +210,17 @@ const AddPost = ({ navigation }) => {
             <TextInput
                 style={styles.input}
                 placeholder="Tags (e.g., @username)"
-                value={tags}
-                onChangeText={handleTagsChange}
-                onFocus={() => setShowSuggestions(true)} // Show suggestions container when input is focused
+                value={tags.join(', ')}
+                onFocus={() => handleFieldFocus('tags')}
+                onChangeText={handleSearchChange}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Collab With (e.g., @friend)"
-                value={collabWith}
-                onChangeText={handleCollabWithChange}
-                onFocus={() => setShowSuggestions(true)} // Show suggestions container when input is focused
+                value={collabWith.join(', ')}
+                onFocus={() => handleFieldFocus('collabWith')}
+                onChangeText={handleSearchChange}
             />
-            {showSuggestions && suggestions.length > 0 && (
-                <View style={styles.suggestionsContainer}>
-                    {suggestions.map((suggestion, index) => (
-                        <TouchableOpacity key={index} onPress={() => {
-                            setCollabWith(`@${suggestion}`);
-                            setShowSuggestions(false); // Hide suggestions container after selection
-                        }}>
-                            <Text style={styles.suggestionText}>{suggestion}</Text>
-                        </TouchableOpacity>
-                    ))}
-                    <TouchableOpacity style={styles.doneButton} onPress={() => setShowSuggestions(false)}>
-                        <Text style={styles.doneButtonText}>Done</Text>
-                    </TouchableOpacity>
-                </View>
-            )}
             <View style={styles.row}>
                 <Picker
                     selectedValue={privacy}
@@ -240,6 +246,25 @@ const AddPost = ({ navigation }) => {
             <TouchableOpacity style={styles.submitButton} onPress={handleSubmit} disabled={loading}>
                 <Text style={styles.submitButtonText}>{loading ? 'Posting...' : 'Post'}</Text>
             </TouchableOpacity>
+            <Modal visible={showSuggestions} animationType="slide">
+                <View style={styles.suggestionsContainer}>
+                    <Text style={styles.suggestionsTitle}>{suggestionsTitle}</Text>
+                    <TextInput
+                        style={styles.searchInput}
+                        placeholder="Search friends..."
+                        value={searchText}
+                        onChangeText={handleSearchChange}
+                    />
+                    <FlatList
+                        data={suggestions}
+                        renderItem={renderSuggestionItem}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+                    <TouchableOpacity style={styles.doneButton} onPress={() => setShowSuggestions(false)}>
+                        <Text style={styles.doneButtonText}>Done</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
         </ScrollView>
         </ScreenWrapper>
     );
@@ -297,21 +322,42 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
     },
     suggestionsContainer: {
-        position: 'absolute',
-        top: '50%', // Adjust this value as needed
-        left: '10%', // Adjust this value as needed
-        width: '80%',
+        flex: 1,
+        padding: 20,
         backgroundColor: '#fff',
+    },
+    suggestionsTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#0E5E9D',
+        marginBottom: 10,
+    },
+    searchInput: {
+        backgroundColor: '#f0f0f0',
+        padding: 10,
         borderRadius: 5,
+        marginBottom: 15,
         borderWidth: 1,
         borderColor: '#ccc',
-        zIndex: 1, // Ensure it appears above other components
-        padding: 10,
     },
-    suggestionText: {
-        padding: 10,
+    suggestionItem: {
+        padding: 5,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    selectedSuggestionItem: {
+        backgroundColor: 'rgba(14, 94, 157, 0.1)',
+    },
+    suggestionText: {
+        flex: 1,
+    },
+    checkIcon: {
+        marginLeft: 10,
+        color: '#0E5E9D',
+
     },
     doneButton: {
         marginTop: 10,
