@@ -49,5 +49,134 @@
                 }
             ]
         }
+    },
+    "feed": {
+        "title": "WELCOME TO THE FEED SEGMENT",
+        "description": {
+            "descriptionTitle": "A Space for Students and Schools to Share",
+            "content": "A space where students can spread their wings and share their thoughts, achievements, and successes. Schools can post their events, workshops, and achievements, creating a vibrant and engaging community.",
+            "features": [
+                {
+                    "title": "1. Student Posts:",
+                    "content": "Students can share their thoughts, achievements, and successes, fostering a sense of community and pride."
+                },
+                {
+                    "title": "2. School Announcements:",
+                    "content": "Schools can post updates about events, workshops, and achievements, keeping the community informed and engaged."
+                },
+                {
+                    "title": "3. Interactive Discussions:",
+                    "content": "Facilitates discussions and interactions between students and schools, encouraging collaboration and knowledge sharing."
+                },
+                {
+                    "title": "4. Event Highlights:",
+                    "content": "Showcases highlights from school events and workshops, celebrating the achievements of students and schools."
+                },
+                {
+                    "title": "5. Achievement Showcases:",
+                    "content": "Provides a platform for students to showcase their achievements, inspiring others and fostering a positive competitive spirit."
+                }
+            ],
+            "outcomes": [
+                {
+                    "title": "Enhanced Community Engagement:",
+                    "content": "Increases participation and interaction within the school community."
+                },
+                {
+                    "title": "Improved Communication:",
+                    "content": "Facilitates better communication between students and schools, keeping everyone informed and connected."
+                },
+                {
+                    "title": "Inspiration and Motivation:",
+                    "content": "Encourages students to strive for excellence by showcasing achievements and successes."
+                }
+            ]
+        }
+    },
+    "chatsAndCircles": {
+        "title": "CHATS AND CIRCLES",
+        "description": {
+            "descriptionTitle": "Connecting Students with Common Interests",
+            "content": "A platform where students can communicate with peers who share similar skills and interests. Students can form groups for common interests, workshops, and events, fostering collaboration and community.",
+            "features": [
+                {
+                    "title": "1. Skill-Based Chats:",
+                    "content": "Students can join chat rooms based on their skills and interests, facilitating focused discussions and knowledge sharing."
+                },
+                {
+                    "title": "2. Interest-Based Circles:",
+                    "content": "Students can create and join circles or groups based on common interests, such as coding, sports, or arts, promoting collaborative learning and project work."
+                },
+                {
+                    "title": "3. Event Coordination:",
+                    "content": "Circles can coordinate and organize events, workshops, and activities, enhancing student engagement and participation."
+                },
+                {
+                    "title": "4. Peer Support:",
+                    "content": "Provides a platform for students to support each other, share resources, and collaborate on projects, fostering a sense of community."
+                },
+                {
+                    "title": "5. School-Managed Groups:",
+                    "content": "Schools can create and manage groups for specific activities, clubs, or workshops, ensuring organized and effective communication."
+                }
+            ],
+            "outcomes": [
+                {
+                    "title": "Enhanced Collaboration:",
+                    "content": "Promotes teamwork and collaboration among students with similar interests and skills."
+                },
+                {
+                    "title": "Increased Engagement:",
+                    "content": "Encourages active participation in group activities, events, and discussions."
+                },
+                {
+                    "title": "Improved Communication:",
+                    "content": "Facilitates better communication and coordination among students and between students and schools."
+                }
+            ]
+        }
+    },
+    "connections": {
+        "title": "SEARCH AND BUILD CONNECTIONS",
+        "description": {
+            "descriptionTitle": "Building and Managing Student Connections",
+            "content": "A platform where students can make friends, send messages, and manage their connections. Students can send friend requests, accept or reject requests, and unfriend as needed, fostering a dynamic and interactive community.",
+            "features": [
+                {
+                    "title": "1. Make Friends:",
+                    "content": "Students can send friend requests to peers, building their network of connections."
+                },
+                {
+                    "title": "2. Send Messages:",
+                    "content": "Students can send messages to their friends, facilitating direct communication and collaboration."
+                },
+                {
+                    "title": "3. Accept or Reject Requests:",
+                    "content": "Students can accept or reject friend requests, managing their connections effectively."
+                },
+                {
+                    "title": "4. Unfriend:",
+                    "content": "Students can unfriend peers if needed, maintaining a healthy and positive network."
+                },
+                {
+                    "title": "5. Connection Management:",
+                    "content": "Provides tools for students to manage their connections, ensuring a dynamic and interactive community."
+                }
+            ],
+            "outcomes": [
+                {
+                    "title": "Enhanced Social Interaction:",
+                    "content": "Promotes social interaction and networking among students."
+                },
+                {
+                    "title": "Improved Communication:",
+                    "content": "Facilitates direct communication between students, enhancing collaboration and support."
+                },
+                {
+                    "title": "Dynamic Community:",
+                    "content": "Creates a dynamic and interactive community where students can build and manage their connections."
+                }
+            ]
+        }
     }
 }

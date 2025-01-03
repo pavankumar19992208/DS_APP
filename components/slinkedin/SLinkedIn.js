@@ -5,6 +5,7 @@ import SLinkedInNavbar from './SLinkedInNavbar'; // Import the new component
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import UserDataContext and BaseUrlContext
 import Feed from './Feed'; // Import the Feed component
 import ScreenWrapper from '../../ScreenWrapper';
+import Info from '../commons/info/Info';
 
 const SLinkedIn = ({ navigation }) => {
     const { userData, setUserData } = useContext(UserDataContext); // Access userData from UserDataContext
@@ -106,6 +107,7 @@ const SLinkedIn = ({ navigation }) => {
                     </View>
                 </View>
             </Modal>
+            <Info keyword="feed" />
         </View>
         </ScreenWrapper>
     );

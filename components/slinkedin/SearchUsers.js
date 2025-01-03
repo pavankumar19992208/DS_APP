@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { View, TextInput, FlatList, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { BaseUrlContext } from '../../BaseUrlContext'; // Import the BaseUrlContext
 import ScreenWrapper from '../../ScreenWrapper';
+import Info from '../commons/info/Info';
 const SearchUsers = ({ navigation }) => {
     const baseUrl = useContext(BaseUrlContext); // Access the baseUrl from context
     const [query, setQuery] = useState('');
@@ -47,6 +48,7 @@ const SearchUsers = ({ navigation }) => {
                     </TouchableOpacity>
                 )}
             />
+        <Info keyword="connections" />
         </View>
         </ScreenWrapper>
     );
@@ -55,6 +57,7 @@ const SearchUsers = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        marginTop: 10,
         padding: 20,
         backgroundColor: '#E0F2FE',
     },

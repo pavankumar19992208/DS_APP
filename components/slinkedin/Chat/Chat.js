@@ -6,6 +6,7 @@ import { UserDataContext, BaseUrlContext } from '../../../BaseUrlContext'; // Im
 import CreateChat from './CreateChat'; // Import CreateChat component
 import CreateCircle from './CreateCircle'; // Import CreateCircle component
 import ScreenWrapper from '../../../ScreenWrapper';
+import Info from '../../commons/info/Info';
 const { width, height } = Dimensions.get('window');
 
 const Chat = ({ navigation }) => {
@@ -249,6 +250,7 @@ const Chat = ({ navigation }) => {
             </Modal>
 
             {/* Bottom Navbar */}
+            <Info keyword="chatsAndCircles" />
             <SLinkedInNavbar navigation={navigation} />
         </View>
         </ScreenWrapper>
@@ -257,6 +259,7 @@ const Chat = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
+        marginTop: 20,
         flex: 1,
         backgroundColor: '#E0F2FE',
     },
