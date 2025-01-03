@@ -8,7 +8,7 @@ const SFooterNavbar = ({ navigation, handleNavigateToSLinkedIn }) => {
             <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('StudentDashboard')}>
                 <Icon name="home" size={30} color="#F965A0" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconContainer} onPress={handleNavigateToSLinkedIn}>
+            <TouchableOpacity style={[styles.iconContainer, styles.highlightedNavItem]} onPress={handleNavigateToSLinkedIn}>
                 <Image source={require('../../assets/images/nl_logo.png')} style={styles.nlLogo} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('BotGenie')}>
@@ -48,6 +48,13 @@ const styles = StyleSheet.create({
     nlLogo: {
         width: 40,
         height: 40,
+    },
+    highlightedNavItem: {
+        borderColor: '#E31C62',
+        borderWidth: 2,
+        borderRadius: 30,
+        backgroundColor: '#F965A0',
+        padding: 5,
     },
 });
 

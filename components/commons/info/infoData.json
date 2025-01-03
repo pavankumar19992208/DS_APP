@@ -3,8 +3,51 @@
         "title": "A STUDENT LINKEDIN COMMUNITY",
         "description": {
             "descriptionTitle": "A LinkedIn community system for schools",
-            "content": "1. Authenticity Of Profiles\n2. Skill & Interest based Networking\n3. Collaborative Circles\n4. Educational Feed Section\n5. Peer & School comparison",
-            "note": "Profiles are created using verified data from partnered schools, ensuring authenticity and eliminating fake profiles."
+            "content": "A platform that connects students, teachers, and schools in a professional network, fostering collaboration, skill-sharing, and academic growth. The system is designed to enhance student engagement, encourage healthy competition, and provide a space for students to showcase their achievements and interests. By creating a safe and authentic environment, students can build meaningful connections, explore opportunities, and gain valuable insights from peers and educators.",
+            "features": [
+                {
+                    "title": "1. Authenticity of Profiles:",
+                    "content": "Profiles are created using verified data from partnered schools, ensuring authenticity and eliminating fake profiles. Builds trust within the community, as interactions are credible and professional."
+                },
+                {
+                    "title": "2. Encouraging Healthy Competition:",
+                    "content": "Leaderboards or achievement showcases for exams, events, and skill-based activities create a positive competitive spirit. Enables students to benchmark their performance against peers in a constructive way."
+                },
+                {
+                    "title": "3. Skill and Interest-Based Networking:",
+                    "content": "Helps students connect with peers of similar interests (e.g., coding, sports, arts). Facilitates knowledge sharing, collaborative learning, and project collaborations."
+                },
+                {
+                    "title": "4. Peer and School Comparison:",
+                    "content": "Students and schools can view aggregated data on performance trends and participation, motivating improvement. Encourages schools to foster better academic and extracurricular programs."
+                },
+                {
+                    "title": "5. Collaborative Circles:",
+                    "content": "Offers 'Circles' or groups where students can join communities based on interests, workshops, or school clubs. Encourages networking within and beyond their school."
+                },
+                {
+                    "title": "6. Educational Feed Section:",
+                    "content": "Students can post achievements, challenges, or educational updates, creating a dynamic and inspiring space. Facilitates sharing of event details, skill-building opportunities, or thought-provoking ideas."
+                },
+                {
+                    "title": "7. Cross-School Collaboration:",
+                    "content": "Enable inter-school projects, competitions, and events, fostering collaboration and exposure to diverse perspectives."
+                }
+            ],
+            "outcomes": [
+                {
+                    "title": "Improved Student Engagement:",
+                    "content": "More active participation in educational and extracurricular activities."
+                },
+                {
+                    "title": "Stronger School Ecosystem:",
+                    "content": "Helps schools monitor and encourage student performance while promoting collaboration."
+                },
+                {
+                    "title": "Enhanced Student Visibility:",
+                    "content": "Recognizes and showcases individual and collective achievements, increasing motivation."
+                }
+            ]
         }
     }
 }

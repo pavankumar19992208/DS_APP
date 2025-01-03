@@ -5,7 +5,7 @@ import infoData from './infoData.json'; // Import the JSON file
 const infoIcon = require('../../../assets/images/info.png'); // Import the icon from assets
 
 const Info = ({ keyword }) => {
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(true);
     const data = infoData[keyword];
     console.log(keyword, data);
     return (
@@ -21,15 +21,37 @@ const Info = ({ keyword }) => {
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalView}>
+                        <Text style={styles.noticeText}>A card for pitching purpose, not for production APK</Text>
                         <Text style={styles.title}>{data.title}</Text>
                         <View style={styles.separator} />
                         <ScrollView style={styles.descriptionContainer}>
                             <Text style={styles.descriptionTitle}>{data.description.descriptionTitle}</Text>
                             <Text style={styles.descriptionContent}>{data.description.content}</Text>
-                            <Text style={styles.descriptionNote}>{data.description.note}</Text>
+                            {data.description.features && (
+                                <>
+                                    <Text style={styles.sectionTitle}>Features:</Text>
+                                    {data.description.features.map((feature, index) => (
+                                        <View key={index} style={styles.featureItem}>
+                                            <Text style={styles.featureTitle}>{feature.title}</Text>
+                                            <Text style={styles.featureContent}>{feature.content}</Text>
+                                        </View>
+                                    ))}
+                                </>
+                            )}
+                            {data.description.outcomes && (
+                                <>
+                                    <Text style={styles.sectionTitle}>Outcomes:</Text>
+                                    {data.description.outcomes.map((outcome, index) => (
+                                        <View key={index} style={styles.outcomeItem}>
+                                            <Text style={styles.outcomeTitle}>{outcome.title}</Text>
+                                            <Text style={styles.outcomeContent}>{outcome.content}</Text>
+                                        </View>
+                                    ))}
+                                </>
+                            )}
                         </ScrollView>
                         <View style={styles.separator} />
-                        <Text style={styles.accessText}>Access it from the highlighted option.</Text>
+                        <Text style={styles.accessText}>Access it from navbar (highlighted one).</Text>
                         <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
                             <Text style={styles.closeButtonText}>Close</Text>
                         </TouchableOpacity>
@@ -64,10 +86,10 @@ const styles = StyleSheet.create({
     },
     modalView: {
         width: '90%',
-        height: '60%',
+        height: '75%',
         backgroundColor: 'white',
         borderRadius: 10,
-        padding: 20,
+        padding: 5,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
@@ -77,6 +99,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+    },
+    noticeText: {
+        fontSize: 14,
+        color: 'red',
+        textAlign: 'center',
     },
     title: {
         fontSize: 18,
@@ -92,6 +119,7 @@ const styles = StyleSheet.create({
     descriptionContainer: {
         flex: 1,
         width: '100%',
+        padding:15,
     },
     descriptionTitle: {
         fontSize: 16,
@@ -101,11 +129,39 @@ const styles = StyleSheet.create({
     descriptionContent: {
         fontSize: 16,
         color: '#000',
+        marginBottom: 10,
     },
-    descriptionNote: {
+    sectionTitle: {
+        fontSize: 16,
+        color: '#0E5E9D',
+        fontWeight: 'bold',
+        marginTop: 10,
+    },
+    featureItem: {
+        marginBottom: 10,
+    },
+    featureTitle: {
         fontSize: 16,
         color: '#000',
-        fontStyle: 'italic',
+        fontWeight: 'bold',
+    },
+    featureContent: {
+        fontSize: 16,
+        color: '#000',
+        marginLeft: 10,
+    },
+    outcomeItem: {
+        marginBottom: 10,
+    },
+    outcomeTitle: {
+        fontSize: 16,
+        color: '#000',
+        fontWeight: 'bold',
+    },
+    outcomeContent: {
+        fontSize: 16,
+        color: '#000',
+        marginLeft: 10,
     },
     accessText: {
         fontSize: 16,

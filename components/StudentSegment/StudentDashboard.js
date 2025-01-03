@@ -26,10 +26,7 @@ export default function StudentDashboard({ navigation }) {
     const [homework, setHomework] = useState([]);
     const [isChangePasswordModalVisible, setIsChangePasswordModalVisible] = useState(false); // State for managing modal visibility
     const [index, setIndex] = useState(0);
-    const [routes] = useState([
-        { key: 'classwork', title: 'CLASSWORK' },
-        { key: 'homework', title: 'HOMEWORK' },
-    ]);
+ 
 
     const renderScene = ({ route }) => {
         switch (route.key) {
