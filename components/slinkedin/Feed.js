@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Dimensions, Alert } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Dimensions, Alert, Modal,ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import UserDataContext and BaseUrlContext
 import SkeletonLoader from '../commons/SkeletonLoader';
@@ -12,6 +12,8 @@ const Feed = ({ navigation }) => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState(''); // State for message
+    const [selectedPost, setSelectedPost] = useState(null); // State for selected post
+    const [modalVisible, setModalVisible] = useState(false); // State for modal visibility
 
     useEffect(() => {
         fetchPosts();
@@ -53,8 +55,35 @@ const Feed = ({ navigation }) => {
         }
     };
 
+    const fetchComments = async (postId) => {
+        try {
+            const response = await fetch(`${baseUrl}/fetchcomments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ postId }),
+            });
+
+            if (!response.ok) {
+                // throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            Alert.alert('Error', error.message);
+            return [];
+        }
+    };
+
+    const handlePostPress = async (post) => {
+        const comments = await fetchComments(post.PostId);
+        setSelectedPost({ ...post, comments });
+        setModalVisible(true);
+    };
+
     const renderPost = ({ item }) => {
-        console.log("UserId: ", item.UserId);
         const mediaUrls = JSON.parse(item.MediaUrl);
         return (
             <View style={styles.postContainer}>
@@ -79,7 +108,16 @@ const Feed = ({ navigation }) => {
                     </View>
                 </View>
                 <View style={styles.postContentContainer}>
-                    <Text style={styles.postContent}>{item.PostContent}</Text>
+                    <Text
+                        style={styles.postContent}
+                        numberOfLines={2}
+                        ellipsizeMode="tail"
+                    >
+                        {item.PostContent}
+                    </Text>
+                    <TouchableOpacity onPress={() => handlePostPress(item)}>
+                        <Text style={styles.moreText}>...more</Text>
+                    </TouchableOpacity>
                 </View>
                 {/* Row 2 */}
                 <View style={styles.row2}>
@@ -153,11 +191,107 @@ const Feed = ({ navigation }) => {
                     showsVerticalScrollIndicator={false} // Hide vertical scroll bar
                 />
             )}
+
+            {/* Modal for Fullscreen Post */}
+            {selectedPost && (
+                <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <ScrollView style={styles.modalContainer}>
+                    <View style={styles.row1}>
+                    <View style={styles.column1}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Profile', { profileId: item.UserId })}>
+                            <Image
+                                source={userData.user?.Photo ? { uri: userData.user.Photo } : require('../../assets/images/studentm.png')}
+                                style={styles.profilePic}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.column2}>
+                        <Text style={styles.studentName}>{userData.user?.Name ?? ''}</Text>
+                        <Text style={styles.schoolName}>{userData.user?.SCHOOL_NAME ?? ''}</Text>
+                    </View>
+                    <View style={styles.column3}>
+                        <TouchableOpacity>
+                            <Icon name="more-vert" size={24} color="#000" />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={styles.postContainer1}>
+
+                <View style={styles.postContentContainer1}>
+                                <Text style={styles.fullPostContent}>{selectedPost.PostContent}</Text>
+                            </View>
+                {/* Row 2 */}
+                <View style={styles.erow2}>
+                    <FlatList
+                        data={JSON.parse(selectedPost.MediaUrl)}
+                        horizontal
+                        pagingEnabled
+                        renderItem={({ item }) => (
+                            <Image source={{ uri: item }} style={styles.media1} />
+                        )}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+                </View>
+                {/* Row 3 */}
+                <View style={styles.row3}>
+                    <View style={styles.column1}>
+                        <TouchableOpacity style={{ marginRight: 20 }}>
+                            <Icon name="favorite-border" size={24} color="#E31C62" />
+                        </TouchableOpacity>
+                        <Text style={{ marginRight: 20 }}>{selectedPost.likesCount ?? 0}</Text>
+                    </View>
+                    <View style={styles.column2}>
+                        <TouchableOpacity>
+                            <Icon name="chat-bubble-outline" size={24} color="#E31C62" />
+                        </TouchableOpacity>
+                        <Text>{selectedPost.commentsCount ?? 0}</Text>
+                    </View>
+                    <View style={styles.column3}>
+                        <TouchableOpacity>
+                            <Icon name="bookmark-outline" size={24} color="#E31C62" />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.column4}>
+                        <TouchableOpacity style={{ marginLeft: 10 }}>
+                            <Icon name="share" size={24} color="#E31C62" />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                {/* Row 4 */}
+                <View style={styles.row4}>
+                    <View style={styles.columni}>
+                        <Text>{new Date(selectedPost.TimeStamp).toLocaleString()}</Text>
+                    </View>
+                    <View style={styles.columni}>
+                        <Text>{selectedPost.Location ?? ''}</Text>
+                    </View>
+                </View>
+            </View>
+                        <FlatList
+                                data={selectedPost.comments}
+                                renderItem={({ item }) => (
+                                    <View style={styles.commentContainer}>
+                                        <Text style={styles.commentText}>{item.CommentContent}</Text>
+                                    </View>
+                                )}
+                                keyExtractor={(item, index) => index.toString()}
+                                ListEmptyComponent={<Text>No comments to show</Text>}
+                            />
+                    </ScrollView>
+                    <View style={styles.extra}>  </View>
+                </Modal>
+            )}
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    extra: {marginBottom: 20},
     postContainer: {
         backgroundColor: '#fff',
         marginTop: 10,
@@ -204,16 +338,35 @@ const styles = StyleSheet.create({
     postContentContainer: {
         marginBottom: 10,
     },
+    postContentContainer1: {
+        marginBottom: 10,
+        padding: 10,
+    },
     postContent: {
         fontSize: 14,
     },
+    moreText: {
+        color: '#0E5E9D',
+        marginTop: 5,
+    },
     row2: {
-        height: "fit-content",
+        height: height * 0.4,
+        marginBottom: 10,
+    },
+    erow2: {
+        width: width - 10,
+        height: height * 0.5,
+        alignItems: 'center',
         marginBottom: 10,
     },
     media: {
         width: width - 40,
         height: height * 0.4,
+        borderRadius: 5,
+    },
+    media1: {
+        width: width - 10,
+        height: height * 0.5,
         borderRadius: 5,
     },
     row3: {
@@ -244,6 +397,27 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#0E5E9D',
         textAlign: 'center',
+    },
+    modalContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginLeft: 10,
+    },
+    fullPostContent: {
+        fontSize: 16,
+        marginBottom: 20,
+    },
+    commentContainer: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    commentText: {
+        fontSize: 14,
     },
 });
 
