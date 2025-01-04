@@ -121,6 +121,8 @@ const Feed = ({ navigation }) => {
                 </View>
                 {/* Row 2 */}
                 <View style={styles.row2}>
+                <TouchableOpacity onPress={() => handlePostPress(item)}>
+
                     <FlatList
                         data={mediaUrls}
                         horizontal
@@ -130,6 +132,7 @@ const Feed = ({ navigation }) => {
                         )}
                         keyExtractor={(item, index) => index.toString()}
                     />
+                    </TouchableOpacity>
                 </View>
                 {/* Row 3 */}
                 <View style={styles.row3}>
