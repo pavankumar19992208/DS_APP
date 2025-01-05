@@ -160,7 +160,9 @@ export default function StudentDashboard({ navigation }) {
                 <View style={styles.row}>
                     <View style={styles.column21}>
                         <Image
-                            source={userData.user?.Photo ? { uri: userData.user.Photo } : require('../../assets/images/studentm.png')}
+                            source={userData.user?.Photo ? { uri: userData.user.Photo } : userData.user.Gender === 'female' ? require('../../assets/images/studentf.png') : require('../../assets/images/studentm.png')}
+
+                            // source={userData.user?.Photo ? { uri: userData.user.Photo } : require('../../assets/images/studentm.png')}
                             style={styles.profilePic}
                         />
                         <Text style={styles.studentId}>{userData.user?.StudentId ?? ''}</Text>
@@ -214,8 +216,7 @@ export default function StudentDashboard({ navigation }) {
 
                 </View>
                 </ScrollView>
-                <SFooterNavbar navigation={navigation} handleNavigateToSLinkedIn={handleNavigateToSLinkedIn} />
-                <ChangePasswordModal
+                <SFooterNavbar navigation={navigation} handleNavigateToSLinkedIn={handleNavigateToSLinkedIn} origin="student" />                <ChangePasswordModal
                     visible={isChangePasswordModalVisible}
                     onClose={() => setIsChangePasswordModalVisible(false)}
                     onSubmit={handleChangePassword}

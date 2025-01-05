@@ -54,7 +54,7 @@ const SLinkedIn = ({ navigation }) => {
                 <View style={styles.column1}>
                     <TouchableOpacity onPress={() => navigation.navigate('Profile', { profileId: userData.UserId })}>
                         <Image
-                            source={userData.user?.Photo ? { uri: userData.user.Photo } : require('../../assets/images/studentm.png')} // Replace with actual profile picture source
+                            source={userData.user?.Photo ? { uri: userData.user.Photo } : userData.user.Gender === 'female' ? require('../../assets/images/studentf.png') : require('../../assets/images/studentm.png')}
                             style={styles.profilePic}
                         />
                     </TouchableOpacity>

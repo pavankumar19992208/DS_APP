@@ -13,7 +13,7 @@ import ChangePasswordModal from '../commons/ChangePasswordModal'; // Import Chan
 const screenWidth = Dimensions.get('window').width;
 
 export default function TeacherDashboard({ navigation }) {
-    const { userData } = useContext(UserDataContext); // Use the userData from UserDataContext
+    const { userData, setUserData } = useContext(UserDataContext); // Access userData from UserDataContext
     const baseUrl = useContext(BaseUrlContext); // Access the baseUrl from context
     console.log("User Data:", userData); // Log the user data
 
@@ -22,7 +22,44 @@ export default function TeacherDashboard({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
     const [isChangePasswordModalVisible, setIsChangePasswordModalVisible] = useState(false); // State for managing modal visibility
     const [loading, setLoading] = useState(false); // State for managing loading
-
+    const handleNavigateToSLinkedIn = async () => {
+        if (!userData.UserName) { // Check if UserName does not exist
+            const payload = {
+                UserId: userData.user?.UserId ?? '',
+                Name: userData.user?.Name ?? '',
+                user_type: 'teacher', // Assuming user_type is 'student'
+            };
+    
+            console.log('Payload:', payload); // Print the payload to the console
+    
+            setLoading(true); // Set loading to true
+    
+            try {
+                const response = await fetch(`${baseUrl}/fetchuser`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload), // Send the payload
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+    
+                const data = await response.json();
+                setUserData({ ...userData, ...data });
+    
+                navigation.navigate('SLinkedIn');
+            } catch (error) {
+                Alert.alert('Error', error.message);
+            } finally {
+                setLoading(false); // Set loading to false
+            }
+        } else {
+            navigation.navigate('SLinkedIn'); // Navigate directly if UserName exists
+        }
+    };
     const handleChangePassword = async (currentPassword, newPassword) => {
         setLoading(true); // Set loading to true
 
@@ -133,7 +170,7 @@ export default function TeacherDashboard({ navigation }) {
                 <View style={styles.row}>
                     <View style={styles.column21}>
                         <Image
-                            source={userData.user.profilepic ? { uri: userData.user.profilepic } : require('../../assets/images/teacherf.png')}
+                            source={userData.user.profilepic ? { uri: userData.user.profilepic } : userData.user.gender === 'male' ? require('../../assets/images/teacherm.png') : require('../../assets/images/teacherf.png')}
                             style={styles.profilePic}
                         />
                         <Text style={styles.teacherId}>{userData.user.userid}</Text>
@@ -175,8 +212,7 @@ export default function TeacherDashboard({ navigation }) {
                         <GenerateRollNumbersScreen visible={modalVisible} onClose={() => setModalVisible(false)} data={userData} />
                     )}
                 </ScrollView>
-                <FooterNavbar navigation={navigation} data={userData} />
-                <ChangePasswordModal
+                <FooterNavbar data={userData} navigation={navigation} handleNavigateToSLinkedIn={handleNavigateToSLinkedIn} origin="teacher" />                <ChangePasswordModal
                     visible={isChangePasswordModalVisible}
                     onClose={() => setIsChangePasswordModalVisible(false)}
                     onSubmit={handleChangePassword}

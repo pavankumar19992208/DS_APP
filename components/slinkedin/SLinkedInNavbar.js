@@ -1,19 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigationState } from '@react-navigation/native';
+import { UserDataContext } from '../../BaseUrlContext';
 
 const SLinkedInNavbar = ({ navigation }) => {
     const currentRoute = useNavigationState(state => state.routes[state.index].name);
+    const { userData } = useContext(UserDataContext);
+
+    const handleHomePress = () => {
+        if (userData.user_type === 'student') {
+            navigation.navigate('StudentDashboard');
+        } else {
+            navigation.navigate('TeacherDashboard');
+        }
+    };
 
     return (
         <View style={styles.bottomNavbar}>
             <TouchableOpacity
                 style={[
                     styles.iconContainer,
-                    currentRoute === 'StudentDashboard' && styles.activeIconContainer,
+                    (currentRoute === 'StudentDashboard' || currentRoute === 'TeacherDashboard') && styles.activeIconContainer,
                 ]}
-                onPress={() => navigation.navigate('StudentDashboard')}
+                onPress={handleHomePress}
             >
                 <Icon name="home" size={30} color="#0E5E9D" />
             </TouchableOpacity>

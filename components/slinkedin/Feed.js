@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Dimensions, Alert, Modal,ScrollView } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Dimensions, Alert, Modal, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import UserDataContext and BaseUrlContext
 import SkeletonLoader from '../commons/SkeletonLoader';
@@ -85,6 +85,7 @@ const Feed = ({ navigation }) => {
 
     const renderPost = ({ item }) => {
         const mediaUrls = JSON.parse(item.MediaUrl);
+        const isStudent = item.UserId.startsWith('S');
         return (
             <View style={styles.postContainer}>
                 {/* Row 1 */}
@@ -98,7 +99,12 @@ const Feed = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.column2}>
-                        <Text style={styles.studentName}>{userData.user?.Name ?? ''}</Text>
+                        <View style={styles.usernameContainer}>
+                            <Text style={styles.studentName}>
+                                {userData.user?.Name ?? ''}{' '}
+                            </Text>
+                            {!isStudent && <View style={styles.blueDot} />}
+                        </View>
                         <Text style={styles.schoolName}>{userData.user?.SCHOOL_NAME ?? ''}</Text>
                     </View>
                     <View style={styles.column3}>
@@ -121,17 +127,16 @@ const Feed = ({ navigation }) => {
                 </View>
                 {/* Row 2 */}
                 <View style={styles.row2}>
-                <TouchableOpacity onPress={() => handlePostPress(item)}>
-
-                    <FlatList
-                        data={mediaUrls}
-                        horizontal
-                        pagingEnabled
-                        renderItem={({ item }) => (
-                            <Image source={{ uri: item }} style={styles.media} />
-                        )}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
+                    <TouchableOpacity onPress={() => handlePostPress(item)}>
+                        <FlatList
+                            data={mediaUrls}
+                            horizontal
+                            pagingEnabled
+                            renderItem={({ item }) => (
+                                <Image source={{ uri: item }} style={styles.media} />
+                            )}
+                            keyExtractor={(item, index) => index.toString()}
+                        />
                     </TouchableOpacity>
                 </View>
                 {/* Row 3 */}
@@ -204,89 +209,93 @@ const Feed = ({ navigation }) => {
                     onRequestClose={() => setModalVisible(false)}
                 >
                     <ScrollView style={styles.modalContainer}>
-                    <View style={styles.row1}>
-                    <View style={styles.column1}>
-                        <TouchableOpacity onPress={() => navigation.navigate('Profile', { profileId: item.UserId })}>
-                            <Image
-                                source={userData.user?.Photo ? { uri: userData.user.Photo } : require('../../assets/images/studentm.png')}
-                                style={styles.profilePic}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.column2}>
-                        <Text style={styles.studentName}>{userData.user?.Name ?? ''}</Text>
-                        <Text style={styles.schoolName}>{userData.user?.SCHOOL_NAME ?? ''}</Text>
-                    </View>
-                    <View style={styles.column3}>
-                        <TouchableOpacity>
-                            <Icon name="more-vert" size={24} color="#000" />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={styles.postContainer1}>
-
-                <View style={styles.postContentContainer1}>
+                        <View style={styles.row1}>
+                            <View style={styles.column1}>
+                                <TouchableOpacity onPress={() => navigation.navigate('Profile', { profileId: selectedPost.UserId })}>
+                                    <Image
+                                        source={userData.user?.Photo ? { uri: userData.user.Photo } : require('../../assets/images/studentm.png')}
+                                        style={styles.profilePic}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.column2}>
+                                <View style={styles.usernameContainer}>
+                                    <Text style={styles.studentName}>
+                                        {userData.user?.Name ?? ''}{' '}
+                                    </Text>
+                                    {selectedPost.UserId.startsWith('T') && <View style={styles.blueDot} />}
+                                </View>
+                                <Text style={styles.schoolName}>{userData.user?.SCHOOL_NAME ?? ''}</Text>
+                            </View>
+                            <View style={styles.column3}>
+                                <TouchableOpacity>
+                                    <Icon name="more-vert" size={24} color="#000" />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        <View style={styles.postContainer1}>
+                            <View style={styles.postContentContainer1}>
                                 <Text style={styles.fullPostContent}>{selectedPost.PostContent}</Text>
                             </View>
-                {/* Row 2 */}
-                <View style={styles.erow2}>
-                    <FlatList
-                        data={JSON.parse(selectedPost.MediaUrl)}
-                        horizontal
-                        pagingEnabled
-                        renderItem={({ item }) => (
-                            <Image source={{ uri: item }} style={styles.media1} />
-                        )}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
-                </View>
-                {/* Row 3 */}
-                <View style={styles.row3}>
-                    <View style={styles.column1}>
-                        <TouchableOpacity style={{ marginRight: 20 }}>
-                            <Icon name="favorite-border" size={24} color="#E31C62" />
-                        </TouchableOpacity>
-                        <Text style={{ marginRight: 20 }}>{selectedPost.likesCount ?? 0}</Text>
-                    </View>
-                    <View style={styles.column2}>
-                        <TouchableOpacity>
-                            <Icon name="chat-bubble-outline" size={24} color="#E31C62" />
-                        </TouchableOpacity>
-                        <Text>{selectedPost.commentsCount ?? 0}</Text>
-                    </View>
-                    <View style={styles.column3}>
-                        <TouchableOpacity>
-                            <Icon name="bookmark-outline" size={24} color="#E31C62" />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.column4}>
-                        <TouchableOpacity style={{ marginLeft: 10 }}>
-                            <Icon name="share" size={24} color="#E31C62" />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                {/* Row 4 */}
-                <View style={styles.row4}>
-                    <View style={styles.columni}>
-                        <Text>{new Date(selectedPost.TimeStamp).toLocaleString()}</Text>
-                    </View>
-                    <View style={styles.columni}>
-                        <Text>{selectedPost.Location ?? ''}</Text>
-                    </View>
-                </View>
-            </View>
+                            {/* Row 2 */}
+                            <View style={styles.erow2}>
+                                <FlatList
+                                    data={JSON.parse(selectedPost.MediaUrl)}
+                                    horizontal
+                                    pagingEnabled
+                                    renderItem={({ item }) => (
+                                        <Image source={{ uri: item }} style={styles.media1} />
+                                    )}
+                                    keyExtractor={(item, index) => index.toString()}
+                                />
+                            </View>
+                            {/* Row 3 */}
+                            <View style={styles.row3}>
+                                <View style={styles.column1}>
+                                    <TouchableOpacity style={{ marginRight: 20 }}>
+                                        <Icon name="favorite-border" size={24} color="#E31C62" />
+                                    </TouchableOpacity>
+                                    <Text style={{ marginRight: 20 }}>{selectedPost.likesCount ?? 0}</Text>
+                                </View>
+                                <View style={styles.column2}>
+                                    <TouchableOpacity>
+                                        <Icon name="chat-bubble-outline" size={24} color="#E31C62" />
+                                    </TouchableOpacity>
+                                    <Text>{selectedPost.commentsCount ?? 0}</Text>
+                                </View>
+                                <View style={styles.column3}>
+                                    <TouchableOpacity>
+                                        <Icon name="bookmark-outline" size={24} color="#E31C62" />
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={styles.column4}>
+                                    <TouchableOpacity style={{ marginLeft: 10 }}>
+                                        <Icon name="share" size={24} color="#E31C62" />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            {/* Row 4 */}
+                            <View style={styles.row4}>
+                                <View style={styles.columni}>
+                                    <Text>{new Date(selectedPost.TimeStamp).toLocaleString()}</Text>
+                                </View>
+                                <View style={styles.columni}>
+                                    <Text>{selectedPost.Location ?? ''}</Text>
+                                </View>
+                            </View>
+                        </View>
                         <FlatList
-                                data={selectedPost.comments}
-                                renderItem={({ item }) => (
-                                    <View style={styles.commentContainer}>
-                                        <Text style={styles.commentText}>{item.CommentContent}</Text>
-                                    </View>
-                                )}
-                                keyExtractor={(item, index) => index.toString()}
-                                ListEmptyComponent={<Text>No comments to show</Text>}
-                            />
+                            data={selectedPost.comments}
+                            renderItem={({ item }) => (
+                                <View style={styles.commentContainer}>
+                                    <Text style={styles.commentText}>{item.CommentContent}</Text>
+                                </View>
+                            )}
+                            keyExtractor={(item, index) => index.toString()}
+                            ListEmptyComponent={<Text>No comments to show</Text>}
+                        />
                     </ScrollView>
-                    <View style={styles.extra}>  </View>
+                    <View style={styles.extra}></View>
                 </Modal>
             )}
         </View>
@@ -294,7 +303,7 @@ const Feed = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    extra: {marginBottom: 20},
+    extra: { marginBottom: 20 },
     postContainer: {
         backgroundColor: '#fff',
         marginTop: 10,
@@ -337,6 +346,18 @@ const styles = StyleSheet.create({
     },
     schoolName: {
         fontSize: 14,
+    },
+    usernameContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    blueDot: {
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: '#0E5E9D',
+        marginLeft: 5,
+        alignSelf: 'center',
     },
     postContentContainer: {
         marginBottom: 10,

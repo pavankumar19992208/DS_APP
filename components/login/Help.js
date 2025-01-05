@@ -29,7 +29,7 @@ const Help = () => {
                     <View style={styles.card}>
                         <Text style={styles.heading}>STUDENT CREDENTIALS (for testing purpose)</Text>
                         <View style={styles.credentialRow}>
-                            <Text>ID: S362010938</Text>
+                            <Text>ID: S9182442102</Text>
                             <TouchableOpacity onPress={() => copyToClipboard('S362010938')}>
                                 <Icon name="content-copy" size={20} color="#007bff" />
                             </TouchableOpacity>
@@ -41,7 +41,7 @@ const Help = () => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={styles.card}>
+                    {/* <View style={styles.card}>
                         <Text style={styles.heading}>TEACHER CREDENTIALS (for testing purpose)</Text>
                         <View style={styles.credentialRow}>
                             <Text>ID: TPA2011651</Text>
@@ -55,7 +55,7 @@ const Help = () => {
                                 <Icon name="content-copy" size={20} color="#007bff" />
                             </TouchableOpacity>
                         </View>
-                    </View>
+                    </View> */}
                     <TouchableOpacity
                         style={styles.closeButton}
                         onPress={() => setModalVisible(false)}
