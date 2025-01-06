@@ -13,7 +13,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.P2PTECHWORKS.P2P",
+      "package": "com.p2p",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
