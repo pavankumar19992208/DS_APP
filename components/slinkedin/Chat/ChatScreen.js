@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Dimensions, Image, Alert, Modal, ActivityIndicator } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons'; // Import Ionicons
 import { UserDataContext, BaseUrlContext } from '../../../BaseUrlContext'; // Import BaseUrlContext
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
@@ -230,7 +230,7 @@ const ChatScreen = ({ route, navigation }) => {
                     <ActivityIndicator size="small" color="gray" style={styles.loader} />
                 )}
                 {isUserMessage && !item.sending && (
-                    <Icon name="check" size={20} color="gray" style={styles.checkIcon} />
+                    <Ionicons name="checkmark" size={20} color="gray" style={styles.checkIcon} />
                 )}
             </View>
         );
@@ -292,10 +292,10 @@ const ChatScreen = ({ route, navigation }) => {
                     onChangeText={setMessage}
                 />
                 <TouchableOpacity onPress={handleAddAttachment}>
-                    <Icon name="attach-file" size={30} color="#0E5E9D" />
+                    <Ionicons name="attach" size={30} color="#0E5E9D" />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleSendMessage}>
-                    <Icon name="send" size={30} color="#0E5E9D" />
+                    <Ionicons name="send" size={30} color="#0E5E9D" />
                 </TouchableOpacity>
             </View>
 
@@ -312,7 +312,7 @@ const ChatScreen = ({ route, navigation }) => {
                             <Image source={{ uri: selectedFile.uri }} style={styles.selectedImage} />
                         ) : selectedFile ? (
                             <View style={styles.fileContainer}>
-                                <Icon name="insert-drive-file" size={100} color="#0E5E9D" />
+                                <Ionicons name="document" size={100} color="#0E5E9D" />
                                 <Text style={styles.fileName}>{selectedFile.name || 'Document'}</Text>
                             </View>
                         ) : null}

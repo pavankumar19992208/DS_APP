@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons'; // Import Ionicons
 
 const SFooterNavbar = ({ navigation, handleNavigateToSLinkedIn }) => {
     return (
         <View style={styles.footer}>
             <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('StudentDashboard')}>
-                <Icon name="home" size={30} color="#F965A0" />
+                <Ionicons name="home" size={30} color="#F965A0" />
             </TouchableOpacity>
             <TouchableOpacity style={[styles.iconContainer, styles.highlightedNavItem]} onPress={handleNavigateToSLinkedIn}>
                 <Image source={require('../../assets/images/nl_logo.png')} style={styles.nlLogo} />
@@ -15,10 +15,10 @@ const SFooterNavbar = ({ navigation, handleNavigateToSLinkedIn }) => {
                 <Image source={require('../../assets/images/genie_icon.png')} style={styles.genieLogo} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Planner')}>
-                <Icon name="event" size={30} color="#F965A0" />
+                <Ionicons name="calendar" size={30} color="#F965A0" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Learn')}>
-                <Icon name="auto-stories" size={30} color="#F965A0" />
+                <Ionicons name="book" size={30} color="#F965A0" />
             </TouchableOpacity>
         </View>
     );

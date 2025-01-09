@@ -24,7 +24,7 @@ const SearchUsers = ({ navigation }) => {
     };
 
     return (
-        <ScreenWrapper>
+        
         <View style={styles.container}>
             <TextInput
                 style={styles.input}
@@ -50,7 +50,7 @@ const SearchUsers = ({ navigation }) => {
             />
         <Info keyword="connections" />
         </View>
-        </ScreenWrapper>
+        
     );
 };
 

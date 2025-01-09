@@ -1,12 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert, ScrollView, Dimensions, Modal, FlatList } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons'; // Import Ionicons
 import { UserDataContext, BaseUrlContext } from '../../../BaseUrlContext'; // Import UserDataContext
 import { Picker } from '@react-native-picker/picker';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import Firebase Storage functions
 import { storage } from '../../connections/Firebase'; // Import Firebase storage instance
 import * as ImagePicker from 'expo-image-picker'; // Import Expo Image Picker
-import ScreenWrapper from '../../../ScreenWrapper';
 
 const AddPost = ({ navigation }) => {
     const { userData, setUserData } = useContext(UserDataContext); // Access userData from UserDataContext
@@ -171,7 +170,7 @@ const AddPost = ({ navigation }) => {
 
     const renderAddMoreItem = () => (
         <TouchableOpacity style={styles.addMoreItem} onPress={handleAddAttachment}>
-            <Icon name="add" size={40} color="#0E5E9D" />
+            <Ionicons name="add" size={40} color="#0E5E9D" />
             <Text style={styles.addMoreText}>{attachments.length === 0 ? '+ ADD FILES' : '+ ADD MORE'}</Text>
         </TouchableOpacity>
     );
@@ -181,13 +180,12 @@ const AddPost = ({ navigation }) => {
         return (
             <TouchableOpacity onPress={() => handleSuggestionSelect(item)} style={[styles.suggestionItem, isSelected && styles.selectedSuggestionItem]}>
                 <Text style={styles.suggestionText}>{item}</Text>
-                {isSelected && <Icon name="check" size={20} color="#fff" style={styles.checkIcon} />}
+                {isSelected && <Ionicons name="checkmark" size={20} color="#fff" style={styles.checkIcon} />}
             </TouchableOpacity>
         );
     };
 
     return (
-        <ScreenWrapper>
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.heading}>Add Post</Text>
             <View style={styles.attachmentContainer}>
@@ -239,7 +237,7 @@ const AddPost = ({ navigation }) => {
                         onChangeText={setLocation}
                     />
                     <TouchableOpacity style={styles.locationIconContainer}>
-                        <Icon name="location-on" size={24} color="#0E5E9D" />
+                        <Ionicons name="location-outline" size={24} color="#0E5E9D" />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -266,7 +264,6 @@ const AddPost = ({ navigation }) => {
                 </View>
             </Modal>
         </ScrollView>
-        </ScreenWrapper>
     );
 };
 

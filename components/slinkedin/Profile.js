@@ -1,11 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions, FlatList, Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons'; // Import Ionicons
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import BaseUrlContext
 const { width, height } = Dimensions.get('window');
 import Loader from '../commons/Loader';
 import SkeletonLoader from '../commons/SkeletonLoader';
-import ScreenWrapper from '../../ScreenWrapper';
 
 const Profile = ({ route }) => {
     const { profileId } = route.params;
@@ -14,13 +13,9 @@ const Profile = ({ route }) => {
     const [loading, setLoading] = useState(false);
     const [loadingPosts, setLoadingPosts] = useState(false);
     const [showAllPosts, setShowAllPosts] = useState(false);
-   // const [showAllPosts, setShowAllPosts] = useState(false);
     const baseUrl = useContext(BaseUrlContext); // Access baseUrl from BaseUrlContext
     const userData = useContext(UserDataContext); // Access userData from UserDataContext
 
-    // useEffect(() => {
-    //     fetchProfile();
-    // }, []);
     useEffect(() => {
         if (profileId) {
             fetchProfile();
@@ -140,7 +135,7 @@ const Profile = ({ route }) => {
                     </View>
                     <View style={styles.postColumn3}>
                         <TouchableOpacity>
-                            <Icon name="more-vert" size={24} color="#000" />
+                            <Ionicons name="ellipsis-vertical" size={24} color="#000" />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -164,19 +159,19 @@ const Profile = ({ route }) => {
                 <View style={styles.postRow3}>
                     <View style={styles.postColumn1}>
                         <TouchableOpacity>
-                            <Icon name="favorite-border" size={24} color="#E31C62" />
+                            <Ionicons name="heart-outline" size={24} color="#E31C62" />
                         </TouchableOpacity>
                         <Text>{item.likesCount ?? 0}</Text>
                     </View>
                     <View style={styles.postColumn2}>
                         <TouchableOpacity>
-                            <Icon name="chat-bubble-outline" size={24} color="#E31C62" />
+                            <Ionicons name="chatbubble-outline" size={24} color="#E31C62" />
                         </TouchableOpacity>
                         <Text>{item.commentsCount ?? 0}</Text>
                     </View>
                     <View style={styles.postColumn3}>
                         <TouchableOpacity>
-                            <Icon name="share" size={24} color="#E31C62" />
+                            <Ionicons name="share-social-outline" size={24} color="#E31C62" />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -200,10 +195,8 @@ const Profile = ({ route }) => {
     const isFriend = userData.userData.friends_list?.includes(profileId);
 
     return (
-        <ScreenWrapper>
         <View style={styles.container}>
             {/* Row 1 */}
-           {/* // <Loader visible={loading} />  */}
             <View style={styles.row1}>
                 <View style={styles.column1}>
                     <Image
@@ -218,17 +211,15 @@ const Profile = ({ route }) => {
                 </View>
             </View>
             {/* New Row for Buttons */}
-            
-                console.log("userData.UserId: ", userData.userData.UserId),
-                <View style={styles.buttonRow}>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Friends: {profile.friends_count ?? 0}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Posts: {profile.posts_count ?? 0}</Text>
-                    </TouchableOpacity>
-                    {userData.userData.UserId !== profileId && (
-                        <>
+            <View style={styles.buttonRow}>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Friends: {profile.friends_count ?? 0}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Posts: {profile.posts_count ?? 0}</Text>
+                </TouchableOpacity>
+                {userData.userData.UserId !== profileId && (
+                    <>
                     {isFriend ? (
                         <TouchableOpacity style={styles.button} onPress={handleUnfriend}>
                             <Text style={styles.buttonText}>Unfriend</Text>
@@ -237,11 +228,10 @@ const Profile = ({ route }) => {
                         <TouchableOpacity style={styles.button} onPress={handleFriendRequest}>
                             <Text style={styles.buttonText}>Send Friend Request</Text>
                         </TouchableOpacity>
-                        
                     )}
                     </>
-                    )}
-                </View>
+                )}
+            </View>
         
             {/* Row 2 */}
             <View style={styles.row2}>
@@ -270,7 +260,6 @@ const Profile = ({ route }) => {
                 )}
             </View>
         </View>
-        </ScreenWrapper>
     );
 };
 

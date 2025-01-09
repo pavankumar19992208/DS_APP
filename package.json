@@ -44,11 +44,13 @@
     "react-native-splash-screen": "^3.3.0",
     "react-native-svg": "^15.10.1",
     "react-native-table-component": "^1.2.2",
-    "react-native-vector-icons": "^10.2.0"
+    "react-native-vector-icons": "^10.2.0",
+    "@expo/vector-icons": "^14.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
-    "@react-native-community/cli": "latest"
+    "@react-native-community/cli": "latest",
+    "expo-cli": "^6.3.12"
   },
   "private": true
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, Dimensions, Alert, Modal, ScrollView } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons'; // Import Ionicons
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import UserDataContext and BaseUrlContext
 import SkeletonLoader from '../commons/SkeletonLoader';
 
@@ -109,7 +109,7 @@ const Feed = ({ navigation }) => {
                     </View>
                     <View style={styles.column3}>
                         <TouchableOpacity>
-                            <Icon name="more-vert" size={24} color="#000" />
+                            <Ionicons name="ellipsis-vertical" size={24} color="#000" />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -143,24 +143,24 @@ const Feed = ({ navigation }) => {
                 <View style={styles.row3}>
                     <View style={styles.column1}>
                         <TouchableOpacity style={{ marginRight: 20 }}>
-                            <Icon name="favorite-border" size={24} color="#E31C62" />
+                            <Ionicons name="heart-outline" size={24} color="#E31C62" />
                         </TouchableOpacity>
                         <Text style={{ marginRight: 20 }}>{item.likesCount ?? 0}</Text>
                     </View>
                     <View style={styles.column2}>
                         <TouchableOpacity>
-                            <Icon name="chat-bubble-outline" size={24} color="#E31C62" />
+                            <Ionicons name="chatbubble-outline" size={24} color="#E31C62" />
                         </TouchableOpacity>
                         <Text>{item.commentsCount ?? 0}</Text>
                     </View>
                     <View style={styles.column3}>
                         <TouchableOpacity>
-                            <Icon name="bookmark-outline" size={24} color="#E31C62" />
+                            <Ionicons name="bookmark-outline" size={24} color="#E31C62" />
                         </TouchableOpacity>
                     </View>
                     <View style={styles.column4}>
                         <TouchableOpacity style={{ marginLeft: 10 }}>
-                            <Icon name="share" size={24} color="#E31C62" />
+                            <Ionicons name="share-social-outline" size={24} color="#E31C62" />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -229,7 +229,7 @@ const Feed = ({ navigation }) => {
                             </View>
                             <View style={styles.column3}>
                                 <TouchableOpacity>
-                                    <Icon name="more-vert" size={24} color="#000" />
+                                    <Ionicons name="ellipsis-vertical" size={24} color="#000" />
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -253,24 +253,24 @@ const Feed = ({ navigation }) => {
                             <View style={styles.row3}>
                                 <View style={styles.column1}>
                                     <TouchableOpacity style={{ marginRight: 20 }}>
-                                        <Icon name="favorite-border" size={24} color="#E31C62" />
+                                        <Ionicons name="heart-outline" size={24} color="#E31C62" />
                                     </TouchableOpacity>
                                     <Text style={{ marginRight: 20 }}>{selectedPost.likesCount ?? 0}</Text>
                                 </View>
                                 <View style={styles.column2}>
                                     <TouchableOpacity>
-                                        <Icon name="chat-bubble-outline" size={24} color="#E31C62" />
+                                        <Ionicons name="chatbubble-outline" size={24} color="#E31C62" />
                                     </TouchableOpacity>
                                     <Text>{selectedPost.commentsCount ?? 0}</Text>
                                 </View>
                                 <View style={styles.column3}>
                                     <TouchableOpacity>
-                                        <Icon name="bookmark-outline" size={24} color="#E31C62" />
+                                        <Ionicons name="bookmark-outline" size={24} color="#E31C62" />
                                     </TouchableOpacity>
                                 </View>
                                 <View style={styles.column4}>
                                     <TouchableOpacity style={{ marginLeft: 10 }}>
-                                        <Icon name="share" size={24} color="#E31C62" />
+                                        <Ionicons name="share-social-outline" size={24} color="#E31C62" />
                                     </TouchableOpacity>
                                 </View>
                             </View>

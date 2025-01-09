@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import Icons from 'react-native-vector-icons/Octicons';
+import Ionicons from '@expo/vector-icons/Ionicons'; // Import Ionicons
 
 const FooterNavbar = ({ navigation, data, handleNavigateToSLinkedIn, origin }) => {
     const handleHomePress = () => {
@@ -15,19 +14,19 @@ const FooterNavbar = ({ navigation, data, handleNavigateToSLinkedIn, origin }) =
     return (
         <View style={styles.footer}>
             <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('UploadMarks', { data })}>
-                <Icons name="number" size={30} color="#FFF" />
+                <Ionicons name="stats-chart" size={30} color="#FFF" />
             </TouchableOpacity>
             <TouchableOpacity style={[styles.iconContainer, styles.highlightedNavItem]} onPress={handleNavigateToSLinkedIn}>
                 <Image source={require('../../assets/images/nl_logo.png')} style={styles.nlLogo} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconContainer} onPress={handleHomePress}>
-                <Icon name="home" size={30} color="#FFF" />
+                <Ionicons name="home" size={30} color="#FFF" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Notify', { data })}>
-                <Icon name="notifications" size={30} color="#FFF" />
+                <Ionicons name="notifications" size={30} color="#FFF" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('UpdateClassWork', { data })}>
-                <Icon name="calendar-month" size={30} color="#FFF" />
+                <Ionicons name="calendar" size={30} color="#FFF" />
             </TouchableOpacity>
         </View>
     );

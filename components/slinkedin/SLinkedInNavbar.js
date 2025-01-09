@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons'; // Import Ionicons
 import { useNavigationState } from '@react-navigation/native';
 import { UserDataContext } from '../../BaseUrlContext';
 
@@ -25,7 +25,7 @@ const SLinkedInNavbar = ({ navigation }) => {
                 ]}
                 onPress={handleHomePress}
             >
-                <Icon name="home" size={30} color="#0E5E9D" />
+                <Ionicons name="home" size={30} color="#0E5E9D" />
             </TouchableOpacity>
             <TouchableOpacity
                 style={[
@@ -34,7 +34,7 @@ const SLinkedInNavbar = ({ navigation }) => {
                 ]}
                 onPress={() => navigation.navigate('AddPost')}
             >
-                <Icon name="add-circle" size={30} color="#0E5E9D" />
+                <Ionicons name="add-circle" size={30} color="#0E5E9D" />
             </TouchableOpacity>
             <TouchableOpacity
                 style={[
@@ -43,7 +43,7 @@ const SLinkedInNavbar = ({ navigation }) => {
                 ]}
                 onPress={() => navigation.navigate('SLinkedIn')}
             >
-                <Icon name="rss-feed" size={30} color="#0E5E9D" />
+                <Ionicons name="play" size={30} color="#0E5E9D" />
             </TouchableOpacity>
             <TouchableOpacity
                 style={[
@@ -52,7 +52,7 @@ const SLinkedInNavbar = ({ navigation }) => {
                 ]}
                 onPress={() => navigation.navigate('SearchUsers')}
             >
-                <Icon name="search" size={30} color="#0E5E9D" />
+                <Ionicons name="search" size={30} color="#0E5E9D" />
             </TouchableOpacity>
             <TouchableOpacity
                 style={[
@@ -61,7 +61,7 @@ const SLinkedInNavbar = ({ navigation }) => {
                 ]}
                 onPress={() => navigation.navigate('Chat')}
             >
-                <Icon name="chat" size={30} color="#0E5E9D" />
+                <Ionicons name="chatbubble" size={30} color="#0E5E9D" />
             </TouchableOpacity>
         </View>
     );

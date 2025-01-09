@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions, Alert, Modal, TextInput } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons'; // Import Ionicons
 import SLinkedInNavbar from './SLinkedInNavbar'; // Import the new component
 import { UserDataContext, BaseUrlContext } from '../../BaseUrlContext'; // Import UserDataContext and BaseUrlContext
 import Feed from './Feed'; // Import the Feed component
@@ -47,7 +47,6 @@ const SLinkedIn = ({ navigation }) => {
     };
 
     return (
-        <ScreenWrapper>
         <View style={styles.container}>
             {/* Top Navbar */}
             <View style={styles.topNavbar}>
@@ -69,7 +68,7 @@ const SLinkedIn = ({ navigation }) => {
                 </View>
                 <View style={styles.column3}>
                     <TouchableOpacity onPress={() => navigation.navigate('NlNotifications')}>
-                        <Icon name="notifications" size={40} color="#E31C62D0" />
+                        <Ionicons name="notifications" size={40} color="#E31C62D0" />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -109,7 +108,6 @@ const SLinkedIn = ({ navigation }) => {
             </Modal>
             <Info keyword="feed" />
         </View>
-        </ScreenWrapper>
     );
 };
 

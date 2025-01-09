@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, Dimensions, ScrollView } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons'; // Import Ionicons
 import FooterNavbar from './FooterNavbar'; // Adjust the path as necessary
 import { Menu, MenuItem } from 'react-native-material-menu';
 import GenerateRollNumbersScreen from './Tservices/GenerateRollNumbersScreen';
@@ -180,7 +180,7 @@ export default function TeacherDashboard({ navigation }) {
                         <TouchableOpacity onPress={toggleExpanded}>
                             <View style={styles.accordionHeader}>
                                 <Text style={styles.accordionHeaderText}>SUBJECTS ALLOCATED</Text>
-                                <Icon name={isCollapsed ? 'keyboard-arrow-down' : 'keyboard-arrow-up'} size={24} color="#FFF" />
+                                <Ionicons name={isCollapsed ? 'chevron-down' : 'chevron-up'} size={24} color="#FFF" />
                             </View>
                         </TouchableOpacity>
                         {!isCollapsed && (
@@ -212,7 +212,8 @@ export default function TeacherDashboard({ navigation }) {
                         <GenerateRollNumbersScreen visible={modalVisible} onClose={() => setModalVisible(false)} data={userData} />
                     )}
                 </ScrollView>
-                <FooterNavbar data={userData} navigation={navigation} handleNavigateToSLinkedIn={handleNavigateToSLinkedIn} origin="teacher" />                <ChangePasswordModal
+                <FooterNavbar data={userData} navigation={navigation} handleNavigateToSLinkedIn={handleNavigateToSLinkedIn} origin="teacher" />
+                <ChangePasswordModal
                     visible={isChangePasswordModalVisible}
                     onClose={() => setIsChangePasswordModalVisible(false)}
                     onSubmit={handleChangePassword}

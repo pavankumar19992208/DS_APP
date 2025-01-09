@@ -2,10 +2,10 @@ import React, { useState, useContext } from 'react';
 import { StyleSheet, View, TextInput, Button, TouchableOpacity, Text, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BaseUrlContext, UserDataContext } from '../../BaseUrlContext'; // Import the contexts
-import img from '../../assets/images/large-dNk4O_UUZ-transformed (1).png';
+import img from '../../assets/images/p2p_logo.png';
 import Help from './Help';
 import Loader from '../commons/Loader'; // Import the Loader component
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from '@expo/vector-icons/Ionicons'; // Import Ionicons
 import RegisterTestUserModal from './RegisterTestUserModal'; // Import the RegisterTestUserModal component
 
 export default function Login() {
@@ -27,7 +27,7 @@ export default function Login() {
                 url = `${baseUrl}/teacher_login`;
                 console.log(url);
                 navigateTo = 'TeacherDashboard';
-            }else if (userId.startsWith('Q')) {
+            } else if (userId.startsWith('Q')) {
                 url = `${baseUrl}/testerlogin`;
                 console.log(url);
                 navigateTo = 'StudentDashboard';
@@ -72,8 +72,8 @@ export default function Login() {
                 <Image source={img} style={styles.logo} />
                 {/* Inputs and Buttons Container */}
                 <View style={styles.inputContainer}>
-                <View style={styles.inputRow}>
-                        <Icon name="user" size={20} color="#888" style={styles.icon} />
+                    <View style={styles.inputRow}>
+                        <Ionicons name="person" size={20} color="#888" style={styles.icon} />
                         {/* User ID Input */}
                         <TextInput
                             style={styles.input}
@@ -85,7 +85,7 @@ export default function Login() {
                     </View>
                     {/* Password Input */}
                     <View style={styles.inputRow}>
-                        <Icon name="lock" size={20} color="#888" style={styles.icon} />
+                        <Ionicons name="lock-closed" size={20} color="#888" style={styles.icon} />
                         <TextInput
                             style={styles.input}
                             placeholder="ENTER PASSWORD"
@@ -189,4 +189,3 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 });
-

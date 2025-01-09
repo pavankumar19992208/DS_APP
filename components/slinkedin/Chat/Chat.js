@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList, Image, Modal } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons'; // Import Ionicons
 import SLinkedInNavbar from '../SLinkedInNavbar'; // Import the SLinkedInNavbar component
 import { UserDataContext, BaseUrlContext } from '../../../BaseUrlContext'; // Import BaseUrlContext
 import CreateChat from './CreateChat'; // Import CreateChat component
@@ -146,7 +146,6 @@ const Chat = ({ navigation }) => {
     );
 
     return (
-        <ScreenWrapper>
         <View style={styles.container}>
             {/* Top Row */}
             <View style={styles.topRow}>
@@ -165,7 +164,7 @@ const Chat = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
-                    <Icon name="add" size={30} color="#0E5E9D" />
+                    <Ionicons name="add" size={30} color="#0E5E9D" />
                 </TouchableOpacity>
             </View>
 
@@ -253,13 +252,12 @@ const Chat = ({ navigation }) => {
             <Info keyword="chatsAndCircles" />
             <SLinkedInNavbar navigation={navigation} />
         </View>
-        </ScreenWrapper>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 20,
+        // marginTop: 20,
         flex: 1,
         backgroundColor: '#E0F2FE',
     },
